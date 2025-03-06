@@ -82,7 +82,7 @@ class SongManager {
         // Gradually fade out the first song
         const fadeOutInterval = setInterval(() => {
             currentStep++;
-            const volume = Math.max(0, 1 - (currentStep / steps));
+            const volume = Math.max(0, 0.2 - (currentStep / steps));
             fromSong.volume = volume;
 
             if (currentStep >= steps) {
