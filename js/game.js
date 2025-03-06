@@ -778,10 +778,14 @@ class Game {
                         row: newRow,
                         col
                     });
+                }
+                if (this.isValidPosition(newRow, col - 1) && !this.board[newRow][col - 1]) {
                     validMoves.push({
                         row: newRow,
                         col: col - 1
                     });
+                }
+                if (this.isValidPosition(newRow, col + 1) && !this.board[newRow][col + 1]) {
                     validMoves.push({
                         row: newRow,
                         col: col + 1
