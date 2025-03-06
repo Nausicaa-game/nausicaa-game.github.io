@@ -90,6 +90,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             gameBoard.appendChild(cell);
+
+            // Add event listeners for hover effect
+            cell.addEventListener('mouseover', handleCellMouseOver);
+            cell.addEventListener('mouseout', handleCellMouseOut);
         }
     }
 
@@ -175,3 +179,44 @@ document.addEventListener('DOMContentLoaded', () => {
     p2pConnection = new P2PGameConnection(game);
     p2pConnection.interceptGameActions();
 });
+
+function handleCellMouseOver(event) {
+    const cell = event.target.parentElement;
+    const row = parseInt(cell.dataset.row);
+    const col = parseInt(cell.dataset.col);
+
+    if(!row || !col) return;
+    // Assuming you have a method in your Game class to get the unit at a specific location
+    const unit = game.board[row][col];
+    if (unit) {
+        // Assuming you have methods in your Game class to calculate valid moves and attacks
+        const validMoves = game.getValidMoves(row, col);
+        const validAttacks = game.getValidAttacks(row, col);
+
+        console.log(validMoves, validAttacks);
+        // Highlight valid moves
+        validMoves.forEach(move => {
+            const moveCell = document.querySelector(`.board-cell[data-row="${move.row}"][data-col="${move.col}"]`);
+            // console.log(moveCell);
+            if (moveCell) {
+                moveCell.classList.add('valid-move');
+            }
+        });
+
+        // Highlight valid attacks
+        validAttacks.forEach(attack => {
+            const attackCell = document.querySelector(`.board-cell[data-row="${attack.row}"][data-col="${attack.col}"]`);
+            if (attackCell) {
+                attackCell.classList.add('valid-attack');
+            }
+        });
+    }
+}
+
+function handleCellMouseOut(event) {
+    // Remove highlighting from all cells
+    const cells = document.querySelectorAll('.board-cell');
+    cells.forEach(cell => {
+        cell.classList.remove('valid-move', 'valid-attack');
+    });
+}

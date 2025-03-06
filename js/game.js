@@ -197,6 +197,7 @@ class Game {
 
                 cell.dataset.row = row;
                 cell.dataset.col = col;
+                
                 gameBoard.appendChild(cell);
             }
         }
@@ -976,6 +977,9 @@ class Game {
     getValidAttacks(row, col) {
         const unit = this.board[row][col];
         if (!unit) return [];
+
+        
+        // console.log("getValidAttacks", unit);
 
         const attackType = UNITS[unit.type].attack;
         const validAttacks = [];
@@ -2345,6 +2349,7 @@ class Game {
                 cell.dataset.row = row;
                 cell.dataset.col = col;
                 cell.addEventListener('click', (e) => this.handleCellClick(e));
+                
                 boardElement.appendChild(cell);
 
                 const unit = this.board[row][col];
@@ -2415,6 +2420,10 @@ class Game {
                 once: true
             });
         }
+
+        // Add event listeners for hover effect
+        unitElement.addEventListener('mouseover', handleCellMouseOver);
+        unitElement.addEventListener('mouseout', handleCellMouseOut);
     }
 
     setTurnAndPlayer(turn, player) {
