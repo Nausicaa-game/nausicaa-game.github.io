@@ -1672,6 +1672,7 @@ class Game {
 
         songManager.playSong("announcer:allPick", true)
         songManager.playSong("firstRound", true)
+        songManager.setVolume("firstRound",0.2)
         // songManager.transitionSong("victory","firstRound", true)
 
         // Reinitialize the game

@@ -97,7 +97,7 @@ class SongManager {
 
                 const fadeInInterval = setInterval(() => {
                     currentStep++;
-                    const volume = Math.min(1, currentStep / steps);
+                    const volume = Math.min(0.2, currentStep / steps);
                     toSong.volume = volume;
 
                     if (currentStep >= steps) {
