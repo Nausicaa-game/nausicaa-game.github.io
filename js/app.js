@@ -122,6 +122,7 @@ function startGameTheme() {
     if (!backgroundThemePlaying) {
         console.log("playing theme");
         songManager.playSong('firstRound');
+        songManager.setVolume("firstRound",0.3)
         songManager.playSong('announcer:allPick');
         backgroundThemePlaying = true;
     }

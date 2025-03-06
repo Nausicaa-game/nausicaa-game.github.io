@@ -82,13 +82,13 @@ class SongManager {
         // Gradually fade out the first song
         const fadeOutInterval = setInterval(() => {
             currentStep++;
-            const volume = Math.max(0, 0.2 - (currentStep / steps));
+            const volume = Math.max(0, 0.3 - (currentStep / steps));
             fromSong.volume = volume;
 
             if (currentStep >= steps) {
                 clearInterval(fadeOutInterval);
                 this.stopSong(fromName);
-                fromSong.volume = 0.2; // Reset volume for future use
+                fromSong.volume = 0.3; // Reset volume for future use
 
                 // Start playing the second song with fade-in
                 toSong.volume = 0;
@@ -97,12 +97,12 @@ class SongManager {
 
                 const fadeInInterval = setInterval(() => {
                     currentStep++;
-                    const volume = Math.min(0.2, currentStep / steps);
+                    const volume = Math.min(0.3, currentStep / steps);
                     toSong.volume = volume;
 
                     if (currentStep >= steps) {
                         clearInterval(fadeInInterval);
-                        toSong.volume = 1; // Ensure volume is 1 at the end
+                        toSong.volume = 0.3; // Ensure volume is 1 at the end
                     }
                 }, fadeDuration * 1000 / steps); // Calculate interval for smooth fade
             }

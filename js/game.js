@@ -322,10 +322,13 @@ class Game {
 
         if (unitType === 'oracle') {
             //console.log("Player", player, "placed Oracle at", row, col);
-            if (player === 1)
+            if (player === 1) {
                 songManager.playSong('oraclePut', true);
+                songManager.setVolume("oraclePut",0.3)
+            }
             else {
                 songManager.playSong('oraclePut', true);
+                songManager.setVolume("oraclePut",0.3)
                 songManager.playSong('announcer:battleBegins', true);
                 songManager.transitionSong("firstRound", "menu_next", true)
             }
