@@ -88,7 +88,7 @@ class SongManager {
             if (currentStep >= steps) {
                 clearInterval(fadeOutInterval);
                 this.stopSong(fromName);
-                fromSong.volume = 1; // Reset volume for future use
+                fromSong.volume = 0.2; // Reset volume for future use
 
                 // Start playing the second song with fade-in
                 toSong.volume = 0;
