@@ -662,7 +662,7 @@ class P2PGameConnection {
     // Helper to load PeerJS dynamically
     loadPeerJS(callback) {
         const script = document.createElement('script');
-        script.src = 'https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js';
+        script.src = '/js/peerjs.min.js';
         script.onload = callback;
         document.head.appendChild(script);
     }
