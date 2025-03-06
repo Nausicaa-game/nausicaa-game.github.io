@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Nausicaa Game</title>
+      <link rel="stylesheet" href="css/style.css">
+      <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="/css/game.css">
+      <link rel="stylesheet" href="/css/style.css">
+      <link rel="stylesheet" href="/css/menu.css">
+   </head>
+   <body>
+      <div class="card-decoration card1"></div>
+      <div class="card-decoration card2"></div>
+      <div class="card-decoration card3"></div>
+      <div class="overlay"></div>
+      <div class="game-container">
+         <div class="logo-container" style="z-index: 10;">
+            <h1>NAUSICAA</h1>
+            <div class="tagline">Card Game of Myths & Legends</div>
+         </div>
+         <div class="menu-container">
+            <a class="menu-option" data-action="play">
+               <div class="menu-icon">▶</div>
+               <div class="menu-text">
+                  <h3>PLAY</h3>
+                  Begin your journey through the mythical realm</p> 
+               </div>
+            </a>
+            <div class="menu-icon">⟳</div>
+            <div class="menu-text">
+               <h3>PLAY MULTIPLAYER LOCAL</h3>
+               <p>Resume your previous adventure</p>
+            </div>
+            </a> 
+            <a class="menu-option">
+               <div class="menu-icon">?</div>
+               <div class="menu-text">
+                  <h3>RULES</h3>
+                  Learn how to play the game</p> 
+               </div>
+            </a>
+            <a class="menu-option">
+               <div class="menu-icon">⚙</div>
+               <div class="menu-text">
+                  <h3>SETTINGS</h3>
+               </div>
+            </a>
+            <a class="menu-option">
+               <div class="menu-icon">i</div>
+               <div class="menu-text">
+                  <h3>ABOUT</h3>
+                  The story behind Nausicaa</p> 
+               </div>
+            </a>
+         </div>
+         <div class="footer" style="background-color: transparent;">
+            &copy; 2025 Nausicaa Card Game
+         </div>
+      </div>
+      <div class="rules-panel" id="rules-panel" style="display: none;">
+         <div class="rules-content">
+            <h2>Règles Rapides</h2>
+            <button id="close-rules" class="close-btn">×</button>
+            <div class="rules-section">
+               <h3>Objectif</h3>
+               <p>Éliminer l'Oracle adverse pour gagner la partie.</p>
+            </div>
+            <div class="rules-section">
+               <h3>Mana</h3>
+               <p>Commence à 1, augmente de 1 chaque tour (max. 6). Utilisé pour invoquer des unités, attaquer et utiliser des capacités.</p>
+            </div>
+            <div class="rules-section">
+               <h3>Actions</h3>
+               <ul>
+                  <li><strong>Invoquer:</strong> Placez des unités dans votre zone de déploiement (2 rangées).</li>
+                  <li><strong>Déplacer:</strong> 1 case gratuitement par tour selon le mouvement de l'unité.</li>
+                  <li><strong>Dash:</strong> 1 mana pour un mouvement supplémentaire (pas d'attaque ce tour).</li>
+                  <li><strong>Attaquer:</strong> 1 mana par attaque, selon la portée de l'unité.</li>
+               </ul>
+            </div>
+            <div class="rules-section">
+               <h3>Restrictions</h3>
+               <p>Les unités fraîchement invoquées ne peuvent ni se déplacer ni attaquer ce tour.</p>
+            </div>
+         </div>
+      </div>
+      <script src="/js/songManager.js"></script>
+      <script src="/js/wobby-corner.js"></script>
+      <script src="/js/menu.js"></script>
+   </body>
+</html>

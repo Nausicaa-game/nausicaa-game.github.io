@@ -1,0 +1,325 @@
+<!-- filepath: /z:/websites/cardgame/assets/pions.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <!-- Definitions for reusable elements -->
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF5CC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFD700;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="flameGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFF00;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FF4500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B0000;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#00FFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0000CD;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="earthGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Filters -->
+    <filter id="shadowEffect" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
+      <feOffset dx="1" dy="2" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    
+    <filter id="glowEffect" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Oracle (King) -->
+  <g transform="translate(50, 50)" filter="url(#shadowEffect)">
+    <rect width="50" height="50" rx="5" ry="5" fill="url(#goldGradient)" stroke="#6b5900" stroke-width="2"/>
+    <!-- Crown design -->
+    <path d="M15,35 L10,20 L20,25 L25,15 L30,25 L40,20 L35,35 Z" fill="url(#goldGradient)" stroke="#8B7500" stroke-width="1.5"/>
+    <!-- Robe -->
+    <path d="M15,35 L25,45 L35,35 Z" fill="#800080" stroke="#000" stroke-width="1"/>
+    <!-- Mana symbol -->
+    <circle cx="25" cy="25" r="5" fill="#FFFFFF" stroke="#000" stroke-width="1"/>
+    <path d="M25,22 L25,28 M22,25 L28,25" stroke="#000" stroke-width="1.5"/>
+    <!-- Base -->
+    <path d="M15,38 L35,38 L35,42 L15,42 Z" fill="#6b5900"/>
+    <!-- Cost indicator: FREE -->
+    <text x="25" y="15" font-family="Arial" font-size="8" font-weight="bold" fill="#000" text-anchor="middle">FREE</text>
+  </g>
+
+  <!-- Goblin (Low-Cost Offensive) -->
+  <g transform="translate(150, 50)" filter="url(#shadowEffect)">
+    <rect width="50" height="50" rx="5" ry="5" fill="#2E8B57" stroke="#1e5c3a" stroke-width="2"/>
+    <!-- Goblin face -->
+    <path d="M15,20 C15,15 35,15 35,20 L35,35 C35,40 15,40 15,35 Z" fill="#5A8A5A" stroke="#000" stroke-width="1"/>
+    <!-- Ears -->
+    <path d="M15,20 L10,10 L15,15 M35,20 L40,10 L35,15" fill="#5A8A5A" stroke="#000" stroke-width="1"/>
+    <!-- Eyes -->
+    <circle cx="20" cy="25" r="3" fill="#FF4500"/>
+    <circle cx="30" cy="25" r="3" fill="#FF4500"/>
+    <circle cx="20" cy="25" r="1" fill="#000"/>
+    <circle cx="30" cy="25" r="1" fill="#000"/>
+    <!-- Mouth -->
+    <path d="M18,32 Q25,36 32,32" stroke="#000" fill="none" stroke-width="1.5"/>
+    <!-- Teeth -->
+    <path d="M22,32 L22,34 M28,32 L28,34" stroke="#FFF" stroke-width="1.5"/>
+    <!-- Forward attack indicator -->
+    <path d="M25,10 L25,5 M22,7 L25,5 L28,7" stroke="#FFF" stroke-width="1.5"/>
+    <!-- Cost indicator -->
+    <circle cx="10" cy="10" r="6" fill="#FFF" stroke="#000" stroke-width="1"/>
+    <text x="10" y="13" font-family="Arial" font-size="8" font-weight="bold" fill="#000" text-anchor="middle">1</text>
+  </g>
+
+  <!-- Harpy (Explosive Unit) -->
+  <g transform="translate(250, 50)" filter="url(#shadowEffect)">
+    <rect width="50" height="50" rx="5" ry="5" fill="#BA55D3" stroke="#8A3CA0" stroke-width="2"/>
+    <!-- Wings -->
+    <path d="M10,25 Q17,15 25,20 Q33,15 40,25" stroke="#000" fill="#E6A8D7" stroke-width="2"/>
+    <!-- Body -->
+    <path d="M20,20 Q25,18 30,20 L30,40 Q25,42 20,40 Z" fill="#BA55D3" stroke="#000" stroke-width="1"/>
+    <!-- Face -->
+    <circle cx="25" cy="25" r="5" fill="#F5DEB3" stroke="#000" stroke-width="1"/>
+    <!-- Eyes -->
+    <circle cx="23" cy="24" r="1.5" fill="#000"/>
+    <circle cx="27" cy="24" r="1.5" fill="#000"/>
+    <!-- Explosion symbol -->
+    <path d="M15,15 L20,5 L25,15 L30,5 L35,15" stroke="#FF6347" stroke-width="1.5" fill="none"/>
+    <circle cx="25" cy="35" r="5" fill="url(#flameGradient)" stroke="#000" stroke-width="1"/>
+    <!-- Cost indicator -->
+    <circle cx="10" cy="10" r="6" fill="#FFF" stroke="#000" stroke-width="1"/>
+    <text x="10" y="13" font-family="Arial" font-size="8" font-weight="bold" fill="#000" text-anchor="middle">1</text>
+  </g>
+
+  <!-- Naiad (Support) -->
+  <g transform="translate(350, 50)" filter="url(#shadowEffect)">
+    <rect width="50" height="50" rx="5" ry="5" fill="#4169E1" stroke="#2A4591" stroke-width="2"/>
+    <!-- Water form -->
+    <path d="M15,40 C15,25 35,25 35,40 S25,50 15,40" fill="url(#waterGradient)" stroke="#000" stroke-width="1"/>
+    <!-- Hair flowing -->
+    <path d="M20,10 Q15,20 20,30 M25,5 Q20,20 25,35 M30,10 Q35,20 30,30" stroke="#00BFFF" fill="none" stroke-width="1.5" stroke-dasharray="2,1"/>
+    <!-- Face -->
+    <circle cx="25" cy="20" r="5" fill="#ADD8E6" stroke="#000" stroke-width="1"/>
+    <!-- Eyes -->
+    <circle cx="23" cy="19" r="1" fill="#000"/>
+    <circle cx="27" cy="19" r="1" fill="#000"/>
+    <!-- Mouth -->
+    <path d="M23,22 Q25,24 27,22" stroke="#000" fill="none" stroke-width="0.5"/>
+    <!-- Card draw symbol -->
+    <rect x="15" y="10" width="7" height="10" rx="1" ry="1" fill="#FFF" stroke="#000" stroke-width="0.5"/>
+    <rect x="22" y="8" width="7" height="10" rx="1" ry="1" fill="#FFF" stroke="#000" stroke-width="0.5"/>
+    <!-- Cost indicator -->
+    <circle cx="10" cy="10" r="6" fill="#FFF" stroke="#000" stroke-width="1"/>
+    <text x="10" y="13" font-family="Arial" font-size="8" font-weight="bold" fill="#000" text-anchor="middle">1</text>
+  </g>
+
+  <!-- Griffin (Strategic) -->
+  <g transform="translate(450, 50)" filter="url(#shadowEffect)">
+    <rect width="50" height="50" rx="5" ry="5" fill="#DAA520" stroke="#A67D18" stroke-width="2"/>
+    <!-- Eagle head -->
+    <path d="M20,15 Q25,10 30,15 L28,20 L22,20 Z" fill="#FFD700" stroke="#000" stroke-width="1"/>
+    <!-- Beak -->
+    <path d="M24,20 L25,25 L26,20" fill="#FFD700" stroke="#000" stroke-width="0.5"/>
+    <!-- Eyes -->
+    <circle cx="23" cy="17" r="1.5" fill="#000"/>
+    <circle cx="27" cy="17" r="1.5" fill="#000"/>
+    <!-- Lion body -->
+    <path d="M15,20 Q25,18 35,20 L35,35 Q25,38 15,35 Z" fill="#B8860B" stroke="#000" stroke-width="1"/>
+    <!-- Wings -->
+    <path d="M18,20 L10,10 L18,15 M32,20 L40,10 L32,15" fill="#F5DEB3" stroke="#000" stroke-width="1"/>
+    <!-- Hop movement indicator -->
+    <path d="M20,40 C20,35 30,35 30,40" stroke="#FFF" stroke-width="1.5" fill="none"/>
+    <path d="M25,35 L25,45" stroke="#FFF" stroke-width="1" stroke-dasharray="2,1"/>
+    <!-- Cost indicator -->
+    <circle cx="10" cy="10" r="6" fill="#FFF" stroke="#000" stroke-width="1"/>
+    <text x="10" y="13" font-family="Arial" font-size="8" font-weight="bold" fill="#000" text-anchor="middle">2</text>
+  </g>
+
+  <!-- Siren (Ranged) -->
+  <g transform="translate(550, 50)" filter="url(#shadowEffect)">
+    <rect width="50" height="50" rx="5" ry="5" fill="#CD5C5C" stroke="#9B4444" stroke-width="2"/>
+    <!-- Female upper body -->
+    <path d="M20,25 Q25,20 30,25 L30,40 Q25,42 20,40 Z" fill="#FFDAB9" stroke="#000" stroke-width="1"/>
+    <!-- Fish tail -->
+    <path d="M20,40 Q25,35 30,40 L30,45 Q25,50 20,45 Z" fill="#1E90FF" stroke="#000" stroke-width="1"/>
+    <path d="M20,42 L30,42" stroke="#000" stroke-width="1" stroke-dasharray="1,1"/>
+    <!-- Hair -->
+    <path d="M20,25 Q25,10 30,25" fill="#FF6347" stroke="#000" stroke-width="1"/>
+    <!-- Face -->
+    <circle cx="25" cy="28" r="3" fill="#FFDAB9" stroke="#000" stroke-width="0.5"/>
+    <!-- Sound waves -->
+    <path d="M15,20 Q25,15 35,20" stroke="#FF1493" fill="none" stroke-width="1" opacity="0.7"/>
+    <path d="M15,18 Q25,13 35,18" stroke="#FF1493" fill="none" stroke-width="1" opacity="0.5"/>
+    <path d="M15,16 Q25,11 35,16" stroke="#FF1493" fill="none" stroke-width="1" opacity="0.3"/>
+    <!-- Diagonal attack indicators -->
+    <path d="M10,10 L15,15 M40,10 L35,15 M10,40 L15,35 M40,40 L35,35" stroke="#FFF" stroke-width="1"/>
+    <!-- Cost indicator -->
+    <circle cx="10" cy="10" r="6" fill="#FFF" stroke="#000" stroke-width="1"/>
+    <text x="10" y="13" font-family="Arial" font-size="8" font-weight="bold" fill="#000" text-anchor="middle">2</text>
+  </g>
+
+  <!-- Centaur (Utility) -->
+  <g transform="translate(650, 50)" filter="url(#shadowEffect)">
+    <rect width="50" height="50" rx="5" ry="5" fill="#7B68EE" stroke="#5A4AB1" stroke-width="2"/>
+    <!-- Horse body -->
+    <path d="M10,35 L40,35 L35,45 L15,45 Z" fill="#8B4513" stroke="#000" stroke-width="1"/>
+    <!-- Human torso -->
+    <path d="M20,20 L30,20 L30,35 L20,35 Z" fill="#FFDAB9" stroke="#000" stroke-width="1"/>
+    <!-- Head -->
+    <circle cx="25" cy="15" r="5" fill="#FFDAB9" stroke="#000" stroke-width="1"/>
+    <!-- Eyes -->
+    <circle cx="23" cy="14" r="1" fill="#000"/>
+    <circle cx="27" cy="14" r="1" fill="#000"/>
+    <!-- Hair -->
+    <path d="M20,15 Q25,8 30,15" fill="#8B4513" stroke="#000" stroke-width="1"/>
+    <!-- Arms -->
+    <path d="M20,25 L15,30 M30,25 L35,30" stroke="#FFDAB9" stroke-width="2" fill="none"/>
+    <!-- Pull ability indicator -->
+    <path d="M15,5 L35,5" stroke="#FFF" stroke-width="1"/>
+    <path d="M22,2 L15,5 L22,8 M28,2 L35,5 L28,8" stroke="#FFF" stroke-width="1"/>
+    <!-- Cost indicator -->
+    <circle cx="10" cy="10" r="6" fill="#FFF" stroke="#000" stroke-width="1"/>
+    <text x="10" y="13" font-family="Arial" font-size="8" font-weight="bold" fill="#000" text-anchor="middle">2</text>
+  </g>
+
+  <!-- Archer (Ranged) -->
+  <g transform="translate(50, 150)" filter="url(#shadowEffect)">
+    <rect width="50" height="50" rx="5" ry="5" fill="#20B2AA" stroke="#157e79" stroke-width="2"/>
+    <!-- Body -->
+    <path d="M20,30 L30,30 L30,45 L20,45 Z" fill="#FFDAB9" stroke="#000" stroke-width="1"/>
+    <!-- Head -->
+    <circle cx="25" cy="25" r="5" fill="#FFDAB9" stroke="#000" stroke-width="1"/>
+    <!-- Eyes -->
+    <circle cx="23" cy="24" r="1" fill="#000"/>
+    <circle cx="27" cy="24" r="1" fill="#000"/>
+    <!-- Bow -->
+    <path d="M15,25 Q10,35 15,45" stroke="#8B4513" fill="none" stroke-width="2"/>
+    <path d="M35,25 Q40,35 35,45" stroke="#8B4513" fill="none" stroke-width="2"/>
+    <path d="M15,35 L35,35" stroke="#8B4513" stroke-width="1"/>
+    <!-- Arrow -->
+    <path d="M25,20 L25,5" stroke="#000" stroke-width="1"/>
+    <path d="M22,8 L25,5 L28,8" stroke="#000" stroke-width="1"/>
+    <path d="M23,35 L27,35" stroke="#8B4513" stroke-width="1.5"/>
+    <!-- Range indicator -->
+    <path d="M15,15 L10,10 M35,15 L40,10" stroke="#FFF" stroke-width="1" stroke-dasharray="2,1"/>
+    <!-- Cost indicator -->
+    <circle cx="10" cy="10" r="6" fill="#FFF" stroke="#000" stroke-width="1"/>
+    <text x="10" y="13" font-family="Arial" font-size="8" font-weight="bold" fill="#000" text-anchor="middle">3</text>
+  </g>
+
+  <!-- Phoenix (Mobility) -->
+  <g transform="translate(150, 150)" filter="url(#shadowEffect)">
+    <rect width="50" height="50" rx="5" ry="5" fill="#FF4500" stroke="#cc3700" stroke-width="2"/>
+    <!-- Phoenix body -->
+    <path d="M15,35 Q25,30 35,35 L30,45 L20,45 Z" fill="#FF4500" stroke="#000" stroke-width="1"/>
+    <!-- Wings -->
+    <path d="M10,30 Q25,20 40,30" stroke="#FFD700" fill="url(#flameGradient)" stroke-width="1.5"/>
+    <path d="M15,25 Q25,15 35,25" stroke="#FF8C00" fill="url(#flameGradient)" stroke-width="1.5"/>
+    <!-- Head and beak -->
+    <circle cx="25" cy="25" r="5" fill="#FF8C00" stroke="#000" stroke-width="1"/>
+    <path d="M24,25 L26,25 L25,30" fill="#FF4500" stroke="#000" stroke-width="0.5"/>
+    <!-- Eyes -->
+    <circle cx="23" cy="23" r="1" fill="#000"/>
+    <circle cx="27" cy="23" r="1" fill="#000"/>
+    <!-- Flames -->
+    <path d="M20,15 Q25,5 30,15" fill="url(#flameGradient)" stroke="#FF4500" stroke-width="1"/>
+    <path d="M15,40 L20,35 L25,42 L30,35 L35,40" fill="url(#flameGradient)" stroke="#FF4500" stroke-width="1"/>
+    <!-- Diagonal movement indicator -->
+    <path d="M15,15 L10,10 M35,15 L40,10" stroke="#FFF" stroke-width="1"/>
+    <!-- Dark tile restriction -->
+    <path d="M5,45 L15,45" stroke="#000" stroke-width="2"/>
+    <path d="M35,45 L45,45" stroke="#000" stroke-width="2"/>
+    <!-- Cost indicator -->
+    <circle cx="10" cy="10" r="6" fill="#FFF" stroke="#000" stroke-width="1"/>
+    <text x="10" y="13" font-family="Arial" font-size="8" font-weight="bold" fill="#000" text-anchor="middle">3</text>
+  </g>
+
+  <!-- Shapeshifter (Special Ability) -->
+  <g transform="translate(250, 150)" filter="url(#shadowEffect)">
+    <rect width="50" height="50" rx="5" ry="5" fill="#9370DB" stroke="#7054a3" stroke-width="2"/>
+    <!-- Amorphous body -->
+    <path d="M15,15 C10,25 10,35 20,40 C30,45 40,35 40,25 C40,15 30,10 25,15 C20,10 15,15 15,15 Z" 
+          fill="#9370DB" stroke="#000" stroke-width="1" opacity="0.8"/>
+    <!-- Changing face elements -->
+    <circle cx="25" cy="25" r="10" fill="#F8F8FF" stroke="#000" stroke-width="1" opacity="0.6"/>
+    <!-- Multiple features -->
+    <circle cx="20" cy="20" r="2" fill="#00BFFF"/>
+    <circle cx="30" cy="20" r="2" fill="#32CD32"/>
+    <path d="M20,30 Q25,35 30,30" stroke="#FF6347" fill="none" stroke-width="1.5"/>
+    <path d="M15,25 Q20,15 25,25" stroke="#FFD700" fill="none" stroke-width="1" opacity="0.7"/>
+    <path d="M25,25 Q30,15 35,25" stroke="#00BFFF" fill="none" stroke-width="1" opacity="0.7"/>
+    <!-- Swap ability indicator -->
+    <path d="M15,10 L10,15 L15,20 M35,10 L40,15 L35,20" stroke="#FFF" stroke-width="1"/>
+    <path d="M10,15 L40,15" stroke="#FFF" stroke-width="1" stroke-dasharray="2,1"/>
+    <!-- Cost indicator -->
+    <circle cx="10" cy="10" r="6" fill="#FFF" stroke="#000" stroke-width="1"/>
+    <text x="10" y="13" font-family="Arial" font-size="8" font-weight="bold" fill="#000" text-anchor="middle">4</text>
+  </g>
+
+  <!-- Seer (Mana Generation) -->
+  <g transform="translate(350, 150)" filter="url(#glowEffect)">
+    <rect width="50" height="50" rx="5" ry="5" fill="#3CB371" stroke="#2a7d4f" stroke-width="2"/>
+    <!-- Robes -->
+    <path d="M15,45 L35,45 L30,20 L20,20 Z" fill="#4B0082" stroke="#000" stroke-width="1"/>
+    <!-- Crystal ball -->
+    <circle cx="25" cy="30" r="8" fill="#F0FFFF" stroke="#000" stroke-width="1" opacity="0.7"/>
+    <!-- Head -->
+    <circle cx="25" cy="15" r="5" fill="#FFDAB9" stroke="#000" stroke-width="1"/>
+    <!-- Eyes -->
+    <circle cx="23" cy="14" r="1" fill="#000"/>
+    <circle cx="27" cy="14" r="1" fill="#000"/>
+    <!-- Hood -->
+    <path d="M18,15 Q25,5 32,15" fill="#4B0082" stroke="#000" stroke-width="1"/>
+    <!-- Mana crystals -->
+    <path d="M12,25 L16,35 L8,35 Z" fill="url(#goldGradient)" stroke="#000" stroke-width="1"/>
+    <path d="M38,25 L42,35 L34,35 Z" fill="url(#goldGradient)" stroke="#000" stroke-width="1"/>
+    <!-- Mana symbol -->
+    <text x="25" y="30" font-family="Arial" font-size="10" font-weight="bold" fill="#4B0082" text-anchor="middle">M</text>
+    <!-- Mana generation indicator -->
+    <path d="M25,5 L25,10 M22,7 L25,5 L28,7" stroke="#FFD700" stroke-width="1"/>
+    <!-- Cost indicator -->
+    <circle cx="10" cy="10" r="6" fill="#FFF" stroke="#000" stroke-width="1"/>
+    <text x="10" y="13" font-family="Arial" font-size="8" font-weight="bold" fill="#000" text-anchor="middle">5</text>
+  </g>
+
+  <!-- Titan (Powerful Unit) -->
+  <g transform="translate(450, 150)" filter="url(#shadowEffect)">
+    <rect width="50" height="50" rx="5" ry="5" fill="#8B0000" stroke="#6b0000" stroke-width="2"/>
+    <!-- Muscular body -->
+    <path d="M15,45 L35,45 L32,25 L18,25 Z" fill="#B22222" stroke="#000" stroke-width="1"/>
+    <!-- Arms -->
+    <path d="M18,25 L10,35 M32,25 L40,35" stroke="#B22222" stroke-width="3" fill="none"/>
+    <!-- Head -->
+    <circle cx="25" cy="15" r="8" fill="#B22222" stroke="#000" stroke-width="1"/>
+    <!-- Eyes -->
+    <circle cx="22" cy="14" r="2" fill="#FFD700"/>
+    <circle cx="28" cy="14" r="2" fill="#FFD700"/>
+    <circle cx="22" cy="14" r="1" fill="#000"/>
+    <circle cx="28" cy="14" r="1" fill="#000"/>
+    <!-- Helmet -->
+    <path d="M17,10 L33,10 L35,15 L15,15 Z" fill="#A52A2A" stroke="#000" stroke-width="1"/>
+    <!-- Area damage indicators -->
+    <path d="M10,5 L15,10 M40,5 L35,10 M10,45 L15,40 M40,45 L35,40" stroke="#FFF" stroke-width="1.5"/>
+    <circle cx="25" cy="25" r="15" stroke="#FFF" stroke-width="1" fill="none" stroke-dasharray="2,2"/>
+    <!-- Cost indicator -->
+    <circle cx="10" cy="10" r="6" fill="#FFF" stroke="#000" stroke-width="1"/>
+    <text x="10" y="13" font-family="Arial" font-size="8" font-weight="bold" fill="#000" text-anchor="middle">6</text>
+  </g>
+</svg>

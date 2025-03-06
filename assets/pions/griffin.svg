@@ -1,0 +1,74 @@
+<!-- filepath: /z:/websites/cardgame/assets/pions.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 260">
+  <!-- Definitions for reusable elements -->
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF5CC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFD700;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="flameGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFF00;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FF4500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B0000;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#00FFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0000CD;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="earthGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Filters -->
+    <filter id="shadowEffect" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
+      <feOffset dx="1" dy="2" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    
+    <filter id="glowEffect" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+
+<!-- Griffin (Strategic) -->
+  <g transform="translate(5, 5) scale(5)" filter="url(#shadowEffect)">
+    <rect width="50" height="50" rx="5" ry="5" fill="#DAA520" stroke="#A67D18" stroke-width="2"/>
+    <!-- Eagle head -->
+    <path d="M20,15 Q25,10 30,15 L28,20 L22,20 Z" fill="#FFD700" stroke="#000" stroke-width="1"/>
+    <!-- Beak -->
+    <path d="M24,20 L25,25 L26,20" fill="#FFD700" stroke="#000" stroke-width="0.5"/>
+    <!-- Eyes -->
+    <circle cx="23" cy="17" r="1.5" fill="#000"/>
+    <circle cx="27" cy="17" r="1.5" fill="#000"/>
+    <!-- Lion body -->
+    <path d="M15,20 Q25,18 35,20 L35,35 Q25,38 15,35 Z" fill="#B8860B" stroke="#000" stroke-width="1"/>
+    <!-- Wings -->
+    <path d="M18,20 L10,10 L18,15 M32,20 L40,10 L32,15" fill="#F5DEB3" stroke="#000" stroke-width="1"/>
+    <!-- Hop movement indicator -->
+    <path d="M20,40 C20,35 30,35 30,40" stroke="#FFF" stroke-width="1.5" fill="none"/>
+    <path d="M25,35 L25,45" stroke="#FFF" stroke-width="1" stroke-dasharray="2,1"/>
+    <!-- Cost indicator -->
+    <!-- <circle cx="10" cy="10" r="6" fill="#FFF" stroke="#000" stroke-width="1"/> -->
+    <!-- <text x="10" y="13" font-family="Arial" font-size="8" font-weight="bold" fill="#000" text-anchor="middle">2</text> -->
+  </g>
+</svg>
