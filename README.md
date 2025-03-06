@@ -126,21 +126,6 @@ Eliminate the opponent's **Oracle** (King equivalent) to win the game.
 - **Restriction**: One attack per turn per unit
 - **Friendly Fire**: Enabled by default
 
-## Arena Modifications
-
-### Customization Options
-- Water barriers
-- Mountain obstacles
-- Magical zones
-- Terrain affecting movement
-- Player-agreed modifications encouraged
-
-## Game Philosophy
-- Emphasizes strategic depth
-- Encourages player creativity
-- Flexible rule set
-- Balanced unit design
-
 ## Technical Considerations
 - Recommended for web implementation
 - Supports turn-based multiplayer
@@ -153,6 +138,6 @@ Interested in expanding the game? Contribute by:
 - Balancing game mechanics
 
 ## License
-[Specify Your License]
+- MIT License
 
-**Created with ❤️ by Mythological Game Designers**
+**Created with ❤️ by fox3000foxy**
