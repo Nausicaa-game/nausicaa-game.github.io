@@ -1,139 +1,160 @@
 <!DOCTYPE html>
 <html lang="fr">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Nausicaa - Jeu de Plateau</title>
-      <link rel="stylesheet" href="/css/style.css">
-      <link rel="stylesheet" href="/css/game.css">
-      <link rel="stylesheet" href="/css/app.css">
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
-      <link rel="icon" type="image/png" href="/assets/icon-mini.png">
-      <meta property="og:title" content="Nausicaa - Partie en cours">
-      <meta property="og:description" content="Quelqu'un vous a demandé de jouer avec lui.">
-      <meta property="og:url" content="https://nausicaa-game.com">
-      <meta property="og:type" content="website">
-      <meta name="twitter:title" content="Nausicaa - Partie en cours">
-      <meta name="twitter:description" content="Quelqu'un vous a demandé de jouer avec lui.">
-   </head>
-   <body class="game-page">
-      <div class="overlay"></div>
-      <header class="game-header">
-         <div style="display: flex; flex-direction: row; position: relative; top: 16px;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nausicaa - Jeu de Plateau</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/game.css">
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="/assets/icon-mini.png">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="Nausicaa - Partie en cours">
+    <meta property="og:description" content="Quelqu'un vous a demandé de jouer avec lui.">
+    <meta property="og:url" content="https://nausicaa-game.com">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter -->
+    <meta name="twitter:title" content="Nausicaa - Partie en cours">
+    <meta name="twitter:description" content="Quelqu'un vous a demandé de jouer avec lui.">
+</head>
+<body class="game-page">
+    <div class="overlay"></div>
+    <header class="game-header">
+        <div style="display: flex; flex-direction: row; position: relative; top: 16px;">
             <div class="logo" style="
-               background: url('./assets/icon.png'),beige;
-               width: 48px;    
-               height: 48px;
-               background-size: contain;
-               border-radius: 50%;
-               ">
+                background: url('./assets/icon.png'),beige;
+                width: 48px;    
+                height: 48px;
+                background-size: contain;
+                border-radius: 50%;
+            ">
             </div>
             <h1 style="
-               position: relative;
-               left: 8px;
-               top: -4px;
-               ">Nausicaa</h1>
-         </div>
-         <div class="game-controls">
+                position: relative;
+                left: 8px;
+                top: -4px;
+            ">Nausicaa</h1>
+        </div>
+        <div class="game-controls">
             <button id="reset-game" class="btn secondary">Nouvelle partie</button>
             <button id="rules-toggle" class="btn secondary">Règles</button>
-            <button onclick='location.href="/"' class="btn secondary">
-               Retour à l'accueil</a>
-         </div>
-      </header>
-      <main class="game-container">
-      <aside class="player-area player-one">
-      <div class="player-info">
-      <h3>Joueur 1</h3>
-      <div class="mana-container">
-      <div class="mana-label">Mana: </div>
-      <div class="mana-crystals" id="player-one-mana">1/1</div>
-      </div>
-      </div>
-      <div class="hand-container">
-      <h4>Votre main</h4>
-      <div class="hand" id="player-one-hand">
-      </div>
-      </div>
-      <div class="action-panel">
-      <div class="current-action" id="player-one-action">Sélectionnez une unité</div>
-      <button id="end-turn-one" class="btn primary">Terminer le tour</button>
-      </div>
-      </aside>
-      <section class="board-container">
-      <div class="turn-indicator" id="turn-indicator">Tour du Joueur 1</div>
-      <div class="game-board" id="game-board">
-      </div>
-      <div class="unit-info" id="unit-info">
-      <h4>Information sur l'unité</h4>
-      <div class="unit-details">Sélectionnez une unité pour voir ses détails</div>
-      </div>
-      </section>
-      <aside class="player-area player-two">
-      <div class="player-info">
-      <h3>Joueur 2</h3>
-      <div class="mana-container">
-      <div class="mana-label">Mana: </div>
-      <div class="mana-crystals" id="player-two-mana">1/1</div>
-      </div>
-      </div>
-      <div class="hand-container">
-      <h4>Main adverse</h4>
-      <div class="hand" id="player-two-hand">
-      </div>
-      </div>
-      <div class="action-panel">
-      <div class="current-action" id="player-two-action">En attente...</div>
-      <button id="end-turn-two" class="btn primary" disabled>Terminer le tour</button>
-      </div>
-      </aside>
-      </main>
-      <div class="rules-panel" id="rules-panel">
-         <div class="rules-content">
+            <button onclick='location.href="/"' class="btn secondary">Retour à l'accueil</a>
+        </div>
+    </header>
+
+    <main class="game-container">
+        <aside class="player-area player-one">
+            <div class="player-info">
+                <h3>Joueur 1</h3>
+                <div class="mana-container">
+                    <div class="mana-label">Mana: </div>
+                    <div class="mana-crystals" id="player-one-mana">1/1</div>
+                </div>
+            </div>
+            
+            <div class="hand-container">
+                <h4>Votre main</h4>
+                <div class="hand" id="player-one-hand">
+                    <!-- Cards will be dynamically added here -->
+                </div>
+            </div>
+            
+            <div class="action-panel">
+                <div class="current-action" id="player-one-action">Sélectionnez une unité</div>
+                <button id="end-turn-one" class="btn primary">Terminer le tour</button>
+            </div>
+        </aside>
+        
+        <section class="board-container">
+            <div class="turn-indicator" id="turn-indicator">Tour du Joueur 1</div>
+            
+            <div class="game-board" id="game-board">
+                <!-- The 10x8 board will be generated here by JavaScript -->
+            </div>
+            
+            <div class="unit-info" id="unit-info">
+                <h4>Information sur l'unité</h4>
+                <div class="unit-details">Sélectionnez une unité pour voir ses détails</div>
+            </div>
+        </section>
+        
+        <aside class="player-area player-two">
+            <div class="player-info">
+                <h3>Joueur 2</h3>
+                <div class="mana-container">
+                    <div class="mana-label">Mana: </div>
+                    <div class="mana-crystals" id="player-two-mana">1/1</div>
+                </div>
+            </div>
+            
+            <div class="hand-container">
+                <h4>Main adverse</h4>
+                <div class="hand" id="player-two-hand">
+                    <!-- Cards will be dynamically added here -->
+                </div>
+            </div>
+            
+            <div class="action-panel">
+                <div class="current-action" id="player-two-action">En attente...</div>
+                <button id="end-turn-two" class="btn primary" disabled>Terminer le tour</button>
+            </div>
+        </aside>
+    </main>
+    
+    <div class="rules-panel" id="rules-panel">
+        <div class="rules-content">
             <h2>Règles Rapides</h2>
             <button id="close-rules" class="close-btn">×</button>
+            
             <div class="rules-section">
-               <h3>Objectif</h3>
-               <p>Éliminer l'Oracle adverse pour gagner la partie.</p>
+                <h3>Objectif</h3>
+                <p>Éliminer l'Oracle adverse pour gagner la partie.</p>
             </div>
+            
             <div class="rules-section">
-               <h3>Mana</h3>
-               <p>Commence à 1, augmente de 1 chaque tour (max. 6). Utilisé pour invoquer des unités, attaquer et utiliser des capacités.</p>
+                <h3>Mana</h3>
+                <p>Commence à 1, augmente de 1 chaque tour (max. 6). Utilisé pour invoquer des unités, attaquer et utiliser des capacités.</p>
             </div>
+            
             <div class="rules-section">
-               <h3>Actions</h3>
-               <ul>
-                  <li><strong>Invoquer:</strong> Placez des unités dans votre zone de déploiement (2 rangées).</li>
-                  <li><strong>Déplacer:</strong> 1 case gratuitement par tour selon le mouvement de l'unité.</li>
-                  <li><strong>Dash:</strong> 1 mana pour un mouvement supplémentaire (pas d'attaque ce tour).</li>
-                  <li><strong>Attaquer:</strong> 1 mana par attaque, selon la portée de l'unité.</li>
-               </ul>
+                <h3>Actions</h3>
+                <ul>
+                    <li><strong>Invoquer:</strong> Placez des unités dans votre zone de déploiement (2 rangées).</li>
+                    <li><strong>Déplacer:</strong> 1 case gratuitement par tour selon le mouvement de l'unité.</li>
+                    <li><strong>Dash:</strong> 1 mana pour un mouvement supplémentaire (pas d'attaque ce tour).</li>
+                    <li><strong>Attaquer:</strong> 1 mana par attaque, selon la portée de l'unité.</li>
+                </ul>
             </div>
+            
             <div class="rules-section">
-               <h3>Restrictions</h3>
-               <p>Les unités fraîchement invoquées ne peuvent ni se déplacer ni attaquer ce tour.</p>
+                <h3>Restrictions</h3>
+                <p>Les unités fraîchement invoquées ne peuvent ni se déplacer ni attaquer ce tour.</p>
             </div>
-         </div>
-      </div>
-      <div class="chat-toggle" id="chat-toggle" style="display: none;">
-         💬
-         <span class="notification-badge" id="chat-notification-badge"></span>
-      </div>
-      <div class="chat-container hidden" id="chat-container">
-         <div id="chat-messages" class="chat-messages">
-         </div>
-         <div class="chat-input-area">
+        </div>
+    </div>
+
+    <div class="chat-toggle" id="chat-toggle" style="display: none;">
+         💬<span class="notification-badge" id="chat-notification-badge"></span>
+    </div>
+
+    <div class="chat-container hidden" id="chat-container">
+        <div id="chat-messages" class="chat-messages"></div>
+        <div class="chat-input-area">
             <input type="text" id="chat-input" autocomplete="off" placeholder="Entrez votre message...">
             <button id="chat-send" class="btn primary">Send</button>
-         </div>
-      </div>
-      </script> 
-      <script src="/js/p2p-connection.js"></script>
-      <script src="/js/main.js"></script>
-      <script src="/js/songManager.js"></script>
-      <script src="/js/game.js"></script>
-      <script src="/js/app.js"></script>
-   </body>
+        </div>
+    </div>
+
+    <script src="/js/p2p-connection.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/songManager.js"></script>
+    <script src="/js/game.js"></script>
+    <script src="/js/app.js"></script>
+</body>
 </html>
