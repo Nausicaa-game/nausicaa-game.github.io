@@ -350,6 +350,9 @@
 .board-cell.valid-attack.dark {
   background-color: rgba(145, 94, 0, 0.8); s
 } */
+.header-toggle-button {
+  display:none
+}
 
 @media (max-width: 767px) {
   .game-controls{
@@ -468,8 +471,8 @@
   }
 
   .game-header {
-    height: 180px;
-    transition: height 0.3s ease; /* Add transition for smooth animation */
+    /* height: 180px; */
+    /* transition: height 0.3s ease; Add transition for smooth animation */
   }
 
   .game-header.retracted {
@@ -494,6 +497,7 @@
     cursor: pointer;
     color: var(--text-light);
     z-index: 10;
+    display: block;
   }
 }
 
