@@ -529,7 +529,7 @@
   }
 }
 
-@media (min-width: 768px) and (max-width: 991px) {
+/* @media (min-width: 768px) and (max-width: 991px) {
   body {
     font-size: 16px;
   }
@@ -566,4 +566,4 @@
     width: 60px;
     height: 60px;
   }
-}
+} */
