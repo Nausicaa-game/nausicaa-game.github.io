@@ -105,41 +105,6 @@ Training a card game AI, especially with techniques like Reinforcement Learning,
 5.  **Exploration vs. Exploitation:**  The AI needs to explore the game space to discover new strategies, but it also needs to exploit its current knowledge to win games.  Techniques like epsilon-greedy (randomly choosing actions with probability epsilon) are commonly used.
 
 6.  **Hyperparameter Tuning:**  Reinforcement learning algorithms have many hyperparameters (e.g., learning rate, discount factor, exploration rate).  Tuning these parameters is essential for good performance.
-
-### Web Libraries for AI and Game Development
-
-If you're building a web-based card game and want to incorporate AI, here are some relevant libraries:
-
-*   **TensorFlow.js:**  A JavaScript library for training and deploying machine learning models in the browser or Node.js.  Excellent for implementing neural networks for DQN or policy gradient methods.
-
-    *   **Pros:**  Runs in the browser, leverages GPU acceleration, large community.
-    *   **Cons:**  Can be slower than native Python implementations for training.
-
-*   **Brain.js:** Another JavaScript neural network library.  Simpler to use than TensorFlow.js for basic neural network tasks.
-
-    *   **Pros:**  Easy to learn, good for simple AI tasks.
-    *   **Cons:**  Less flexible than TensorFlow.js for complex models.
-
-*   **PyTorch (with Flask/FastAPI):** Train your AI models using Python and PyTorch (a popular deep learning framework), then expose the trained model as an API endpoint using Flask or FastAPI. Your web application can then send game states to the API and receive AI decisions.
-
-    *   **Pros:**  PyTorch is powerful and flexible, Python has a rich ecosystem of AI libraries.
-    *   **Cons:**  Requires setting up a separate backend server.
-
-*   **Phaser:** A popular 2D game framework for the web.  Provides tools for creating game graphics, handling user input, and managing game logic.  You can integrate your AI algorithms (written in JavaScript) into your Phaser game.
-
-    *   **Pros:**  Well-suited for card games, large community, good documentation.
-    *   **Cons:**  Requires learning the Phaser API.
-
-*   **PixiJS:**  Another 2D rendering library that can be used to create game graphics.  More lightweight than Phaser, but requires more manual coding.
-
-    *   **Pros:**  Fast and flexible.
-    *   **Cons:**  Lower-level than Phaser.
-
-*   **socket.io:** A library for real-time, bidirectional communication between web clients and servers. Useful for multiplayer card games where the AI needs to interact with other players.
-
-Choosing the right libraries depends on the complexity of your AI and your comfort level with different programming languages and frameworks. For complex AI, Python with PyTorch and a web API is often a good choice. For simpler AI that runs directly in the browser, TensorFlow.js or Brain.js are viable options.
-
-
 ## Bug Paper
 
 (This section would contain a detailed description of a specific bug, including steps to reproduce, expected behavior, and actual behavior.)
