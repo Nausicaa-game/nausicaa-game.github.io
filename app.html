@@ -82,6 +82,16 @@
         <section class="board-container">
             <div class="turn-indicator" id="turn-indicator" data-i18n="player-1-turn">Tour du Joueur 1</div>
             
+            <div class="options">
+                <div class="timer">
+                    Timer mode
+                    <label class="switch">
+                        <input type="checkbox" id="timerMode">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div id="timer-display" style="display: none; width:200px; text-align: center;">15</div>
+            </div>
             <div class="game-board" id="game-board">
                 <!-- The 10x8 board will be generated here by JavaScript -->
             </div>

@@ -341,6 +341,14 @@ class P2PGameConnection {
 
         let oldUnitsId = this.game.board.map(row => row.map(cell => cell ? cell.uuid : null));
 
+        this.game.timerMode = gameState.timerMode;
+        this.game.timerSeconds = gameState.timerSeconds;
+        // this.game.turnTimer = gameState.turnTimer;
+
+        if(this.game.timerMode){
+            document.getElementById("timer-display").style.display = "block";
+        }
+
         this.game.currentPlayer = gameState.currentPlayer;
         this.game.turn = gameState.turn;
         this.game.gameOver = gameState.gameOver;
@@ -443,6 +451,9 @@ class P2PGameConnection {
     getSerializableGameState() {
         // Create a simplified version of the game state for transmission
         const state = {
+            timerMode: this.game.timerMode, // Default: timer mode off
+            timerSeconds: this.game.timerSeconds,
+            turnTimer: this.game.turnTimer,
             currentPlayer: this.game.currentPlayer,
             turn: this.game.turn,
             gameOver: this.game.gameOver,

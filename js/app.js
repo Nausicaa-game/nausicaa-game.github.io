@@ -133,6 +133,7 @@ function startGameTheme() {
         songManager.playSong('announcer:allPick');
         backgroundThemePlaying = true;
     }
+    document.querySelector(".timer").style.display = 'none';
 }
 
 document.querySelector('.game-container').addEventListener('click', function() {
@@ -163,6 +164,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (header.classList.contains('retracted')) {
         header.classList.remove('retracted');
       }
+    });
+
+    const timerModeCheckbox = document.getElementById('timerMode');
+    timerModeCheckbox.addEventListener('change', function() {
+        game.setTimerMode(this.checked);
     });
   });
 

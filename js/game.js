@@ -134,9 +134,44 @@ for (const unitType in UNITS) {
 
 class Game {
     constructor() {
+        this.timerMode = false; // Default: timer mode off
+        this.timerSeconds = 15;
+        this.turnTimer = null;
         this.initializeUI();
         this.initializeGame();
         this.setupEventListeners();
+    }
+
+    setTimerMode(enabled) {
+        this.timerMode = enabled;
+        if (this.timerMode && !this.gameOver) {
+            // this.startTurnTimer();
+        } else {
+            // this.stopTurnTimer();
+        }
+    }
+
+    startTurnTimer() {
+        document.getElementById("timer-display").style.display = "block";
+        this.stopTurnTimer(); // Clear any existing timer
+        this.timerSeconds = 15; // Reset timer seconds
+        this.updateTimerDisplay(); // Update display immediately
+        this.turnTimer = setInterval(() => {
+            this.timerSeconds -= 0.01;
+            this.timerSeconds = parseFloat(this.timerSeconds.toFixed(2));
+            this.updateTimerDisplay();
+            if (this.timerSeconds <= 0 && !this.gameOver) {
+                clearInterval(this.turnTimer); // Clear the interval
+                this.endTurn();
+            }
+        }, 10);
+    }
+
+    stopTurnTimer() {
+        if (this.turnTimer) {
+            clearTimeout(this.turnTimer);
+            this.turnTimer = null;
+        }
     }
 
     initializeUI() {
@@ -341,6 +376,9 @@ class Game {
                 songManager.setVolume("oraclePut",0.3)
                 songManager.playSong('announcer:battleBegins', true);
                 songManager.transitionSong("firstRound", "menu_next", true)
+                if (game.timerMode) {
+                    game.startTurnTimer();
+                }
             }
         }
 
@@ -498,6 +536,7 @@ class Game {
             //console.log("Bruh what are ut trying bud")
             return;
         }
+
         // Make sure the clicked card belongs to the current player
         const isPlayerOneCard = cardElement.closest('#player-one-hand') !== null;
         const isPlayerTwoCard = cardElement.closest('#player-two-hand') !== null;
@@ -1628,6 +1667,7 @@ class Game {
     }
 
     endTurn() {
+        this.stopTurnTimer();
         // Reset unit flags for the current player
         this.players[this.currentPlayer].units.forEach(unitInfo => {
             const unit = unitInfo.unit;
@@ -1680,6 +1720,14 @@ class Game {
 
         // Update turn indicator
         document.getElementById('turn-indicator').textContent = `${translations[preferredLanguage]['turn']} ${this.turn} - ${translations[preferredLanguage]['player']} ${this.currentPlayer}`;
+        this.highlightCurrentPlayer();
+        if (this.timerMode && !this.gameOver) {
+            if(this.players[2].units.find(u=>u.unit.type=="oracle")) {
+                // check both of oracles are present before starting timer
+                this.startTurnTimer();
+                console.log("oracle2 is present, starting timer")
+            }
+        }
     }
 
     resetGame() {
@@ -1710,25 +1758,13 @@ class Game {
         // Update UI
         this.updateGameUI();
         this.updateActionText(translations[preferredLanguage]['new_game_started']);
+        if (this.timerMode) {
+            this.startTurnTimer();
+        }
     }
 
     endGame(winner) {
-        //console.log("endGame() called")
-        // const me = p2pConnection?.gameId ? p2pConnection.isHost ? 1 : 2 : this.currentPlayer;
-        // const opponentPlayer = me === 1 ? 2 : 1;
-        // const board = this.board;
-        // for(let boardRow of board) {
-        //     for(let unit of boardRow) {
-        //         if(unit) {
-        //             //console.log(unit)
-        //         }
-        //         if(unit && unit.type === 'oracle' && unit.player === opponentPlayer) {
-        //             //console.log("Oracle is still alive, abordting endGame()")
-        //             return;
-        //         }
-        //     }
-        // }
-
+        this.stopTurnTimer();
         this.gameOver = true;
         this.updateActionText(`${translations[preferredLanguage]['player_wins'].replace('{player}', winner)}`);
         document.getElementById('turn-indicator').textContent = `${translations[preferredLanguage]['player']} ${winner} ${translations[preferredLanguage]['wins']}!`;
@@ -1970,6 +2006,28 @@ class Game {
         // Enable/disable end turn buttons
         document.getElementById('end-turn-one').disabled = this.currentPlayer !== 1 || this.gameOver;
         document.getElementById('end-turn-two').disabled = this.currentPlayer !== 2 || this.gameOver;
+        this.highlightCurrentPlayer();
+    }
+
+    highlightCurrentPlayer() {
+        const playerOneHeader = document.querySelector('.player-area.player-one .player-info h3');
+        const playerTwoHeader = document.querySelector('.player-area.player-two .player-info h3');
+
+        if (this.currentPlayer === 1) {
+            playerOneHeader.classList.add('current-turn');
+            playerTwoHeader.classList.remove('current-turn');
+        } else {
+            playerTwoHeader.classList.add('current-turn');
+            playerOneHeader.classList.remove('current-turn');
+        }
+    }
+
+    updateTimerDisplay() {
+        // You'll need an element in your HTML to display the timer
+        const timerDisplay = document.getElementById('timer-display');
+        if (timerDisplay) {
+            timerDisplay.textContent = `${this.timerSeconds}`;
+        }
     }
 
     updateHandDisplay(playerIndex) {
