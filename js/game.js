@@ -140,6 +140,7 @@ class Game {
         this.initializeUI();
         this.initializeGame();
         this.setupEventListeners();
+        this.setupCardPreviewSystem();
     }
 
     setTimerMode(enabled) {
@@ -2072,6 +2073,23 @@ class Game {
             card.appendChild(cardDetails);
 
             handContainer.appendChild(card);
+            console.log(card)
+
+            // Add hover functionality for each card
+            let hoverTimer = null;
+            let hoverDelay = 750;
+            
+            card.addEventListener('mouseover', (e) => {
+                clearTimeout(hoverTimer);
+                hoverTimer = setTimeout(() => {
+                    this.showUnitCardPreview(unitType, e.clientX, e.clientY);
+                }, hoverDelay);
+            });
+            
+            card.addEventListener('mouseout', () => {
+                clearTimeout(hoverTimer);
+                this.hideUnitCardPreview();
+            });
         });
 
         // If hand is empty, show message
@@ -2428,6 +2446,7 @@ class Game {
 
                 cell.dataset.row = row;
                 cell.dataset.col = col;
+                
                 cell.addEventListener('click', (e) => this.handleCellClick(e));
                 
                 boardElement.appendChild(cell);
@@ -2539,5 +2558,187 @@ class Game {
             }
         }
         return null; // Or throw an error if you prefer
+    }
+
+    // Add this code to your Game class in game.js
+    setupCardPreviewSystem() {
+        // Variables to track hover state
+        const hoverDelay = 750; // 2 seconds
+        const hoverTimers = new Map(); // Map to store timers for different elements
+        
+        // Use a single document-level event listener for efficiency
+        // document.addEventListener('mouseover', (e) => {
+        //     // Check if we're hovering over a unit on the board
+        //     const unitElement = e.target.closest('.unit');
+        //     if (unitElement) {
+        //         const unitType = unitElement.dataset.type;
+        //         if (unitType) {
+        //             // Clear any existing timer for this element
+        //             const elementId = unitElement.dataset.uuid || `unit-${unitType}-${Date.now()}`;
+        //             if (hoverTimers.has(elementId)) {
+        //                 clearTimeout(hoverTimers.get(elementId));
+        //             }
+                    
+        //             // Set new timer
+        //             const timer = setTimeout(() => {
+        //                 this.showUnitCardPreview(unitType, e.clientX, e.clientY);
+        //             }, hoverDelay);
+                    
+        //             hoverTimers.set(elementId, timer);
+        //         }
+        //         return;
+        //     }
+            
+        //     // Check if we're hovering over a card in a player's hand
+        //     const cardElement = e.target.closest('.card');
+        //     if (cardElement) {
+        //         const unitType = cardElement.dataset.type;
+        //         if (unitType) {
+        //             // Clear any existing timer for this element
+        //             const elementId = cardElement.dataset.uuid || `card-${unitType}-${Date.now()}`;
+        //             if (hoverTimers.has(elementId)) {
+        //                 clearTimeout(hoverTimers.get(elementId));
+        //             }
+                    
+        //             // Set new timer
+        //             const timer = setTimeout(() => {
+        //                 this.showUnitCardPreview(unitType, e.clientX, e.clientY);
+        //             }, hoverDelay);
+                    
+        //             hoverTimers.set(elementId, timer);
+        //         }
+        //     }
+        // });
+        
+        // Clear timers when mouse leaves elements
+        // document.addEventListener('mouseout', (e) => {
+        //     const unitElement = e.target.closest('.unit');
+        //     const cardElement = e.target.closest('.card');
+            
+        //     if (unitElement) {
+        //         const elementId = unitElement.dataset.uuid || `unit-${unitElement.dataset.type}-${Date.now()}`;
+        //         if (hoverTimers.has(elementId)) {
+        //             clearTimeout(hoverTimers.get(elementId));
+        //             hoverTimers.delete(elementId);
+        //         }
+                
+        //         // Only hide preview if we're not moving to another unit or card
+        //         const relatedTarget = e.relatedTarget;
+        //         if (!relatedTarget || (!relatedTarget.closest('.unit') && !relatedTarget.closest('.card'))) {
+        //             this.hideUnitCardPreview();
+        //         }
+        //     }
+            
+        //     if (cardElement) {
+        //         const elementId = cardElement.dataset.uuid || `card-${cardElement.dataset.type}-${Date.now()}`;
+        //         if (hoverTimers.has(elementId)) {
+        //             clearTimeout(hoverTimers.get(elementId));
+        //             hoverTimers.delete(elementId);
+        //         }
+                
+        //         // Only hide preview if we're not moving to another unit or card
+        //         const relatedTarget = e.relatedTarget;
+        //         if (!relatedTarget || (!relatedTarget.closest('.unit') && !relatedTarget.closest('.card'))) {
+        //             this.hideUnitCardPreview();
+        //         }
+        //     }
+        // });
+    }
+
+    showUnitCardPreview(unitType, x, y) {
+        const unitData = UNITS[unitType];
+        if (!unitData) return;
+    
+        // Remove any existing preview
+        this.hideUnitCardPreview();
+        
+        // Create card preview container
+        const preview = document.createElement('div');
+        preview.id = 'unit-card-preview';
+        preview.className = 'unit-card';
+        
+        // Get translated movement and attack types
+        const movementText = translations[preferredLanguage][`${unitData.movement}_movement`] || unitData.movement;
+        const attackText = translations[preferredLanguage][`${unitData.attack}_attack`] || unitData.attack;
+        let abilityText = '';
+        
+        if (unitData.ability) {
+            abilityText = translations[preferredLanguage][`${unitData.ability}_ability`] || unitData.ability;
+        }
+        
+        // Add card content
+        preview.innerHTML = `
+            <div class="unit-image">
+                <img src="/assets/pions/${unitType}.svg" alt="${unitData.name}">
+            </div>
+            <h3>${unitData.name}</h3>
+            <div class="unit-stats">
+                <p><strong>${translations[preferredLanguage]['health']}:</strong> ${unitData.health}</p>
+                ${unitData.ability ? `<p><strong>${translations[preferredLanguage]['ability'] || "Capacité"}:</strong> ${abilityText}</p>` : ''}
+            </div>
+            <p class="unit-desc">${unitData.description}</p>
+        `;
+        
+        console.log("showUnitCardPreview", x, y)
+        // Add styling
+        Object.assign(preview.style, {
+            backgroundColor: 'var(--background-light)',
+            color: 'var(--text-color)',
+            padding: '1.5rem',
+            border: 'var(--border-ornate)',
+            borderRadius: '8px',
+            boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
+            maxWidth: '300px',
+            width: '280px',
+            textAlign: 'center',
+            opacity: '0',
+            transition: 'opacity 0.3s ease',
+            position: 'fixed',
+            zIndex: '1000', 
+            // top: y +'5',
+            // left: 5 + '5',
+            pointerEvents: 'none'
+        });
+        
+        // Add to document
+        document.body.appendChild(preview);
+        
+        // Position the preview to avoid being cut off by viewport edges
+        const rect = preview.getBoundingClientRect();
+        
+        // Check left edge
+        if (x - rect.width / 2 < 0) {
+            preview.style.left = '10px'; // Stick to the left edge with a small margin
+        } else if (x + rect.width / 2 > window.innerWidth) {
+            preview.style.left = `${window.innerWidth - rect.width - 10}px`; // Stick to the right edge with a small margin
+        } else {
+            preview.style.left = `${x - rect.width / 2}px`; // Center the preview
+        }
+
+        // Check top edge
+        if (y - rect.height / 2 < 0) {
+            preview.style.top = '10px'; // Stick to the top edge with a small margin
+        } else if (y + rect.height > window.innerHeight) {
+            preview.style.top = `${window.innerHeight - rect.height - 10}px`; // Stick to the bottom edge with a small margin
+        } else {
+            preview.style.top = `${y - rect.height / 2}px`; // Center the preview vertically
+        }
+        
+        // Fade in effect
+        requestAnimationFrame(() => {
+            preview.style.opacity = '1';
+        });
+    }
+
+    hideUnitCardPreview() {
+        const existingPreview = document.getElementById('unit-card-preview');
+        if (existingPreview) {
+            existingPreview.style.opacity = '0';
+            setTimeout(() => {
+                if (existingPreview.parentNode) {
+                    existingPreview.parentNode.removeChild(existingPreview);
+                }
+            }, 300);
+        }
     }
 }
