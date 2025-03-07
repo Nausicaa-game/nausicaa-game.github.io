@@ -1,9 +1,0 @@
-Voilà l'idée.
-
-Chacun des pions sur le plateau aura un coefficient d'attractivité, comme une sorte de chose qui pousserait l'IA a se dire il serait préférable de bouffer ce pion là plutot que celui ci.
-En fonction de la distance qui sépare nos pions le coefficient d'attractivité va être lui même divisé par la distance qui sépare un pion adverse d'un de nos pions.
-De là on peut calculer un coefficient d'attaque. C'est à dire prioriser les attaques sur tel ou tel pion.
-Ce coefficient, c'est celui d'attractivité divisé par la distance.
-
-Si aucune attaque n'est possible, on priorisera le coefficient de distance. Et si plusieurs pions ont la meme distance, on priorisera le coefficient d'attractivité.
-Ca donnera une IA aggressive. Plus qu'a trouver le bon équilibrage et les hyperparamètres.
