@@ -58,13 +58,20 @@ function handleIncomingMessage(player, messageText) {
     addchatMessage(player, messageText, false); // Add message to chat
 
     // Check if chat is closed
-    if (chatContainer.classList.contains('hidden')) {
+    if (chatContainer.classList.contains('hidden') || !document.hasFocus()) {
         // Play sound
         songManager.playSong('notification', true); // Replace 'notification' with your sound key
         // Show notification badge
         chatNotificationBadge.style.display = 'inline-block';
     }
 }
+
+// On focus, if chat opened, hide notification badge
+window.addEventListener('focus', function() {
+    if (!chatContainer.classList.contains('hidden')) {
+        chatNotificationBadge.style.display = 'none';
+    }
+});
 
 document.addEventListener('DOMContentLoaded', function() {
     // Create the game board (10x8)
