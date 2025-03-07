@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nausicaa - Jeu de Plateau Stratégique</title>
+    <title data-i18n="title">Nausicaa - Jeu de Plateau Stratégique</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
 
-    <meta name="description" content="Nausicaa est un jeu de plateau stratégique mythologique.">
-    <meta name="keywords" content="Nausicaa, Nausicaa game, jeu de plateau, stratégie, mythologie, deck building, cartes, unités mythologiques">
-    <meta name="author" content="Your Name">
+    <meta name="description" content="Nausicaa est un jeu de plateau stratégique mythologique." data-i18n="meta-description">
+    <meta name="keywords" content="Nausicaa, Nausicaa game, jeu de plateau, stratégie, mythologie, deck building, cartes, unités mythologiques" data-i18n="meta-keywords">
+    <meta name="author" content="Your Name" data-i18n="meta-author">
     <!-- <link rel="icon" type="image/png" href="/assets/icon-mini.png"> -->
 
     <!-- Open Graph / Facebook -->
-    <meta property="og:title" content="Nausicaa - Jeu de Plateau Stratégique">
-    <meta property="og:description" content="Un jeu de plateau mythologique où construction de deck et tactique s'entremêlent">
+    <meta property="og:title" content="Nausicaa - Jeu de Plateau Stratégique" data-i18n="og-title">
+    <meta property="og:description" content="Un jeu de plateau mythologique où construction de deck et tactique s'entremêlent" data-i18n="og-description">
     <meta property="og:image" content="/assets/hero.png">
     <meta property="og:url" content="https://nausicaa-game.github.io/">
     <meta property="og:type" content="website">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Nausicaa - Jeu de Plateau Stratégique">
-    <meta name="twitter:description" content="Un jeu de plateau mythologique où construction de deck et tactique s'entremêlent">
+    <meta name="twitter:title" content="Nausicaa - Jeu de Plateau Stratégique" data-i18n="twitter-title">
+    <meta name="twitter:description" content="Un jeu de plateau mythologique où construction de deck et tactique s'entremêlent" data-i18n="twitter-description">
     <meta name="twitter:image" content="/assets/hero.png">
 
     <meta name="theme-color" content="#0077be">
@@ -55,28 +55,41 @@
                     top: -4px;
                 ">Nausicaa</h1>
             </div>
-            <p class="tagline">Stratégie mythologique sur plateau</p>
+            <p class="tagline" data-i18n="tagline">Stratégie mythologique sur plateau</p>
         </div>
         <nav>
             <ul>
-                <li><a href="#accueil" class="active">Accueil</a></li>
-                <li><a href="#how-to-play">Règles</a></li>
-                <li><a href="#units-types">Unités</a></li>
+                <li><a href="#accueil" class="active" data-i18n="accueil">Accueil</a></li>
+                <li><a href="#how-to-play" data-i18n="regles">Règles</a></li>
+                <li><a href="#units-types" data-i18n="unites">Unités</a></li>
                 <!-- <li><a href="#boutique">Boutique</a></li> -->
-                <li><a href="#newsletter">Contact</a></li>
+                <li><a href="#newsletter" data-i18n="contact">Contact</a></li>
             </ul>
         </nav>
+        <div class="language-selector">
+            <select id="language-selector" onchange="changeLanguage(this.value)">
+                <option value="fr" selected>Français</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="de">Deutsch</option>
+                <option value="it">Italiano</option>
+                <option value="ja">日本語</option>
+                <option value="zh">中文</option>
+                <option value="ru">Русский</option>
+                <!-- Ajoutez d'autres langues au besoin -->
+            </select>
+        </div>
     </header>
 
     <main>
         <section id="hero">
             <div class="hero-content">
-                <h2>L'univers stratégique de Nausicaa</h2>
-                <p>Un jeu de plateau mythologique où construction de deck et tactique s'entremêlent</p>
+                <h2 data-i18n="hero-title">L'univers stratégique de Nausicaa</h2>
+                <p data-i18n="hero-subtitle">Un jeu de plateau mythologique où construction de deck et tactique s'entremêlent</p>
                 <div class="cta-buttons">
-                    <a onclick="onclick:play()" class="btn primary">JOUER</a>
+                    <a onclick="play()" class="btn primary" data-i18n="play">JOUER</a>
                     <!-- <a href="./app?p2p=true" class="btn primary">EN LIGNE</a> -->
-                    <a href="#regles" class="btn secondary">Découvrir les règles</a>
+                    <a href="#how-to-play" class="btn secondary" data-i18n="discover-rules">Découvrir les règles</a>
                 </div>
             </div>
             <div class="hero-cards">
@@ -87,11 +100,11 @@
         </section>
 
         <section id="presentation">
-            <h2>À propos de Nausicaa</h2>
+            <h2 data-i18n="about-title">À propos de Nausicaa</h2>
             <div class="presentation-container">
                 <div class="presentation-text">
-                    <p>Nausicaa est un jeu de plateau stratégique au tour par tour qui donne vie à des créatures mythologiques sur un champ de bataille dynamique de 10x8 cases. Inspiré par les échecs et les guerres mythologiques, les joueurs construisent leur deck, gèrent leur mana et déploient stratégiquement leurs unités légendaires pour vaincre leur adversaire.</p>
-                    <p>Chaque partie est un affrontement d'intelligence où tactique et anticipation sont les clés de la victoire. Votre objectif : éliminer l'Oracle de votre adversaire tout en protégeant le vôtre.</p>
+                    <p data-i18n="about-p1">Nausicaa est un jeu de plateau stratégique au tour par tour qui donne vie à des créatures mythologiques sur un champ de bataille dynamique de 10x8 cases. Inspiré par les échecs et les guerres mythologiques, les joueurs construisent leur deck, gèrent leur mana et déploient stratégiquement leurs unités légendaires pour vaincre leur adversaire.</p>
+                    <p data-i18n="about-p2">Chaque partie est un affrontement d'intelligence où tactique et anticipation sont les clés de la victoire. Votre objectif : éliminer l'Oracle de votre adversaire tout en protégeant le vôtre.</p>
                 </div>
                 <div class="presentation-image">
                     <img src="/assets/gameplay.gif" alt="Illustration de Nausicaa">
@@ -100,60 +113,60 @@
         </section>
 
         <section id="how-to-play">
-            <h2>Comment jouer</h2>
+            <h2 data-i18n="how-to-play">Comment jouer</h2>
             <div class="steps">
                 <div class="step">
                     <div class="step-icon">1</div>
-                    <h3>Construisez votre deck</h3>
-                    <p>Assemblez un deck de 15 unités mythologiques pour votre armée.</p>
+                    <h3 data-i18n="step1-title">Construisez votre deck</h3>
+                    <p data-i18n="step1-desc">Assemblez un deck de 15 unités mythologiques pour votre armée.</p>
                 </div>
                 <div class="step">
                     <div class="step-icon">2</div>
-                    <h3>Déployez sur le plateau</h3>
-                    <p>Placez stratégiquement vos unités dans votre zone de déploiement de 2 rangées.</p>
+                    <h3 data-i18n="step2-title">Déployez sur le plateau</h3>
+                    <p data-i18n="step2-desc">Placez stratégiquement vos unités dans votre zone de déploiement de 2 rangées.</p>
                 </div>
                 <div class="step">
                     <div class="step-icon">3</div>
-                    <h3>Gérez votre mana</h3>
-                    <p>Utilisez judicieusement votre mana pour invoquer des unités, attaquer et activer des capacités spéciales.</p>
+                    <h3 data-i18n="step3-title">Gérez votre mana</h3>
+                    <p data-i18n="step3-desc">Utilisez judicieusement votre mana pour invoquer des unités, attaquer et activer des capacités spéciales.</p>
                 </div>
                 <div class="step">
                     <div class="step-icon">4</div>
-                    <h3>Éliminez l'Oracle adverse</h3>
-                    <p>Manœuvrez vos unités pour capturer l'Oracle adverse et remporter la victoire.</p>
+                    <h3 data-i18n="step4-title">Éliminez l'Oracle adverse</h3>
+                    <p data-i18n="step4-desc">Manœuvrez vos unités pour capturer l'Oracle adverse et remporter la victoire.</p>
                 </div>
             </div>
             
             <div class="gameplay-details">
-                <h3>Le plateau de jeu</h3>
+                <h3 data-i18n="board-title">Le plateau de jeu</h3>
                 <div class="gameplay-container">
                     <div class="gameplay-image">
                         <img src="./assets/board.svg" alt="Plateau de jeu Nausicaa">
                     </div>
                     <div class="gameplay-text">
-                        <p>Le champ de bataille de Nausicaa est un plateau d'échecs modifié de 10x8 cases où chaque joueur dispose d'une zone de déploiement de 2 rangées.</p>
-                        <p>Les deux rangées du bas (rouges) constituent la zone de déploiement du Joueur 1, tandis que les deux rangées du haut (bleues) sont réservées au Joueur 2.</p>
-                        <p>Le plateau peut être personnalisé avec des obstacles, des terrains spéciaux et des zones magiques pour varier les stratégies de jeu.</p>
+                        <p data-i18n="board-p1">Le champ de bataille de Nausicaa est un plateau d'échecs modifié de 10x8 cases où chaque joueur dispose d'une zone de déploiement de 2 rangées.</p>
+                        <p data-i18n="board-p2">Les deux rangées du bas (rouges) constituent la zone de déploiement du Joueur 1, tandis que les deux rangées du haut (bleues) sont réservées au Joueur 2.</p>
+                        <p data-i18n="board-p3">Le plateau peut être personnalisé avec des obstacles, des terrains spéciaux et des zones magiques pour varier les stratégies de jeu.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="units-types">
-            <h2>Les unités de Nausicaa</h2>
-            <p>Découvrez les différentes unités mythologiques que vous pouvez contrôler dans le jeu. Chaque unité possède des capacités uniques et un coût en mana spécifique.</p>
+            <h2 data-i18n="units-title">Les unités de Nausicaa</h2>
+            <p data-i18n="units-desc">Découvrez les différentes unités mythologiques que vous pouvez contrôler dans le jeu. Chaque unité possède des capacités uniques et un coût en mana spécifique.</p>
             <div class="units-container">
                 <!-- Unité Royale -->
                 <div class="unit-card">
                     <div class="unit-image">
                         <img src="./assets/pions/oracle.svg" alt="L'Oracle">
                     </div>
-                    <h3>Oracle (Unité Royale)</h3>
-                    <p style="text-align: left;">L'unité royale à protéger. Se déplace dans les 8 cases environnantes pour 1 mana (2 mana pour un dash). Sa perte signifie la défaite.</p>
+                    <h3 data-i18n="oracle-title">Oracle (Unité Royale)</h3>
+                    <p style="text-align: left;" data-i18n="oracle-desc">L'unité royale à protéger. Se déplace dans les 8 cases environnantes pour 1 mana (2 mana pour un dash). Sa perte signifie la défaite.</p>
                     <div style="text-align: left;">
-                        <p><b>• Coût:</b> Gratuit</p>
-                        <p><b>• Mouvement:</b> 8 cases environnantes.</p>
-                        <p><b>• Règle Spéciale:</b> 1 mana pour se déplacer, 2 pour dasher.</p>
+                        <p><b data-i18n="cost">• Coût:</b> <span data-i18n="oracle-cost">Gratuit</span></p>
+                        <p><b data-i18n="movement">• Mouvement:</b> <span data-i18n="oracle-movement">8 cases environnantes.</span></p>
+                        <p><b data-i18n="special">• Règle Spéciale:</b> <span data-i18n="oracle-special">1 mana pour se déplacer, 2 pour dasher.</span></p>
                     </div>
                 </div>
         
@@ -162,13 +175,13 @@
                     <div class="unit-image">
                         <img src="./assets/pions/gobelin.svg" alt="Gobelin">
                     </div>
-                    <h3>Gobelin (1 Mana)</h3>
-                    <p style="text-align: left;">Unité offensive de base. Avance jusqu'à 3 cases et attaque dans 4 directions latérales.</p>
+                    <h3 data-i18n="goblin-title">Gobelin (1 Mana)</h3>
+                    <p style="text-align: left;" data-i18n="goblin-desc">Unité offensive de base. Avance jusqu'à 3 cases et attaque dans 4 directions latérales.</p>
                     <div style="text-align: left;">
-                        <p><b>• Coût:</b> 1 Mana</p>
-                        <p><b>• Mouvement:</b> Avant jusqu'à 3 cases.</p>
-                        <p><b>• Attaque:</b> 4 directions latérales.</p>
-                        <p><b>• Rôle Tactique:</b> Unité offensive de base.</p>
+                        <p><b data-i18n="cost">• Coût:</b> <span data-i18n="goblin-cost">1 Mana</span></p>
+                        <p><b data-i18n="movement">• Mouvement:</b> <span data-i18n="goblin-movement">Avant jusqu'à 3 cases.</span></p>
+                        <p><b data-i18n="attack">• Attaque:</b> <span data-i18n="goblin-attack">4 directions latérales.</span></p>
+                        <p><b data-i18n="role">• Rôle Tactique:</b> <span data-i18n="goblin-role">Unité offensive de base.</span></p>
                     </div>
                 </div>
         
@@ -176,13 +189,13 @@
                     <div class="unit-image">
                         <img src="./assets/pions/harpy.svg" alt="Harpie">
                     </div>
-                    <h3>Harpie (1 Mana)</h3>
-                    <p style="text-align: left;">Se déplace dans les 8 directions. Peut déclencher une attaque explosive qui détruit les unités adjacentes et elle-même.</p>
+                    <h3 data-i18n="harpy-title">Harpie (1 Mana)</h3>
+                    <p style="text-align: left;" data-i18n="harpy-desc">Se déplace dans les 8 directions. Peut déclencher une attaque explosive qui détruit les unités adjacentes et elle-même.</p>
                     <div style="text-align: left;">
-                        <p><b>• Coût:</b> 1 Mana</p>
-                        <p><b>• Mouvement:</b> 8 cases environnantes.</p>
-                        <p><b>• Capacité Spéciale:</b> Attaque explosive à usage unique (destruction de zone, auto-destruction).</p>
-                        <p><b>• Attention:</b> Peut blesser vos propres unités.</p>
+                        <p><b data-i18n="cost">• Coût:</b> <span data-i18n="harpy-cost">1 Mana</span></p>
+                        <p><b data-i18n="movement">• Mouvement:</b> <span data-i18n="harpy-movement">8 cases environnantes.</span></p>
+                        <p><b data-i18n="special">• Capacité Spéciale:</b> <span data-i18n="harpy-special">Attaque explosive à usage unique (destruction de zone, auto-destruction).</span></p>
+                        <p><b data-i18n="warning">• Attention:</b> <span data-i18n="harpy-warning">Peut blesser vos propres unités.</span></p>
                     </div>
                 </div>
         
@@ -190,12 +203,12 @@
                     <div class="unit-image">
                         <img src="./assets/pions/naiad.svg" alt="Naïade">
                     </div>
-                    <h3>Naïade (1 Mana)</h3>
-                    <p style="text-align: left;">Unité de support. Fait piocher une carte à l'invocation et à sa destruction. Ne peut pas attaquer.</p>
+                    <h3 data-i18n="naiad-title">Naïade (1 Mana)</h3>
+                    <p style="text-align: left;" data-i18n="naiad-desc">Unité de support. Fait piocher une carte à l'invocation et à sa destruction. Ne peut pas attaquer.</p>
                     <div style="text-align: left;">
-                        <p><b>• Coût:</b> 1 Mana</p>
-                        <p><b>• Capacité:</b> Pioche une carte à l'invocation et à la destruction.</p>
-                        <p><b>• Ne peut pas attaquer.</b></p>
+                        <p><b data-i18n="cost">• Coût:</b> <span data-i18n="naiad-cost">1 Mana</span></p>
+                        <p><b data-i18n="ability">• Capacité:</b> <span data-i18n="naiad-ability">Pioche une carte à l'invocation et à la destruction.</span></p>
+                        <p><b data-i18n="limit">• Ne peut pas attaquer.</b></p>
                     </div>
                 </div>
         
@@ -204,12 +217,12 @@
                     <div class="unit-image">
                         <img src="./assets/pions/griffin.svg" alt="Griffin">
                     </div>
-                    <h3>Griffin (2 Mana)</h3>
-                    <p style="text-align: left;">Saute 2 cases latéralement. Pioche une carte lorsqu'il saute par-dessus une unité.</p>
+                    <h3 data-i18n="griffin-title">Griffin (2 Mana)</h3>
+                    <p style="text-align: left;" data-i18n="griffin-desc">Saute 2 cases latéralement. Pioche une carte lorsqu'il saute par-dessus une unité.</p>
                     <div style="text-align: left;">
-                        <p><b>• Coût:</b> 2 Mana</p>
-                        <p><b>• Mouvement:</b> Saute de 2 cases latéralement.</p>
-                        <p><b>• Capacité Spéciale:</b> Pioche une carte en sautant par-dessus une unité.</p>
+                        <p><b data-i18n="cost">• Coût:</b> <span data-i18n="griffin-cost">2 Mana</span></p>
+                        <p><b data-i18n="movement">• Mouvement:</b> <span data-i18n="griffin-movement">Saute de 2 cases latéralement.</span></p>
+                        <p><b data-i18n="special">• Capacité Spéciale:</b> <span data-i18n="griffin-special">Pioche une carte en sautant par-dessus une unité.</span></p>
                     </div>
                 </div>
         
@@ -217,13 +230,13 @@
                     <div class="unit-image">
                         <img src="./assets/pions/siren.svg" alt="Sirène">
                     </div>
-                    <h3>Sirène (2 Mana)</h3>
-                    <p style="text-align: left;">Attaque simultanément dans les 4 diagonales. Attention au tir ami !</p>
+                    <h3 data-i18n="siren-title">Sirène (2 Mana)</h3>
+                    <p style="text-align: left;" data-i18n="siren-desc">Attaque simultanément dans les 4 diagonales. Attention au tir ami !</p>
                     <div style="text-align: left;">
-                        <p><b>• Coût:</b> 2 Mana</p>
-                        <p><b>• Mouvement:</b> Latéral limité.</p>
-                        <p><b>• Attaque:</b> 4 diagonales simultanément.</p>
-                        <p><b>• Attention:</b> Peut blesser vos propres unités.</p>
+                        <p><b data-i18n="cost">• Coût:</b> <span data-i18n="siren-cost">2 Mana</span></p>
+                        <p><b data-i18n="movement">• Mouvement:</b> <span data-i18n="siren-movement">Latéral limité.</span></p>
+                        <p><b data-i18n="attack">• Attaque:</b> <span data-i18n="siren-attack">4 diagonales simultanément.</span></p>
+                        <p><b data-i18n="warning">• Attention:</b> <span data-i18n="siren-warning">Peut blesser vos propres unités.</span></p>
                     </div>
                 </div>
         
@@ -231,11 +244,11 @@
                     <div class="unit-image">
                         <img src="./assets/pions/centaur.svg" alt="Centaure">
                     </div>
-                    <h3>Centaure (2 Mana)</h3>
-                    <p style="text-align: left;">Peut attirer n'importe quelle unité de 2 cases vers lui pour 1 mana supplémentaire.</p>
+                    <h3 data-i18n="centaur-title">Centaure (2 Mana)</h3>
+                    <p style="text-align: left;" data-i18n="centaur-desc">Peut attirer n'importe quelle unité de 2 cases vers lui pour 1 mana supplémentaire.</p>
                     <div style="text-align: left;">
-                        <p><b>• Coût:</b> 2 Mana</p>
-                        <p><b>• Capacité:</b> Tire une unité de 2 cases pour 1 mana.</p>
+                        <p><b data-i18n="cost">• Coût:</b> <span data-i18n="centaur-cost">2 Mana</span></p>
+                        <p><b data-i18n="ability">• Capacité:</b> <span data-i18n="centaur-ability">Tire une unité de 2 cases pour 1 mana.</span></p>
                     </div>
                 </div>
         
@@ -244,12 +257,12 @@
                     <div class="unit-image">
                         <img src="./assets/pions/archer.svg" alt="Archer">
                     </div>
-                    <h3>Archer (3 Mana)</h3>
-                    <p style="text-align: left;">Se déplace latéralement et attaque jusqu'à 3 cases en diagonale.</p>
+                    <h3 data-i18n="archer-title">Archer (3 Mana)</h3>
+                    <p style="text-align: left;" data-i18n="archer-desc">Se déplace latéralement et attaque jusqu'à 3 cases en diagonale.</p>
                     <div style="text-align: left;">
-                        <p><b>• Coût:</b> 3 Mana</p>
-                        <p><b>• Mouvement:</b> Latéral.</p>
-                        <p><b>• Attaque:</b> Diagonale, portée de 3 cases.</p>
+                        <p><b data-i18n="cost">• Coût:</b> <span data-i18n="archer-cost">3 Mana</span></p>
+                        <p><b data-i18n="movement">• Mouvement:</b> <span data-i18n="archer-movement">Latéral.</span></p>
+                        <p><b data-i18n="attack">• Attaque:</b> <span data-i18n="archer-attack">Diagonale, portée de 3 cases.</span></p>
                     </div>
                 </div>
         
@@ -257,12 +270,12 @@
                     <div class="unit-image">
                         <img src="./assets/pions/phoenix.svg" alt="Phénix">
                     </div>
-                    <h3>Phénix (3 Mana)</h3>
-                    <p style="text-align: left;">Ne peut se déplacer et attaquer que sur les cases sombres du plateau, en diagonale.</p>
+                    <h3 data-i18n="phoenix-title">Phénix (3 Mana)</h3>
+                    <p style="text-align: left;" data-i18n="phoenix-desc">Ne peut se déplacer et attaquer que sur les cases sombres du plateau, en diagonale.</p>
                     <div style="text-align: left;">
-                        <p><b>• Coût:</b> 3 Mana</p>
-                        <p><b>• Mouvement:</b> Diagonal, uniquement sur cases sombres.</p>
-                        <p><b>• Restriction:</b> Ne peut agir que sur les cases sombres.</p>
+                        <p><b data-i18n="cost">• Coût:</b> <span data-i18n="phoenix-cost">3 Mana</span></p>
+                        <p><b data-i18n="movement">• Mouvement:</b> <span data-i18n="phoenix-movement">Diagonal, uniquement sur cases sombres.</span></p>
+                        <p><b data-i18n="restriction">• Restriction:</b> <span data-i18n="phoenix-restriction">Ne peut agir que sur les cases sombres.</span></p>
                     </div>
                 </div>
         
@@ -271,12 +284,12 @@
                     <div class="unit-image">
                         <img src="./assets/pions/shapeshifter.svg" alt="Métamorphe">
                     </div>
-                    <h3>Métamorphe (4 Mana)</h3>
-                    <p style="text-align: left;">Peut échanger sa place avec n'importe quelle unité sauf l'Oracle. Ne peut pas attaquer après l'échange.</p>
+                    <h3 data-i18n="shapeshifter-title">Métamorphe (4 Mana)</h3>
+                    <p style="text-align: left;" data-i18n="shapeshifter-desc">Peut échanger sa place avec n'importe quelle unité sauf l'Oracle. Ne peut pas attaquer après l'échange.</p>
                     <div style="text-align: left;">
-                        <p><b>• Coût:</b> 4 Mana</p>
-                        <p><b>• Capacité:</b> Échange de place avec une unité (sauf Oracle).</p>
-                        <p><b>• Restriction:</b> Ne peut pas attaquer le tour du téléport.</p>
+                        <p><b data-i18n="cost">• Coût:</b> <span data-i18n="shapeshifter-cost">4 Mana</span></p>
+                        <p><b data-i18n="ability">• Capacité:</b> <span data-i18n="shapeshifter-ability">Échange de place avec une unité (sauf Oracle).</span></p>
+                        <p><b data-i18n="restriction">• Restriction:</b> <span data-i18n="shapeshifter-restriction">Ne peut pas attaquer le tour du téléport.</span></p>
                     </div>
                 </div>
         
@@ -284,12 +297,12 @@
                     <div class="unit-image">
                         <img src="./assets/pions/seer.svg" alt="Voyant">
                     </div>
-                    <h3>Voyant (4 Mana)</h3>
-                    <p style="text-align: left;">Génère du mana supplémentaire chaque tour mais ne peut ni se déplacer ni attaquer.</p>
+                    <h3 data-i18n="seer-title">Voyant (4 Mana)</h3>
+                    <p style="text-align: left;" data-i18n="seer-desc">Génère du mana supplémentaire chaque tour mais ne peut ni se déplacer ni attaquer.</p>
                     <div style="text-align: left;">
-                        <p><b>• Coût:</b> 4 Mana</p>
-                        <p><b>• Capacité:</b> Génère du mana supplémentaire.</p>
-                        <p><b>• Limitation:</b> Ne peut ni bouger, ni attaquer.</p>
+                        <p><b data-i18n="cost">• Coût:</b> <span data-i18n="seer-cost">4 Mana</span></p>
+                        <p><b data-i18n="ability">• Capacité:</b> <span data-i18n="seer-ability">Génère du mana supplémentaire.</span></p>
+                        <p><b data-i18n="limitation">• Limitation:</b> <span data-i18n="seer-limitation">Ne peut ni bouger, ni attaquer.</span></p>
                     </div>
                 </div>
         
@@ -297,75 +310,75 @@
                     <div class="unit-image">
                         <img src="./assets/pions/titan.svg" alt="Titan">
                     </div>
-                    <h3>Titan (6 Mana)</h3>
-                    <p style="text-align: left;">Détruit les unités environnantes à son invocation. Dispose d'attaques de zone dévastatrices.</p>
+                    <h3 data-i18n="titan-title">Titan (6 Mana)</h3>
+                    <p style="text-align: left;" data-i18n="titan-desc">Détruit les unités environnantes à son invocation. Dispose d'attaques de zone dévastatrices.</p>
                     <div style="text-align: left;">
-                        <p><b>• Coût:</b> 6 Mana</p>
-                        <p><b>• Effet d'Invocation:</b> Détruit les unités adjacentes.</p>
-                        <p><b>• Attaque:</b> Puissante attaque à distance avec effet de zone.</p>
+                        <p><b data-i18n="cost">• Coût:</b> <span data-i18n="titan-cost">6 Mana</span></p>
+                        <p><b data-i18n="effect">• Effet d'Invocation:</b> <span data-i18n="titan-effect">Détruit les unités adjacentes.</span></p>
+                        <p><b data-i18n="attack">• Attaque:</b> <span data-i18n="titan-attack">Puissante attaque à distance avec effet de zone.</span></p>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="game-mechanics">
-            <h2>Mécaniques de Jeu</h2>
-            <p>Découvrez les mécaniques qui rendent Nausicaa unique et stratégique.</p>
+            <h2 data-i18n="game-mechanics-title">Mécaniques de Jeu</h2>
+            <p data-i18n="game-mechanics-desc">Découvrez les mécaniques qui rendent Nausicaa unique et stratégique.</p>
             
             <!-- Système de mana -->
             <div class="gameplay-details">
-                <h3>Le Système de Mana</h3>
+                <h3 data-i18n="mana-title">Le Système de Mana</h3>
                 <div class="gameplay-container">
                     <div class="gameplay-text">
-                        <p>Le mana est la ressource principale de Nausicaa, représentant l'énergie mystique que vous contrôlez.</p>
-                        <p>Chaque joueur commence avec 1 mana et en gagne un supplémentaire à chaque tour, jusqu'à un maximum de 6.</p>
-                        <p>Le mana est entièrement récupéré au début de votre tour, vous obligeant à utiliser judicieusement cette ressource limitée pour invoquer des unités, attaquer ou utiliser des capacités spéciales.</p>
+                        <p data-i18n="mana-p1">Le mana est la ressource principale de Nausicaa, représentant l'énergie mystique que vous contrôlez.</p>
+                        <p data-i18n="mana-p2">Chaque joueur commence avec 1 mana et en gagne un supplémentaire à chaque tour, jusqu'à un maximum de 6.</p>
+                        <p data-i18n="mana-p3">Le mana est entièrement récupéré au début de votre tour, vous obligeant à utiliser judicieusement cette ressource limitée pour invoquer des unités, attaquer ou utiliser des capacités spéciales.</p>
                     </div>
                 </div>
             </div>
             
             <!-- Système de déplacement -->
             <div class="gameplay-details">
-                <h3>Déplacement et Dash</h3>
+                <h3 data-i18n="movement-title">Déplacement et Dash</h3>
                 <div class="movement-types">
                     <div class="movement-card">
-                        <h4>Déplacement Standard</h4>
-                        <p>Déplacement gratuit d'une case par tour pour chaque unité, selon son pattern de mouvement.</p>
+                        <h4 data-i18n="movement-standard-title">Déplacement Standard</h4>
+                        <p data-i18n="movement-standard-desc">Déplacement gratuit d'une case par tour pour chaque unité, selon son pattern de mouvement.</p>
                     </div>
                     <div class="movement-card">
-                        <h4>Dash</h4>
-                        <p>Dépensez 1 mana pour un mouvement supplémentaire, mais l'unité ne pourra pas attaquer ce tour.</p>
+                        <h4 data-i18n="movement-dash-title">Dash</h4>
+                        <p data-i18n="movement-dash-desc">Dépensez 1 mana pour un mouvement supplémentaire, mais l'unité ne pourra pas attaquer ce tour.</p>
                     </div>
                     <div class="movement-card">
-                        <h4>Restrictions</h4>
-                        <p>Une unité fraîchement invoquée ne peut ni se déplacer ni attaquer pendant le tour de son arrivée.</p>
+                        <h4 data-i18n="movement-restrictions-title">Restrictions</h4>
+                        <p data-i18n="movement-restrictions-desc">Une unité fraîchement invoquée ne peut ni se déplacer ni attaquer pendant le tour de son arrivée.</p>
                     </div>
                     <div class="movement-card">
-                        <h4>Patterns Spéciaux</h4>
-                        <p>Chaque type d'unité possède son propre pattern de mouvement, inspiré des échecs mais enrichi de capacités mythologiques.</p>
+                        <h4 data-i18n="movement-patterns-title">Patterns Spéciaux</h4>
+                        <p data-i18n="movement-patterns-desc">Chaque type d'unité possède son propre pattern de mouvement, inspiré des échecs mais enrichi de capacités mythologiques.</p>
                     </div>
                 </div>
             </div>
             
             <!-- Système d'attaque -->
             <div class="gameplay-details">
-                <h3>Système d'Attaque</h3>
+                <h3 data-i18n="attack-system-title">Système d'Attaque</h3>
                 <div class="attack-types">
                     <div class="attack-card">
-                        <h4>Coût d'Attaque</h4>
-                        <p>Chaque attaque coûte 1 mana, limitant le nombre d'actions offensives par tour.</p>
+                        <h4 data-i18n="attack-cost-title">Coût d'Attaque</h4>
+                        <p data-i18n="attack-cost-desc">Chaque attaque coûte 1 mana, limitant le nombre d'actions offensives par tour.</p>
                     </div>
                     <div class="attack-card">
-                        <h4>Portée d'Attaque</h4>
-                        <p>Chaque unité possède sa propre portée et pattern d'attaque, de l'attaque adjacente à l'attaque à distance.</p>
+                        <h4 data-i18n="attack-range-title">Portée d'Attaque</h4>
+                        <p data-i18n="attack-range-desc">Chaque unité possède sa propre portée et pattern d'attaque, de l'attaque adjacente à l'attaque à distance.</p>
                     </div>
                     <div class="attack-card">
-                        <h4>Attaques de Zone</h4>
-                        <p>Certaines unités comme la Harpie ou le Titan peuvent attaquer plusieurs cases simultanément.</p>
+                        <h4 data-i18n="attack-area-title">Attaques de Zone</h4>
+                        <p data-i18n="attack-area-desc">Certaines unités comme la Harpie ou le Titan peuvent attaquer plusieurs cases simultanément.</p>
                     </div>
                     <div class="attack-card">
-                        <h4>Tir Ami</h4>
-                        <p>Attention aux attaques de zone qui peuvent également toucher vos propres unités !</p>
+                        <h4 data-i18n="attack-friendly-title">Tir Ami</h4>
+                        <p data-i18n="attack-friendly-desc">Attention aux attaques de zone qui peuvent également toucher vos propres unités !</p>
                     </div>
                 </div>
             </div>
@@ -373,11 +386,11 @@
 
         <section id="newsletter">
             <div class="newsletter-container">
-                <h2>Restez informé</h2>
-                <p>Inscrivez-vous à notre newsletter pour recevoir les dernières nouvelles, mises à jour et offres spéciales.</p>
+                <h2 data-i18n="newsletter-title">Restez informé</h2>
+                <p data-i18n="newsletter-desc">Inscrivez-vous à notre newsletter pour recevoir les dernières nouvelles, mises à jour et offres spéciales.</p>
                 <form class="newsletter-form">
-                    <input type="email" placeholder="Votre adresse email" required>
-                    <button type="submit" class="btn primary">S'inscrire</button>
+                    <input type="email" placeholder="Votre adresse email" required data-i18n="newsletter-placeholder">
+                    <button type="submit" class="btn primary" data-i18n="newsletter-button">S'inscrire</button>
                 </form>
             </div>
         </section>
@@ -387,26 +400,26 @@
         <!-- Le footer peut rester inchangé -->
         <div class="footer-content">
             <div class="footer-logo">
-                <h2>Nausicaa</h2>
-                <p>Stratégie mythologique sur plateau.</p>
-                <p>La plupart des effets sonores viennent de Dota 2.</p>
+                <h2 data-i18n="footer-title">Nausicaa</h2>
+                <p data-i18n="footer-tagline">Stratégie mythologique sur plateau.</p>
+                <p data-i18n="footer-sound-credits">La plupart des effets sonores viennent de Dota 2.</p>
             </div>
             <div class="footer-links">
                 <div class="footer-column">
-                    <h3>Liens rapides</h3>
+                    <h3 data-i18n="quick-links">Liens rapides</h3>
                     <ul>
-                        <li><a href="#accueil">Accueil</a></li>
-                        <li><a href="#regles">Règles</a></li>
-                        <li><a href="#unites">Unités</a></li>
+                        <li><a href="#accueil" data-i18n="accueil">Accueil</a></li>
+                        <li><a href="#regles" data-i18n="regles">Règles</a></li>
+                        <li><a href="#unites" data-i18n="unites">Unités</a></li>
                         <li><a href="#boutique">Boutique</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3>Communauté</h3>
+                    <h3 data-i18n="community">Communauté</h3>
                     <ul>
-                        <li><a href="#forum">Forum</a></li>
-                        <li><a href="#tournois">Tournois</a></li>
-                        <li><a href="#evenements">Événements</a></li>
+                        <li><a href="#forum" data-i18n="forum">Forum</a></li>
+                        <li><a href="#tournois" data-i18n="tournaments">Tournois</a></li>
+                        <li><a href="#evenements" data-i18n="events">Événements</a></li>
                     </ul>
                 </div>
             </div>
@@ -415,15 +428,17 @@
                 <!-- <a href="#" class="social-icon">Twitter</a> -->
                 <a href="https://instagram.com/fox3000foxy" target="_blank" class="social-icon">Instagram</a>
                 <a href="https://discord.gg/fox3000foxy" target="_blank" class="social-icon">Discord</a>
-                <a href="https://github.com/Nausicaa-game/nausicaa-game.github.io" target="_blank" class="social-icon">Code source</a>
+                <a href="https://github.com/Nausicaa-game/nausicaa-game.github.io" target="_blank" class="social-icon" data-i18n="source-code">Code source</a>
             </div>
         </div>
         <div class="copyright">
-            <p>© 2025 Nausicaa Game. Tous droits réservés.</p>
+            <p data-i18n="copyright">© 2025 Nausicaa Game. Tous droits réservés.</p>
         </div>
     </footer>
 
     <script src="js/main.js"></script>
     <script src="js/wobby-corner.js"></script>
+    <script src="js/translations.js"></script>
+
 </body>
 </html>

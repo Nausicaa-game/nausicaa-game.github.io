@@ -11,117 +11,117 @@ const MAX_MANA = 6;
 // Unit definitions with their properties
 const UNITS = {
     oracle: {
-        name: translations[preferredLanguage]['oracle_name'],
+        name: "Oracle",
         cost: 0,
         movement: "king", // 8 surrounding squares
         attack: "none",
         health: 1,
-        description: translations[preferredLanguage]['oracle_description'],
+        description: "Votre pièce la plus importante. Si elle est détruite, vous perdez la partie.",
         manaCost: {
             move: 1,
             dash: 2
         }
     },
     gobelin: {
-        name: translations[preferredLanguage]['gobelin_name'],
+        name: "Gobelin",
         cost: 1,
         movement: "forward3",
         attack: "lateral4",
         health: 1,
-        description: translations[preferredLanguage]['gobelin_description']
+        description: "Avance jusqu'à 3 cases et attaque dans 4 directions latérales."
     },
     harpy: {
-        name: translations[preferredLanguage]['harpy_name'],
+        name: "Harpie",
         cost: 1,
         movement: "king",
         attack: "explosion",
         health: 1,
-        description: translations[preferredLanguage]['harpy_description']
+        description: "Se déplace dans toutes les directions. Attaque explosive."
     },
     naiad: {
-        name: translations[preferredLanguage]['naiad_name'],
+        name: "Naïade",
         cost: 1,
         movement: "diagonal",
         attack: "none",
         health: 1,
-        description: translations[preferredLanguage]['naiad_description']
+        description: "Piochez une carte quand elle apparaît et quand elle est détruite."
     },
     griffin: {
-        name: translations[preferredLanguage]['griffin_name'],
+        name: "Griffon",
         cost: 2,
         movement: "hop2",
         attack: "adjacent",
         health: 2,
-        description: translations[preferredLanguage]['griffin_description']
+        description: "Saute 2 cases latéralement et pioche en sautant par-dessus une unité."
     },
     siren: {
-        name: translations[preferredLanguage]['siren_name'],
+        name: "Sirène",
         cost: 2,
         movement: "lateral",
         attack: "diagonal4",
         health: 1,
-        description: translations[preferredLanguage]['siren_description']
+        description: "Attaque simultanément dans les 4 directions diagonales."
     },
     centaur: {
-        name: translations[preferredLanguage]['centaur_name'],
+        name: "Centaure",
         cost: 2,
         movement: "knight", // L-shape like chess knight
         attack: "adjacent",
         health: 2,
         ability: "pull",
-        description: translations[preferredLanguage]['centaur_description']
+        description: "Peut tirer une unité de 2 cases (coût: 1 mana)."
     },
     archer: {
-        name: translations[preferredLanguage]['archer_name'],
+        name: "Archer",
         cost: 3,
         movement: "lateral",
         attack: "diagonal3",
         health: 1,
-        description: translations[preferredLanguage]['archer_description']
+        description: "Attaque à distance de 3 cases en diagonal."
     },
     phoenix: {
-        name: translations[preferredLanguage]['phoenix_name'],
+        name: "Phoenix",
         cost: 3,
         movement: "diagonal",
         attack: "adjacent",
         health: 2,
         special: "dark_tiles_only",
-        description: translations[preferredLanguage]['phoenix_description']
+        description: "Ne peut se déplacer que sur les cases sombres."
     },
     shapeshifter: {
-        name: translations[preferredLanguage]['shapeshifter_name'],
+        name: "Métamorphe",
         cost: 4,
         movement: "king",
         attack: "adjacent",
         health: 2,
         ability: "swap",
-        description: translations[preferredLanguage]['shapeshifter_description']
+        description: "Peut échanger sa place avec n'importe quelle unité (sauf l'Oracle)."
     },
     seer: {
-        name: translations[preferredLanguage]['seer_name'],
+        name: "Voyant",
         cost: 4,
         movement: "none",
         attack: "none",
         health: 1,
         ability: "extra_mana",
-        description: translations[preferredLanguage]['seer_description']
+        description: "Génère 1 mana supplémentaire par tour, mais ne peut ni bouger ni attaquer."
     },
     zombie: {
-        name: translations[preferredLanguage]['zombie_name'],
+        name: "Zombie",
         cost: 1,
         movement: "zombie_move",
         attack: "zombie_attack",
         health: 1,
-        description: translations[preferredLanguage]['zombie_description']
+        description: "Moves forward and attacks laterally."
     },
     titan: {
-        name: translations[preferredLanguage]['titan_name'],
+        name: "Titan",
         cost: 6,
         movement: "king1", // Can move one square in all directions
         attack: "area3",
         health: 3,
         ability: "destroy_on_spawn",
-        description: translations[preferredLanguage]['titan_description']
+        description: "Détruit les unités environnantes lors de son apparition. Attaque puissante à distance."
     }
 };
 
@@ -143,12 +143,12 @@ class Game {
         // Initialize player info panels
         const playerOneInfo = document.querySelector('.player-area.player-one .player-info .mana-container');
         playerOneInfo.innerHTML = `
-            <div class="mana-container">${translations[preferredLanguage]['mana']} <span id="player-one-mana">1/1</span></div>
+            <div class="mana-container">Mana: <span id="player-one-mana">1/1</span></div>
         `;
 
         const playerTwoInfo = document.querySelector('.player-area.player-two .player-info .mana-container');
         playerTwoInfo.innerHTML = `
-            <div class="mana-container">${translations[preferredLanguage]['mana']} <span id="player-two-mana">1/1</span></div>
+            <div class="mana-container">Mana: <span id="player-two-mana">1/1</span></div>
         `;
 
         // Initialize hand containers
@@ -161,19 +161,19 @@ class Game {
         // Initialize action panels
         const playerOneActionPanel = document.querySelector('.player-area.player-one .action-panel');
         playerOneActionPanel.innerHTML = `
-            <div id="player-one-action" class="current-action">${translations[preferredLanguage]['select_card']}</div>
-            <button id="end-turn-one" class="btn primary">${translations[preferredLanguage]['end_turn']}</button>
+            <div id="player-one-action" class="current-action">Sélectionnez une carte pour la jouer</div>
+            <button id="end-turn-one" class="btn primary">Fin de Tour</button>
         `;
 
         const playerTwoActionPanel = document.querySelector('.player-area.player-two .action-panel');
         playerTwoActionPanel.innerHTML = `
-            <div id="player-two-action" class="current-action">${translations[preferredLanguage]['waiting']}</div>
-            <button id="end-turn-two" class="btn primary" disabled>${translations[preferredLanguage]['end_turn']}</button>
+            <div id="player-two-action" class="current-action">En attente</div>
+            <button id="end-turn-two" class="btn primary" disabled>Fin de Tour</button>
         `;
 
         // Initialize unit info panel
         const unitInfoPanel = document.getElementById('unit-info');
-        unitInfoPanel.innerHTML = `<div class="unit-details">${translations[preferredLanguage]['select_unit']}</div>`;
+        unitInfoPanel.innerHTML = '<div class="unit-details">Sélectionnez une unité pour voir ses détails</div>';
 
         // Create the game board
         const gameBoard = document.getElementById('game-board');
@@ -383,7 +383,7 @@ class Game {
         document.getElementById('end-turn-one').addEventListener('click', () => {
             if (this.currentPlayer === 1 && ((p2pConnection?.gameId && p2pConnection.isHost) || !p2pConnection?.gameId)) {
                 if (this.turn === 1 && !this.hasPlacedOracle(1)) {
-                    this.updateActionText(translations[preferredLanguage]['player_one_place_oracle']);
+                    this.updateActionText("Joueur 1 doit placer son Oracle en premier.");
                     return;
                 }
                 this.endTurn();
@@ -393,7 +393,7 @@ class Game {
         document.getElementById('end-turn-two').addEventListener('click', () => {
             if (this.currentPlayer === 2 && ((p2pConnection?.gameId && !p2pConnection.isHost) || !p2pConnection?.gameId)) {
                 if (this.turn === 1 && !this.hasPlacedOracle(2)) {
-                    this.updateActionText(translations[preferredLanguage]['player_two_place_oracle']);
+                    this.updateActionText("Joueur 2 doit placer son Oracle en premier.");
                     return;
                 }
                 this.endTurn();
@@ -424,7 +424,7 @@ class Game {
             if (this.selectedCard && this.selectedCard.type === 'oracle') {
                 this.trySpawnUnit(row, col);
             } else {
-                this.updateActionText(translations[preferredLanguage]['select_oracle']);
+                this.updateActionText("Vous devez sélectionner l'Oracle pour le placer.");
             }
             return;
         }
@@ -499,7 +499,7 @@ class Game {
 
         if ((this.currentPlayer === 1 && !isPlayerOneCard) ||
             (this.currentPlayer === 2 && !isPlayerTwoCard)) {
-            this.updateActionText(translations[preferredLanguage]['select_own_card']);
+            this.updateActionText("Vous ne pouvez sélectionner que vos propres cartes");
             return;
         }
 
@@ -530,7 +530,7 @@ class Game {
 
         // Check if player has enough mana
         if (this.players[this.currentPlayer].mana < manaCost) {
-            this.updateActionText(translations[preferredLanguage]['not_enough_mana'] + ` ${UNITS[unitType].name}`);
+            this.updateActionText(`Pas assez de mana pour déployer ${UNITS[unitType].name}`);
             return;
         }
 
@@ -544,8 +544,8 @@ class Game {
 
         // Highlight valid spawn locations
         this.highlightValidSpawnLocations();
-        console.log(unitType+"_name")
-        this.updateActionText(translations[preferredLanguage]['select_spawn'] + ` ${translations[preferredLanguage][unitType+"_name"]}`);
+
+        this.updateActionText(`Sélectionnez une case pour déployer ${UNITS[unitType].name}`);
     }
 
     selectUnit(unitElement, row, col) {
@@ -557,7 +557,7 @@ class Game {
 
         // Check if another unit has already been moved this turn
         if (this.movedUnitThisTurn !== null && this.movedUnitThisTurn !== unit) {
-            this.updateActionText(translations[preferredLanguage]['act_with_moved_unit']);
+            this.updateActionText(`Vous ne pouvez agir qu'avec l'unité que vous avez déjà déplacée ce tour.`);
             return;
         }
 
@@ -648,7 +648,7 @@ class Game {
         document.querySelectorAll('.cell-highlight').forEach(highlight => highlight.remove());
 
         // Reset unit info panel
-        document.querySelector('#unit-info .unit-details').textContent = translations[preferredLanguage]['select_unit'];
+        document.querySelector('#unit-info .unit-details').textContent = 'Sélectionnez une unité pour voir ses détails';
     }
 
     highlightValidSpawnLocations(clear = true) {
@@ -1289,7 +1289,7 @@ class Game {
     trySpawnUnit(row, col) {
         if (this.selectedCard.type === 'phoenix') {
             if ((row + col) % 2 === 0) {
-                this.updateActionText(translations[preferredLanguage]['phoenix_invalid_spawn']);
+                this.updateActionText("Le Phénix ne peut être invoqué que sur les cases sombres.");
                 return;
             }
         }
@@ -1326,7 +1326,7 @@ class Game {
             (this.currentPlayer === 2 && (row === 0 || row === 1));
 
         if (!isValidSpawn || this.board[row][col]) {
-            this.updateActionText(translations[preferredLanguage]['invalid_spawn_position']);
+            this.updateActionText("Position d'invocation invalide");
             return;
         }
 
@@ -1335,7 +1335,7 @@ class Game {
         const cost = this.selectedCard.cost;
 
         if (player.mana < cost) {
-            this.updateActionText(translations[preferredLanguage]['insufficient_mana']);
+            this.updateActionText("Mana insuffisant");
             return;
         }
 
@@ -1351,13 +1351,13 @@ class Game {
             this.triggerTitanSpawnEffect(row, col);
         } else if (unitType === 'naiad') {
             this.drawCards(this.currentPlayer, 1);
-            this.updateActionText(translations[preferredLanguage]['naiad_invocation_text']);
+            this.updateActionText(`Naïade invoquée. Vous piochez une carte!`);
         }
 
         // Clear selection and update UI
         this.deselectCard();
         this.updateGameUI();
-        this.updateActionText(`${UNITS[unitType].name} ${translations[preferredLanguage]['summoned']}`);
+        this.updateActionText(`${UNITS[unitType].name} invoqué`);
 
         // End turn after placing unit
         this.endTurn();
@@ -1528,7 +1528,7 @@ class Game {
         // Deselect and update UI
         this.deselectUnit();
         this.updateGameUI();
-        this.updateActionText(`${translations[preferredLanguage]['ability_used']}`);
+        this.updateActionText(`Capacité utilisée`);
 
         // End turn automatically after using ability
         setTimeout(() => this.checkAutoEndTurn(), 500);
@@ -1572,7 +1572,7 @@ class Game {
 
         // If no more actions are possible, end the turn
         if (!canStillAct && !hasPlayableCards) {
-            this.updateActionText(translations[preferredLanguage]['no_actions_possible']);
+            this.updateActionText(`Aucune action possible - Fin du tour automatique`);
 
             // Use bind to ensure 'this' refers to the Game instance
             setTimeout(this.endTurn.bind(this), 1000);
@@ -1667,10 +1667,10 @@ class Game {
 
         // Update UI
         this.updateGameUI();
-        this.updateActionText(`${translations[preferredLanguage]['turn_player']} ${this.currentPlayer}`);
+        this.updateActionText(`Tour du Joueur ${this.currentPlayer}`);
 
         // Update turn indicator
-        document.getElementById('turn-indicator').textContent = `${translations[preferredLanguage]['turn']} ${this.turn} - ${translations[preferredLanguage]['player']} ${this.currentPlayer}`;
+        document.getElementById('turn-indicator').textContent = `Tour ${this.turn} - Joueur ${this.currentPlayer}`;
     }
 
     resetGame() {
@@ -1700,7 +1700,7 @@ class Game {
 
         // Update UI
         this.updateGameUI();
-        this.updateActionText(translations[preferredLanguage]['new_game_started']);
+        this.updateActionText('Nouvelle partie commencée');
     }
 
     endGame(winner) {
@@ -1721,8 +1721,8 @@ class Game {
         // }
 
         this.gameOver = true;
-        this.updateActionText(`${translations[preferredLanguage]['player_wins'].replace('{player}', winner)}`);
-        document.getElementById('turn-indicator').textContent = `${translations[preferredLanguage]['player']} ${winner} ${translations[preferredLanguage]['wins']}!`;
+        this.updateActionText(`Joueur ${winner} gagne la partie!`);
+        document.getElementById('turn-indicator').textContent = `Victoire du Joueur ${winner}!`;
         document.getElementById('turn-indicator').style.backgroundColor = winner === 1 ? 'var(--highlight-color)' : 'var(--primary-color)';
 
         // Remove any existing victory overlay
@@ -1768,23 +1768,23 @@ class Game {
             maxWidth: '80%'
         });
 
-        let subliminalText = translations[preferredLanguage]['game_over'];
-        let subliminalText2 = translations[preferredLanguage]['opponent_oracle_destroyed'];
+        let subliminalText = "Fin de partie"
+        let subliminalText2 = "L'oracle adverse a été détruit"
         if (p2pConnection.gameId && winner === 1 && p2pConnection.isHost) {
-            subliminalText = translations[preferredLanguage]['victory'];
-            subliminalText2 = translations[preferredLanguage]['opponent_oracle_destroyed'];
+            subliminalText = "Victoire !"
+            subliminalText2 = "L'oracle adverse a été détruit"
             songManager.transitionSong("menu_next", "victory", true)
         } else if (p2pConnection.gameId && winner === 2 && !p2pConnection.isHost) {
-            subliminalText = translations[preferredLanguage]['victory'];
-            subliminalText2 = translations[preferredLanguage]['opponent_oracle_destroyed'];
+            subliminalText = "Victoire !"
+            subliminalText2 = "L'Oracle adverse a été détruit"
             songManager.transitionSong("menu_next", "victory", true)
         } else if (p2pConnection.gameId && winner === 2 && p2pConnection.isHost) {
-            subliminalText = translations[preferredLanguage]['defeat'];
-            subliminalText2 = translations[preferredLanguage]['your_oracle_destroyed'];
+            subliminalText = "Défaite"
+            subliminalText2 = "Votre Oracle a été détruit"
             songManager.transitionSong("menu_next", "defeat", true)
         } else if (p2pConnection.gameId && winner === 1 && !p2pConnection.isHost) {
-            subliminalText = translations[preferredLanguage]['defeat'];
-            subliminalText2 = translations[preferredLanguage]['your_oracle_destroyed'];
+            subliminalText = "Défaite"
+            subliminalText2 = "Votre Oracle a été détruit"
             songManager.transitionSong("menu_next", "defeat", true)
         } else if (!p2pConnection.gameId) {
             songManager.transitionSong("menu_next", "victory", true)
@@ -1793,9 +1793,9 @@ class Game {
         // Set the message content
         victoryMessage.innerHTML = `
             <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">${subliminalText}</h1>
-            <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">${translations[preferredLanguage]['player']} ${winner} ${translations[preferredLanguage]['wins']}</p>
+            <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">Joueur ${winner} remporte la partie</p>
             <p style="font-size: 1.2rem;">${subliminalText2}</p>
-            <button id="new-game-btn" style="margin-top: 1.5rem; padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; background-color: white; border: none; border-radius: 5px; font-weight: bold;">${translations[preferredLanguage]['new_game']}</button>
+            <button id="new-game-btn" style="margin-top: 1.5rem; padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; background-color: white; border: none; border-radius: 5px; font-weight: bold;">Nouvelle Partie</button>
         `;
 
         // Add message to overlay and overlay to board
@@ -1944,7 +1944,7 @@ class Game {
             }
         }
 
-        this.updateActionText(translations[preferredLanguage]['titan_spawn_effect']);
+        this.updateActionText("Le Titan apparaît et détruit les unités environnantes!");
     }
 
     // UI update methods
@@ -2011,7 +2011,7 @@ class Game {
         if (player.hand.length === 0) {
             const emptyMessage = document.createElement('div');
             emptyMessage.className = 'empty-hand-message';
-            emptyMessage.textContent = translations[preferredLanguage]['empty_hand'];
+            emptyMessage.textContent = 'Main vide';
             handContainer.appendChild(emptyMessage);
         }
     }
@@ -2019,7 +2019,7 @@ class Game {
     updateUnitInfoPanel(unit) {
         const unitInfo = document.querySelector('#unit-info .unit-details');
         if (!unit) {
-            unitInfo.textContent = translations[preferredLanguage]['select_unit_info'];
+            unitInfo.textContent = 'Sélectionnez une unité pour voir ses détails';
             return;
         }
 
@@ -2027,21 +2027,21 @@ class Game {
 
         let infoHTML = `
             <div class="unit-info-name">${unitData.name}</div>
-            <div class="unit-info-health">${translations[preferredLanguage]['health']}: ${unit.health}/${unitData.health}</div>
+            <div class="unit-info-health">Points de vie: ${unit.health}/${unitData.health}</div>
             <div class="unit-info-desc">${unitData.description}</div>
             <div class="unit-status">`;
 
         if (unit.justSpawned) {
-            infoHTML += `<span class="status-tag">${translations[preferredLanguage]['just_spawned']}</span>`;
+            infoHTML += '<span class="status-tag">Invoqué ce tour</span>';
         }
         if (unit.hasMoved) {
-            infoHTML += `<span class="status-tag">${translations[preferredLanguage]['has_moved']}</span>`;
+            infoHTML += '<span class="status-tag">A bougé</span>';
         }
         if (unit.hasAttacked) {
-            infoHTML += `<span class="status-tag">${translations[preferredLanguage]['has_attacked']}</span>`;
+            infoHTML += '<span class="status-tag">A attaqué</span>';
         }
         if (unit.usedAbility) {
-            infoHTML += `<span class="status-tag">${translations[preferredLanguage]['ability_used']}</span>`;
+            infoHTML += '<span class="status-tag">Capacité utilisée</span>';
         }
 
         infoHTML += `</div>`;
@@ -2082,20 +2082,20 @@ class Game {
         let actionText = '';
 
         if (unit.justSpawned) {
-            actionText = `${UNITS[unit.type].name} ${translations[preferredLanguage]['cant_act_this_turn']}.`;
+            actionText = `${UNITS[unit.type].name} ne peut pas agir ce tour-ci.`;
         } else if (this.movedUnitThisTurn && this.movedUnitThisTurn !== unit) {
-            actionText = `${translations[preferredLanguage]['act_with_moved_unit']}`;
+            actionText = `Vous avez déjà déplacé une autre unité ce tour-ci.`;
         } else {
             const actions = [];
-            if (canMove) actions.push(translations[preferredLanguage]['move']);
-            if (canDash) actions.push(translations[preferredLanguage]['dash']);
-            if (canAttack) actions.push(translations[preferredLanguage]['attack']);
-            if (hasAbility) actions.push(translations[preferredLanguage]['use_ability']);
+            if (canMove) actions.push('se déplacer');
+            if (canDash) actions.push('foncer');
+            if (canAttack) actions.push('attaquer');
+            if (hasAbility) actions.push('utiliser sa capacité');
 
             if (actions.length > 0) {
-                actionText = `${UNITS[unit.type].name} ${translations[preferredLanguage]['can']} ` + actions.join(translations[preferredLanguage]['or']) + '.';
+                actionText = `${UNITS[unit.type].name} peut ` + actions.join(' ou ');
             } else {
-                actionText = `${UNITS[unit.type].name} ${translations[preferredLanguage]['has_acted_this_turn']}.`;
+                actionText = `${UNITS[unit.type].name} a déjà agi ce tour-ci.`;
             }
         }
 
@@ -2445,10 +2445,10 @@ class Game {
 
         // Update UI
         this.updateGameUI();
-        this.updateActionText(`${translations[preferredLanguage]['turn_player']} ${this.currentPlayer}`);
+        this.updateActionText(`Tour du Joueur ${this.currentPlayer}`);
 
         // Update turn indicator
-        document.getElementById('turn-indicator').textContent = `${translations[preferredLanguage]['turn']} ${this.turn} - ${translations[preferredLanguage]['player']} ${this.currentPlayer}`;
+        document.getElementById('turn-indicator').textContent = `Tour ${this.turn} - Joueur ${this.currentPlayer}`;
     }
 
     findUnitByUUID(uuid) {
@@ -2460,7 +2460,7 @@ class Game {
                 }
             }
         }
-        return null; // Or throw an error if you prefer
+        return null;
     }
 
     getUnitPosition(unit) {

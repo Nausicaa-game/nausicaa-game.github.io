@@ -22,10 +22,10 @@ class P2PGameConnection {
         container.id = 'p2p-controls';
         container.innerHTML = `
             <div class="p2p-actions">
-            <div class="connection-status">Statut: <span id="connection-status">Déconnecté</span></div>
-                <button id="host-game-btn" class="btn primary">Héberger une partie</button>
-                <button id="game-code-display" class="btn primary small copy-code-btn" style="display:none;">Copier le lien</button>
-                <button id="get-link-btn" class="btn"  style="display:none">Obtenir le lien</button>
+                <div class="connection-status">Statut: <span id="connection-status">${translations[preferredLanguage]['disconnected']}</span></div>
+                <button id="host-game-btn" class="btn primary">${translations[preferredLanguage]['host-game']}</button>
+                <button id="game-code-display" class="btn primary small copy-code-btn" style="display:none;">${translations[preferredLanguage]['copy-link']}</button>
+                <button id="get-link-btn" class="btn" style="display:none">${translations[preferredLanguage]['get-link']}</button>
                 <div class="game-code" style="display:none"></div>
             </div>
         `;
@@ -50,24 +50,22 @@ class P2PGameConnection {
 
     openLinkPopup() {
         if (!this.gameId) {
-            alert('Vous devez héberger une partie d\'abord.');
+            alert(translations[preferredLanguage]['must-host-game']);
             return;
         }
-        nt.getElementById('host-game-btn').addEventListener('click', () => this.hostGame());
-        docum
 
         const gameLink = `${window.location.origin}${window.location.pathname}?gameId=${this.gameId}`;
-        // const popupContent = `
-        //     <p>Partagez ce lien pour rejoindre la partie :</p>
-        //     <a href="${gameLink}" target="_blank">${gameLink}</a>
-        // `;
+        const popupContent = `
+            <p>${translations[preferredLanguage]['share-link']}</p>
+            <a href="${gameLink}" target="_blank">${gameLink}</a>
+        `;
 
         // Create a simple popup window
         const popupWindow = window.open('', '_blank', 'width=600,height=200');
         popupWindow.document.write(`
             <html>
             <head>
-                <title>Lien de la partie</title>
+                <title>${translations[preferredLanguage]['game-link']}</title>
             </head>
             <body>
                 ${popupContent}
@@ -82,9 +80,9 @@ class P2PGameConnection {
         const statusElement = document.getElementById('connection-status');
         if (statusElement) {
             statusElement.textContent = {
-                'disconnected': 'Déconnecté',
-                'connecting': 'Connexion en cours...',
-                'connected': 'Connecté'
+                'disconnected': translations[preferredLanguage]['disconnected'],
+                'connecting': translations[preferredLanguage]['connecting'],
+                'connected': translations[preferredLanguage]['connected']
             } [status] || status;
 
             statusElement.className = status;
