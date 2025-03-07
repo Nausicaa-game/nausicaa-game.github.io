@@ -165,7 +165,7 @@
 .unit {
     width: 30px;
     height: 30px;
-    /* pointer-events: none; */
+    pointer-events: none;
     position: absolute;
     background-size: contain;
     background-repeat: no-repeat;
@@ -334,22 +334,23 @@
 
 /* Style for valid moves */
 /* WIP */
-/* .board-cell.valid-move {
-  background-color: rgba(255, 217, 0, 0.8); 
+.valid-move {
+  background-color: color-mix(in srgb, gold 10%, var(--background-light));
 }
 
-.board-cell.valid-move.dark {
-  background-color: rgba(213, 181, 0, 0.8); 
-} */
+.valid-move.dark {
+  background-color: color-mix(in srgb, gold 10%, var(--secondary-color));
+}
 
 /* Style for valid attacks */
-/* .board-cell.valid-attack {
-  background-color: rgba(255, 217, 0, 0.8); 
+.valid-attack {
+  background-color: color-mix(in srgb, rgba(255, 0, 0, 0.3) 10%, var(--background-light));
 }
 
-.board-cell.valid-attack.dark {
-  background-color: rgba(145, 94, 0, 0.8); s
-} */
+.valid-attack.dark {
+  background-color: color-mix(in srgb, rgba(255, 0, 0, 0.3) 10%, var(--secondary-color));
+}
+
 .header-toggle-button {
   display:none
 }

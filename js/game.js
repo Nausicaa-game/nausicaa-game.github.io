@@ -690,6 +690,8 @@ class Game {
             col
         }) => {
             const cell = document.querySelector(`.board-cell[data-row="${row}"][data-col="${col}"]`);
+            cell.classList.remove('valid-move');
+
             if (cell) {
                 const highlight = document.createElement('div');
                 highlight.className = 'cell-highlight';
@@ -709,6 +711,8 @@ class Game {
             col
         }) => {
             const cell = document.querySelector(`.board-cell[data-row="${row}"][data-col="${col}"]`);
+            cell.classList.remove('valid-attack');
+
             if (cell) {
                 const highlight = document.createElement('div');
                 highlight.className = 'cell-highlight attack-highlight';

@@ -206,7 +206,7 @@ function handleCellMouseOver(event) {
     // Assuming you have a method in your Game class to get the unit at a specific location
     const unit = game.board[row][col];
     // console.log(unit)
-    if (unit) {
+    if (unit && unit.player === game.currentPlayer) {
         // Assuming you have methods in your Game class to calculate valid moves and attacks
         const validMoves = game.getValidMoves(row, col);
         const validAttacks = game.getValidAttacks(row, col);
@@ -216,7 +216,7 @@ function handleCellMouseOver(event) {
         validMoves.forEach(move => {
             const moveCell = document.querySelector(`.board-cell[data-row="${move.row}"][data-col="${move.col}"]`);
             // console.log(moveCell);
-            if (moveCell) {
+            if (moveCell && !game.selectedUnit) {
                 moveCell.classList.add('valid-move');
             }
         });
@@ -224,7 +224,7 @@ function handleCellMouseOver(event) {
         // Highlight valid attacks
         validAttacks.forEach(attack => {
             const attackCell = document.querySelector(`.board-cell[data-row="${attack.row}"][data-col="${attack.col}"]`);
-            if (attackCell) {
+            if (attackCell && !game.selectedUnit) {
                 attackCell.classList.add('valid-attack');
             }
         });
