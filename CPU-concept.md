@@ -105,6 +105,20 @@ Training a card game AI, especially with techniques like Reinforcement Learning,
 5.  **Exploration vs. Exploitation:**  The AI needs to explore the game space to discover new strategies, but it also needs to exploit its current knowledge to win games.  Techniques like epsilon-greedy (randomly choosing actions with probability epsilon) are commonly used.
 
 6.  **Hyperparameter Tuning:**  Reinforcement learning algorithms have many hyperparameters (e.g., learning rate, discount factor, exploration rate).  Tuning these parameters is essential for good performance.
+
+## The actual concept: coefficients state machines
+This approach involves assigning an "attractiveness coefficient" to each piece on the board. This coefficient represents the desirability of targeting that piece.
+
+*   **Attractiveness Coefficient:** Each piece has a base attractiveness score. Factors influencing this score could include:
+    *   Piece type (e.g., a high-value piece has a higher coefficient).
+    *   Current health.
+    *   Abilities.
+*   **Distance Modifier:** The attractiveness coefficient is then divided by the distance between the CPU's pieces and the target piece. This prioritizes closer targets.
+*   **Attack Coefficient:** The final attack coefficient is calculated as: `Attractiveness Coefficient / Distance`. The CPU will prioritize attacking pieces with the highest attack coefficient.
+*   **Movement Prioritization:** If no attacks are possible, the CPU will prioritize moving towards the closest enemy piece. If multiple pieces are at the same distance, the CPU will prioritize moving towards the piece with the highest attractiveness coefficient.
+
+This approach should create an aggressive AI. The key will be finding the right balance and tuning the hyperparameters (e.g., the base attractiveness coefficients for different piece types).
+
 ## Bug Paper
 
 (This section would contain a detailed description of a specific bug, including steps to reproduce, expected behavior, and actual behavior.)
