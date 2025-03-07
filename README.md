@@ -261,7 +261,7 @@ Interested in expanding the game? Contribute by:
 ---
 
 <div align="center">
-  <p><strong>Created with ❤️ by <a href="https://instagram.com/fox3000foxy">fox3000foxy</a></strong></p>
+  <p><strong>Created with ❤️ by <a href="https://github.com/fox3000foxy">fox3000foxy</a></strong></p>
   
   <a href="https://discord.gg/fox3000foxy"><img src="https://img.shields.io/badge/Discord-Join-7289DA?style=for-the-badge&logo=discord" alt="Discord"></a>&nbsp;
   <a href="https://instagram.com/fox3000foxy"><img src="https://img.shields.io/badge/Instagram-Follow-E4405F?style=for-the-badge&logo=instagram" alt="Instagram"></a>
