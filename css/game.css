@@ -429,6 +429,10 @@
     margin-bottom: auto;
   }
 
+  .p2p-controls {
+    text-align:center;
+  }
+
   .action-panel, .player-info {
     display: flex;
     flex-direction: row;
