@@ -119,6 +119,10 @@ This approach involves assigning an "attractiveness coefficient" to each piece o
 
 This approach should create an aggressive AI. The key will be finding the right balance and tuning the hyperparameters (e.g., the base attractiveness coefficients for different piece types).
 
+This system allows for dynamic adjustments to the AI's behavior. By tweaking the base attractiveness coefficients and the distance modifier, we can control whether the CPU prioritizes attacking high-value targets or focusing on closer, weaker enemies.
+
+Furthermore, we can introduce variability by periodically changing these hyperparameters (e.g., every 4 turns). This would prevent the AI from becoming predictable and force the player to adapt to its shifting priorities. This is similar to how the ghosts in Pac-Man change their behavior patterns.
+
 ## Bug Paper
 
 (This section would contain a detailed description of a specific bug, including steps to reproduce, expected behavior, and actual behavior.)
