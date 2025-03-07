@@ -44,104 +44,117 @@ const UNITS_ATTRACTIVENESS = {
     "titan": 95 // Dévastateur, priorité absolue
 };
 
-/**
- * Calcule la distance euclidienne (à vol d'oiseau) entre deux points sur une grille.
- *
- * Cette fonction prend les coordonnées de deux points (x1, y1) et (x2, y2) et calcule la distance euclidienne
- * entre eux. La distance euclidienne est la longueur du segment de ligne entre les deux points.
- *
- * @param {number} x1 La coordonnée x du premier point.
- * @param {number} y1 La coordonnée y du premier point.
- * @param {number} x2 La coordonnée x du second point.
- * @param {number} y2 La coordonnée y du second point.
- * @returns {number} La distance euclidienne entre les deux points.
- *
- * Exemple :
- * calculateEuclideanDistance(0, 0, 3, 4) retourne 5 (car sqrt((0-3)^2 + (0-4)^2) = sqrt(9 + 16) = sqrt(25) = 5)
- */
-function calculateEuclideanDistance(x1, y1, x2, y2) {
-    // Calcule la différence au carré entre les coordonnées x.
-    const deltaX = Math.pow(x1 - x2, 2);
-
-    // Calcule la différence au carré entre les coordonnées y.
-    const deltaY = Math.pow(y1 - y2, 2);
-
-    // La distance euclidienne est la racine carrée de la somme de ces différences au carré.
-    return Math.sqrt(deltaX + deltaY) * COEFFICIENTS_IMPORTANCE["distance"];
-}
-
-/**
- * Calcule le coefficient d'attaque entre deux points sur une grille.
- *
- * Cette fonction prend les coordonnées de deux points (x1, y1) et (x2, y2) et calcule le coefficient d'attaque
- * entre eux. Le coefficient d'attaque est une valeur qui représente la priorité d'attaquer un point par rapport à un autre.
- * Plus le coefficient est élevé, plus le point est prioritaire.
- * Le coefficient d'attaque est calculé en divisant le coefficient d'attractivité du point attaqué par la distance euclidienne
- * entre les deux points.
- * Si la distance est nulle, la fonction retourne Infinity pour éviter une division par zéro.
- *
- */  
-function calculateAttackCoefficient(x1, y1, x2, y2) {
-    // Calcule la distance euclidienne entre les deux points.
-    const distance = calculateEuclideanDistance(x1, y1, x2, y2);
-
-    // Si la distance est nulle, retourne Infinity pour éviter une division par zéro.
-    if (distance === 0) {
-        return Infinity;
+class CPUPlayer {
+    /**
+     * Crée un nouveau joueur CPU pour le jeu donné.
+     *
+     * @param {Game} game Le jeu auquel le joueur CPU appartient.
+     */
+    constructor(game) {
+        this.game = game;
     }
 
-    // Calcule le coefficient d'attaque en divisant le coefficient d'attractivité par la distance.
-    return (UNITS_ATTRACTIVENESS[game.board[y2][x2].unit.type] * COEFFICIENTS_IMPORTANCE["attractiveness"]) / distance;
-}
+    /**
+     * Calcule la distance euclidienne (à vol d'oiseau) entre deux points sur une grille.
+     *
+     * Cette fonction prend les coordonnées de deux points (x1, y1) et (x2, y2) et calcule la distance euclidienne
+     * entre eux. La distance euclidienne est la longueur du segment de ligne entre les deux points.
+     *
+     * @param {number} x1 La coordonnée x du premier point.
+     * @param {number} y1 La coordonnée y du premier point.
+     * @param {number} x2 La coordonnée x du second point.
+     * @param {number} y2 La coordonnée y du second point.
+     * @returns {number} La distance euclidienne entre les deux points.
+     *
+     * Exemple :
+     * calculateEuclideanDistance(0, 0, 3, 4) retourne 5 (car sqrt((0-3)^2 + (0-4)^2) = sqrt(9 + 16) = sqrt(25) = 5)
+     */
+    calculateEuclideanDistance(x1, y1, x2, y2) {
+        // Calcule la différence au carré entre les coordonnées x.
+        const deltaX = Math.pow(x1 - x2, 2);
 
-/**
- * Calcule le coefficient de priorité d'une unité par rapport à une autre.
- * 
- * Cette fonction prend deux unités, une unité bot et une unité cible, et calcule le coefficient de priorité
- * de l'unité bot par rapport à l'unité cible. Le coefficient de priorité est une valeur qui représente la priorité
- */
-function calculateUnitPriority(botUnit, targetUnit) {
-    const botX = botUnit.x;
-    const botY = botUnit.y;
+        // Calcule la différence au carré entre les coordonnées y.
+        const deltaY = Math.pow(y1 - y2, 2);
 
-    const targetX = targetUnit.x;
-    const targetY = targetUnit.y;
+        // La distance euclidienne est la racine carrée de la somme de ces différences au carré.
+        return Math.sqrt(deltaX + deltaY) * COEFFICIENTS_IMPORTANCE["distance"];
+    }
 
-    return calculateAttackCoefficient(botX, botY, targetX, targetY);
-}
+    /**
+     * Calcule le coefficient d'attaque entre deux points sur une grille.
+     *
+     * Cette fonction prend les coordonnées de deux points (x1, y1) et (x2, y2) et calcule le coefficient d'attaque
+     * entre eux. Le coefficient d'attaque est une valeur qui représente la priorité d'attaquer un point par rapport à un autre.
+     * Plus le coefficient est élevé, plus le point est prioritaire.
+     * Le coefficient d'attaque est calculé en divisant le coefficient d'attractivité du point attaqué par la distance euclidienne
+     * entre les deux points.
+     * Si la distance est nulle, la fonction retourne Infinity pour éviter une division par zéro.
+     *
+     */  
+    calculateAttackCoefficient(x1, y1, x2, y2) {
+        // Calcule la distance euclidienne entre les deux points.
+        const distance = calculateEuclideanDistance(x1, y1, x2, y2);
 
-/** 
- * Itère sur le plateau de jeu et exécute une fonction de rappel pour chaque unité du joueur 1.
- */
-function iterateBoard(botUnit, board) {
-    const unitsCoefficients = {};
-    for (let y = 0; y < board.length; y++) {
-        for (let x = 0; x < board[y].length; x++) {
-            let unit = board[y][x].unit;
-            if (unit && unit.player === 1) {
-                unitsCoefficients[unit.id] = calculateUnitPriority(botUnit, unit);
+        // Si la distance est nulle, retourne Infinity pour éviter une division par zéro.
+        if (distance === 0) {
+            return Infinity;
+        }
+
+        // Calcule le coefficient d'attaque en divisant le coefficient d'attractivité par la distance.
+        return (UNITS_ATTRACTIVENESS[game.board[y2][x2].unit.type] * COEFFICIENTS_IMPORTANCE["attractiveness"]) / distance;
+    }
+
+    /**
+     * Calcule le coefficient de priorité d'une unité par rapport à une autre.
+     * 
+     * Cette fonction prend deux unités, une unité bot et une unité cible, et calcule le coefficient de priorité
+     * de l'unité bot par rapport à l'unité cible. Le coefficient de priorité est une valeur qui représente la priorité
+     */
+    calculateUnitPriority(botUnit, targetUnit) {
+        const botX = botUnit.x;
+        const botY = botUnit.y;
+
+        const targetX = targetUnit.x;
+        const targetY = targetUnit.y;
+
+        return calculateAttackCoefficient(botX, botY, targetX, targetY);
+    }
+
+    /** 
+     * Itère sur le plateau de jeu et exécute une fonction de rappel pour chaque unité du joueur 1.
+     */
+    iterateBoard(botUnit) {
+        const board = this.game.board;
+        const unitsCoefficients = {};
+        for (let y = 0; y < board.length; y++) {
+            for (let x = 0; x < board[y].length; x++) {
+                let unit = board[y][x].unit;
+                if (unit && unit.player === 1) {
+                    unitsCoefficients[unit.id] = calculateUnitPriority(botUnit, unit);
+                }
             }
         }
+        return unitsCoefficients;
     }
-    return unitsCoefficients;
-}
 
-/* 
- * Retourne l'unité la plus prioritaire à attaquer pour une unité donnée.
- */
-function getBestUnitToAttack(botUnit, board) {
-    const unitsCoefficients = iterateBoard(botUnit, board);
-    const bestUnit = Object.keys(unitsCoefficients).reduce((a, b) => unitsCoefficients[a] > unitsCoefficients[b] ? a : b);
-    return {unit: bestUnit, coefficient: unitsCoefficients[bestUnit]};
-}
+    /* 
+    * Retourne l'unité la plus prioritaire à attaquer pour une unité donnée.
+    */
+    getBestUnitToAttack(botUnit) {
+        const unitsCoefficients = iterateBoard(botUnit);
+        const bestUnit = Object.keys(unitsCoefficients).reduce((a, b) => unitsCoefficients[a] > unitsCoefficients[b] ? a : b);
+        return {unit: bestUnit, coefficient: unitsCoefficients[bestUnit]};
+    }
 
-/**
- * Retourne les meilleures actions pour chaque unité du joueur 2.
- */
-function getBestMove(botUnits, board) {
-    const bestMoves = {};
-    botUnits.forEach((unit) => {
-        bestMoves[unit.id] = getBestUnitToAttack(unit, board);
-    });
-    return bestMoves;
+    /**
+     * Retourne les meilleures actions pour chaque unité du joueur 2.
+     */
+    getBestMove() {
+        const bestMoves = {};
+        this.game.players[2].units.forEach((unitElement) => {
+            const unit = {...unitElement.unit, x: unitElement.x, y: unitElement.y};
+            bestMoves[unit.id] = getBestUnitToAttack(unit);
+        });
+        return bestMoves;
+    }
 }
