@@ -1804,7 +1804,7 @@ class Game {
             <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">${subliminalText}</h1>
             <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">${translations[preferredLanguage]['player']} ${winner} ${translations[preferredLanguage]['wins']}</p>
             <p style="font-size: 1.2rem;">${subliminalText2}</p>
-            <button id="new-game-btn" style="margin-top: 1.5rem; padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; background-color: white; border: none; border-radius: 5px; font-weight: bold;">${translations[preferredLanguage]['new_game']}</button>
+            <button id="new-game-btn" style="margin-top: 1.5rem; padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; background-color: white; border: none; border-radius: 5px; font-weight: bold;">${translations[preferredLanguage]['new-game']}</button>
         `;
 
         // Add message to overlay and overlay to board
