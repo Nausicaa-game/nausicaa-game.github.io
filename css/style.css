@@ -38,7 +38,6 @@ body {
     font-family: 'Cinzel', 'Times New Roman', serif;
     color: var(--text-dark);
     background-color: var(--background-light);
-    background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
     line-height: 1.6;
 }
 
