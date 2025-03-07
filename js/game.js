@@ -549,7 +549,7 @@ class Game {
 
         // Highlight valid spawn locations
         this.highlightValidSpawnLocations();
-        console.log(unitType+"_name")
+        // console.log(unitType+"_name")
         this.updateActionText(translations[preferredLanguage]['select_spawn'] + ` ${translations[preferredLanguage][unitType+"_name"]}`);
     }
 
