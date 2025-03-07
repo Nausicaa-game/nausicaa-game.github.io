@@ -157,4 +157,16 @@ class CPUPlayer {
         });
         return bestMoves;
     }
+
+    /**
+     * A implémenter
+     * WORK IN PROGRESS:
+     * - Fonction de prise de décision pour le joueur CPU a chaque tour.
+     * - Régulation des coefficients d'importance pour les heuristiques.
+     * - Implémentation de la logique de jeu pour le CPU.
+     * - Calculer par distance euclidienne le meilleure mouvement valide ou attaque valide possible. 
+     *   Attaque prioritaire au mouvement:
+     *    - Si il existe une attaque possible, attaquer.
+     *    - Si il n'existe pas d'attaque possible, se déplacer au plus proche de la cible en checkant quel est le validMove le plus proche.
+     */
 }
