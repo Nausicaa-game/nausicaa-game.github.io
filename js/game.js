@@ -164,6 +164,8 @@ class Game {
             if (this.timerSeconds <= 0 && !this.gameOver) {
                 clearInterval(this.turnTimer); // Clear the interval
                 this.endTurn();
+                songManager.playSong('timer', true)
+                this.triggerTimerEndEffect(); // ADD THIS LINE
             }
         }, 10);
     }
@@ -1389,6 +1391,7 @@ class Game {
         }
 
         player.mana -= cost;
+        player.mana = Math.max(player.mana, 0);
 
         // Get unit type and place it on the board
         const unitType = this.selectedCard.type;
@@ -1451,6 +1454,7 @@ class Game {
 
         if (this.selectedAction === 'dash') {
             this.players[this.currentPlayer].mana--;
+            this.players[this.currentPlayer].mana = Math.max(this.players[this.currentPlayer].mana, 0);
         }
 
         // Deselect the unit
@@ -1515,6 +1519,7 @@ class Game {
 
         // Spend mana for attack
         this.players[this.currentPlayer].mana--;
+        this.players[this.currentPlayer].mana = Math.max(this.players[this.currentPlayer].mana, 0);
 
         // Handle special attack types
         if (UNITS[unit.type].attack === 'explosion') {
@@ -1559,6 +1564,7 @@ class Game {
 
         // Spend mana for ability
         this.players[this.currentPlayer].mana--;
+        this.players[this.currentPlayer].mana = Math.max(this.players[this.currentPlayer].mana, 0);
 
         // Handle different abilities
         switch (UNITS[unit.type].ability) {
@@ -2178,8 +2184,8 @@ class Game {
             if (hasAbility) actions.push(translations[preferredLanguage]['use_ability']);
 
             if (actions.length > 0) {
-                actionText = `${UNITS[unit.type].name} ${translations[preferredLanguage]['can']} ` + actions.join(translations[preferredLanguage]['or']) + '.';
-            } else {
+                actionText = `${UNITS[unit.type].name} ${translations[preferredLanguage]['can']} ` + actions.join(" " + translations[preferredLanguage]['or'] + " ") + '.';
+            } else { 
                 actionText = `${UNITS[unit.type].name} ${translations[preferredLanguage]['has_acted_this_turn']}.`;
             }
         }
@@ -2740,5 +2746,34 @@ class Game {
                 }
             }, 300);
         }
+    }
+
+    triggerTimerEndEffect() {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 0, 0, 0.3);
+            pointer-events: none;
+            z-index: 1001;
+            opacity: 1; /* Start with full opacity */
+            transition: opacity 1s ease; /* Adjust duration as needed */
+        `;
+        document.body.appendChild(overlay);
+
+        // Trigger the fade-out effect after a short delay
+        setTimeout(() => {
+            overlay.style.opacity = '0'; /* Fade to 0 opacity */
+        }, 100); // Small delay before fade-out
+
+        // Remove the overlay after the transition completes
+        setTimeout(() => {
+            if (overlay.parentNode) {
+                document.body.removeChild(overlay);
+            }
+        }, 1100); // Transition duration + initial delay
     }
 }

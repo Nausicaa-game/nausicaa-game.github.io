@@ -165,3 +165,4 @@ songManager.loadSong('victory', '/assets/songs/victory.mp3');
 songManager.loadSong('defeat', '/assets/songs/defeat.mp3');
 songManager.loadSong('yourTurn', '/assets/songs/your_turn.mp3');
 songManager.loadSong('notification', '/assets/songs/notification.mp3');
+songManager.loadSong('timer', '/assets/songs/timer.mp3');
