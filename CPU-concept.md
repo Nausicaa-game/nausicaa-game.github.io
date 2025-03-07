@@ -123,6 +123,14 @@ This system allows for dynamic adjustments to the AI's behavior. By tweaking the
 
 Furthermore, we can introduce variability by periodically changing these hyperparameters (e.g., every 4 turns). This would prevent the AI from becoming predictable and force the player to adapt to its shifting priorities. This is similar to how the ghosts in Pac-Man change their behavior patterns.
 
+*   **Placing Units:** When the CPU has the opportunity to place units on the board, it should consider the following:
+    *   **Strategic Locations:** Identify key locations on the board that provide a tactical advantage (e.g., high ground, chokepoints).
+    *   **Unit Synergy:** Place units that complement each other's abilities.
+    *   **Resource Management:** Balance unit placement with resource availability.
+    *   **Threat Assessment:** Anticipate the opponent's moves and place units to counter them.
+
+The AI will place an unit when it will calculate than his oracle is in a weaker position.
+
 ## Bug Paper
 
 (This section would contain a detailed description of a specific bug, including steps to reproduce, expected behavior, and actual behavior.)
