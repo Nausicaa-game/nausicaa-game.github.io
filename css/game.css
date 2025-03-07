@@ -371,9 +371,15 @@
     padding: 0.5rem;
   }
 
+  .player-area.player-one {
+    border-bottom: none; 
+    border-top: 1px solid var(--accent-color);
+  }
+
   .player-area.player-two {
     border-top: none; 
     border-bottom: 1px solid var(--accent-color); 
+    border-left: none;
   }
 
   .board-container {
@@ -459,6 +465,35 @@
     top: 0.5rem;
     right: 0.5rem;
     font-size: 1.2rem;
+  }
+
+  .game-header {
+    height: 180px;
+    transition: height 0.3s ease; /* Add transition for smooth animation */
+  }
+
+  .game-header.retracted {
+    height: 30px; /* Adjust as needed */
+    overflow: hidden;
+  }
+
+  .game-header.retracted div,
+  .game-header.retracted h1,
+  .game-header.retracted .game-controls {
+    display: none;
+  }
+
+  .header-toggle-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: var(--text-light);
+    z-index: 10;
   }
 }
 

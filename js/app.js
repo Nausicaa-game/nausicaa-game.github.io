@@ -142,7 +142,22 @@ document.addEventListener('DOMContentLoaded', () => {
     } else
         overlay.style.display = 'none';
 
-});
+    const header = document.querySelector('.game-header');
+    const headerToggleButton = document.getElementById('header-toggle-button');
+  
+    headerToggleButton.addEventListener('click', () => {
+      header.classList.toggle('retracted');
+    });
+
+    // Check if the header is initially retracted and click the toggle button
+    // This is to ensure the header is retracted on page load if it was retracted previously
+    header.addEventListener('click', (event) => {  
+      if(event.target === headerToggleButton) return;
+      if (header.classList.contains('retracted')) {
+        header.classList.remove('retracted');
+      }
+    });
+  });
 
 let game = null;
 let p2pConnection = null;
@@ -182,18 +197,20 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function handleCellMouseOver(event) {
-    const cell = event.target.parentElement;
+    const cell = event.target;
     const row = parseInt(cell.dataset.row);
     const col = parseInt(cell.dataset.col);
 
+    // console.log(row, col)
     if(!row || !col) return;
     // Assuming you have a method in your Game class to get the unit at a specific location
     const unit = game.board[row][col];
+    // console.log(unit)
     if (unit) {
         // Assuming you have methods in your Game class to calculate valid moves and attacks
         const validMoves = game.getValidMoves(row, col);
         const validAttacks = game.getValidAttacks(row, col);
-
+        game.updateUnitInfoPanel(unit);
         console.log(validMoves, validAttacks);
         // Highlight valid moves
         validMoves.forEach(move => {
@@ -211,6 +228,10 @@ function handleCellMouseOver(event) {
                 attackCell.classList.add('valid-attack');
             }
         });
+    }
+    else {
+        if(!game.selectedUnit) 
+            document.querySelector('#unit-info .unit-details').textContent = translations[preferredLanguage]['select_unit'];
     }
 }
 

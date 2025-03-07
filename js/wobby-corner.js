@@ -112,3 +112,9 @@ function calcAvgs(p) {
     avg.push((p[0] + p[leng - 2]) / 2, (p[1] + p[leng - 1]) / 2);
     return avg;
 }
+function handleResize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+window.addEventListener("resize", handleResize);

@@ -203,6 +203,11 @@ class Game {
                 cell.dataset.row = row;
                 cell.dataset.col = col;
                 
+
+                // Add event listeners for hover effect
+                cell.addEventListener('mouseover', handleCellMouseOver);
+                cell.addEventListener('mouseout', handleCellMouseOut);
+
                 gameBoard.appendChild(cell);
             }
         }
@@ -2026,7 +2031,7 @@ class Game {
         const unitData = UNITS[unit.type];
 
         let infoHTML = `
-            <div class="unit-info-name">${unitData.name}</div>
+            <div class="unit-info-name">${unitData.name} (${translations[preferredLanguage]["player"]} ${unit.player})</div>
             <div class="unit-info-health">${translations[preferredLanguage]['health']}: ${unit.health}/${unitData.health}</div>
             <div class="unit-info-desc">${unitData.description}</div>
             <div class="unit-status">`;
@@ -2433,10 +2438,6 @@ class Game {
                 once: true
             });
         }
-
-        // Add event listeners for hover effect
-        unitElement.addEventListener('mouseover', handleCellMouseOver);
-        unitElement.addEventListener('mouseout', handleCellMouseOut);
     }
 
     setTurnAndPlayer(turn, player) {
