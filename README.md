@@ -243,6 +243,9 @@ Eliminate the opponent's **Oracle** (King equivalent) to win the game.
   - Privacy-focused design
   - Scales easily with player base
 
+### CPU Concept
+  For details on the CPU concept and AI implementation, see the [CPU Concept document](./CPU-concept.md). This document outlines the algorithms and strategies used to create a challenging and engaging AI opponent.
+
 ### Code Repository
 [![GitHub](https://img.shields.io/badge/GitHub-Nausicaa--game-blue?style=flat-square&logo=github)](https://github.com/Nausicaa-game/nausicaa-game.github.io)
 
