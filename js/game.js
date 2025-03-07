@@ -125,6 +125,13 @@ const UNITS = {
     }
 };
 
+// Preload unit images
+const unitImages = {};
+for (const unitType in UNITS) {
+    unitImages[unitType] = new Image();
+    unitImages[unitType].src = `/assets/pions/${unitType}.svg`;
+}
+
 class Game {
     constructor() {
         this.initializeUI();
