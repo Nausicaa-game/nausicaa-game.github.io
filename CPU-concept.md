@@ -1,0 +1,158 @@
+# CPU Concept for Card Game
+
+This document explores different algorithms for implementing a CPU player in our card game. We'll consider approaches like minimax, state machines, and potentially other AI techniques.
+
+## Algorithms
+
+### 1. Minimax
+
+*   **Description:** A classic decision-making algorithm used in two-player games. It explores the game tree, trying to maximize the CPU's score while minimizing the opponent's score.  The algorithm recursively explores possible moves, alternating between maximizing the CPU's advantage and minimizing the opponent's.  The depth of the search can be limited to balance computation time and decision quality.
+*   **Pros:**
+    *   Guaranteed to find the optimal move (given enough time and memory).
+    *   Well-understood and widely used.
+*   **Cons:**
+    *   Can be computationally expensive, especially for games with large branching factors.
+    *   Requires a good evaluation function to estimate the value of game states.  This function needs to accurately reflect the relative strength of different board positions.
+*   **Implementation Notes:**
+    *   Alpha-beta pruning can be used to reduce the search space. This optimization technique eliminates branches of the search tree that are guaranteed to be worse than the best already found.
+    *   Iterative deepening can be used to improve the quality of the move over time. Start with a shallow search and gradually increase the depth until a time limit is reached.
+
+### 2. State Machines
+
+*   **Description:** Define a set of states that the CPU can be in (e.g., "Attacking", "Defending", "Building"). Transitions between states are triggered by game events or conditions. Each state dictates the CPU's behavior, such as card selection and target prioritization.
+*   **Pros:**
+    *   Relatively simple to implement.
+    *   Can create believable and strategic behavior.  By carefully designing the states and transitions, you can create a CPU opponent with a distinct personality and play style.
+*   **Cons:**
+    *   May not be as optimal as minimax.  The CPU's decisions are based on predefined rules rather than a comprehensive search of the game tree.
+    *   Requires careful design of states and transitions.  Poorly designed states can lead to predictable or ineffective behavior.
+*   **Implementation Notes:**
+    *   Consider using a hierarchical state machine for more complex behavior. This allows you to organize states into a tree-like structure, with higher-level states controlling the overall strategy and lower-level states handling specific actions.
+    *   Use probabilities to make the CPU's behavior less predictable.  Introduce randomness into the state transitions or action selection to make the CPU more challenging to play against.
+
+### 3. Other Approaches
+
+*   **Monte Carlo Tree Search (MCTS):** A more advanced algorithm that uses random simulations to estimate the value of game states. Good for games with large branching factors where minimax is too slow. MCTS iteratively builds a search tree by repeatedly selecting nodes, expanding them with random simulations, and updating their values based on the simulation results.
+*   **Reinforcement Learning:** Train the CPU to play the game by rewarding it for good moves and punishing it for bad moves. Requires a lot of training data and careful tuning of the reward function. The CPU learns to play the game through trial and error, gradually improving its strategy over time.
+
+### 3.1 Monte Carlo Tree Search (MCTS) Details
+
+*   **Node Structure:** Each node in the MCTS tree represents a game state and stores:
+    *   `wins`: Number of times this node has led to a win for the CPU.
+    *   `visits`: Number of times this node has been visited during simulations.
+    *   `children`: A list of child nodes, representing possible actions from this state.
+*   **Algorithm Steps:**
+    1.  **Selection:** Traverse the tree from the root node (current game state) to a leaf node using a selection policy (e.g., UCT - Upper Confidence Bound applied to Trees).  The UCT formula balances exploration (trying less visited nodes) and exploitation (choosing nodes that have led to good results).
+    2.  **Expansion:** If the leaf node is not a terminal node (end of the game), expand it by creating child nodes for all possible actions from that state.
+    3.  **Simulation:** From the newly created child node (or the selected leaf node if no expansion is needed), perform a random playout (simulation) until the end of the game.
+    4.  **Backpropagation:** Update the `wins` and `visits` values of all nodes along the path from the leaf node back to the root node, based on the outcome of the simulation.
+*   **Evaluation Function (for Simulations):**
+    *   The simulation step requires a way to evaluate the game state at the end of the random playout. This can be a simple heuristic function that estimates the value of the state for the CPU.
+    *   **Examples of Evaluation Criteria:**
+        *   **Card Advantage:** Count the number of cards each player has.
+        *   **Board Control:** Evaluate the strength of the CPU's units on the board compared to the opponent's.
+        *   **Health Remaining:** Consider the remaining health of each player.
+        *   **Resource Advantage:** Compare the amount of resources (e.g., mana) each player has.
+    *   The evaluation function should return a score that represents the value of the game state for the CPU (e.g., 1 for a win, 0 for a loss, and a value between 0 and 1 for intermediate states).
+*   **Pros:**
+    *   Handles games with large branching factors better than minimax.
+    *   Does not require a perfect evaluation function, as it learns through simulations.
+*   **Cons:**
+    *   Can be computationally expensive, especially for complex games.
+    *   Performance depends on the quality of the simulation policy and evaluation function.
+*   **Implementation Notes:**
+    *   Experiment with different selection policies (e.g., UCT with different exploration parameters).
+    *   Optimize the simulation step to improve performance.
+    *   Consider using domain knowledge to guide the simulations and improve the accuracy of the evaluation.
+
+
+## Training the AI and Web Libraries
+
+### Training the AI
+
+Training a card game AI, especially with techniques like Reinforcement Learning, involves these key steps:
+
+1.  **Define the Environment:** This is your card game. You need a way to simulate the game, including all the rules, cards, and possible actions.
+
+2.  **Choose a Reinforcement Learning Algorithm:** Common choices include:
+
+    *   **Q-Learning:**  A classic algorithm that learns a Q-function, which estimates the value of taking a specific action in a specific state.
+    *   **Deep Q-Network (DQN):**  Uses a neural network to approximate the Q-function, allowing it to handle more complex game states.
+    *   **Policy Gradients (e.g., REINFORCE, PPO, A2C):** Directly learns a policy that maps states to actions.  Often more stable than Q-learning for complex environments.
+
+3.  **Design the Reward Function:** This is crucial. The reward function tells the AI what is good and bad. Examples:
+
+    *   Winning the game: +1
+    *   Losing the game: -1
+    *   Dealing damage to the opponent: +0.1
+    *   Having a strong board presence: +0.05
+    *   Playing an invalid move: -0.5
+
+4.  **Implement the Training Loop:**
+
+    *   Initialize the AI agent (e.g., the neural network for DQN).
+    *   For each episode:
+        *   Reset the game environment to a starting state.
+        *   While the game is not over:
+            *   The AI agent observes the current game state.
+            *   The AI agent chooses an action based on its policy (or Q-function).  Exploration strategies (e.g., epsilon-greedy) are important to encourage the AI to try new things.
+            *   The AI agent executes the action in the game environment.
+            *   The AI agent receives a reward from the environment.
+            *   The AI agent updates its policy (or Q-function) based on the reward and the new game state.
+        *   Evaluate the AI's performance (e.g., win rate).
+        *   Adjust hyperparameters or the reward function as needed.
+
+5.  **Exploration vs. Exploitation:**  The AI needs to explore the game space to discover new strategies, but it also needs to exploit its current knowledge to win games.  Techniques like epsilon-greedy (randomly choosing actions with probability epsilon) are commonly used.
+
+6.  **Hyperparameter Tuning:**  Reinforcement learning algorithms have many hyperparameters (e.g., learning rate, discount factor, exploration rate).  Tuning these parameters is essential for good performance.
+
+### Web Libraries for AI and Game Development
+
+If you're building a web-based card game and want to incorporate AI, here are some relevant libraries:
+
+*   **TensorFlow.js:**  A JavaScript library for training and deploying machine learning models in the browser or Node.js.  Excellent for implementing neural networks for DQN or policy gradient methods.
+
+    *   **Pros:**  Runs in the browser, leverages GPU acceleration, large community.
+    *   **Cons:**  Can be slower than native Python implementations for training.
+
+*   **Brain.js:** Another JavaScript neural network library.  Simpler to use than TensorFlow.js for basic neural network tasks.
+
+    *   **Pros:**  Easy to learn, good for simple AI tasks.
+    *   **Cons:**  Less flexible than TensorFlow.js for complex models.
+
+*   **PyTorch (with Flask/FastAPI):** Train your AI models using Python and PyTorch (a popular deep learning framework), then expose the trained model as an API endpoint using Flask or FastAPI. Your web application can then send game states to the API and receive AI decisions.
+
+    *   **Pros:**  PyTorch is powerful and flexible, Python has a rich ecosystem of AI libraries.
+    *   **Cons:**  Requires setting up a separate backend server.
+
+*   **Phaser:** A popular 2D game framework for the web.  Provides tools for creating game graphics, handling user input, and managing game logic.  You can integrate your AI algorithms (written in JavaScript) into your Phaser game.
+
+    *   **Pros:**  Well-suited for card games, large community, good documentation.
+    *   **Cons:**  Requires learning the Phaser API.
+
+*   **PixiJS:**  Another 2D rendering library that can be used to create game graphics.  More lightweight than Phaser, but requires more manual coding.
+
+    *   **Pros:**  Fast and flexible.
+    *   **Cons:**  Lower-level than Phaser.
+
+*   **socket.io:** A library for real-time, bidirectional communication between web clients and servers. Useful for multiplayer card games where the AI needs to interact with other players.
+
+Choosing the right libraries depends on the complexity of your AI and your comfort level with different programming languages and frameworks. For complex AI, Python with PyTorch and a web API is often a good choice. For simpler AI that runs directly in the browser, TensorFlow.js or Brain.js are viable options.
+
+
+## Bug Paper
+
+(This section would contain a detailed description of a specific bug, including steps to reproduce, expected behavior, and actual behavior.)
+
+Example:
+
+### Bug: Incorrect Card Targeting
+
+*   **Description:** The CPU sometimes targets its own cards with attack spells instead of the opponent's cards.
+*   **Steps to Reproduce:**
+    1.  Start a game against the CPU.
+    2.  Wait until the CPU has an attack spell in its hand.
+    3.  Observe the CPU's target selection.
+*   **Expected Behavior:** The CPU should target the opponent's cards with attack spells.
+*   **Actual Behavior:** The CPU sometimes targets its own cards with attack spells.
+*   **Possible Cause:** Error in the target selection logic.  The targeting function may be incorrectly identifying valid targets or may be prioritizing the CPU's own cards over the opponent's.
