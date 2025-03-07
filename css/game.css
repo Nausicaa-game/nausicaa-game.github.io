@@ -425,11 +425,34 @@
     white-space: nowrap;
   }
 
+  h1, h2, h3 {
+    margin-bottom: auto;
+  }
+
+  .action-panel, .player-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+  }
+
+  .action-panel {
+    display: grid;
+    grid-template-columns: 50% 40%;
+    align-items: center;
+  }
+
+  .end-turn-one {
+
+  }
+
   .card {
     width: auto; 
     height: 75px;
     margin: 0 0.2rem;
     flex-shrink: 0;
+    zoom: 0.72;
   }
 
   .card-image {
