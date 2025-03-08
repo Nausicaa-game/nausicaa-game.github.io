@@ -106,14 +106,6 @@ const UNITS = {
         ability: "extra_mana",
         description: translations[preferredLanguage]['seer_description']
     },
-    zombie: {
-        name: translations[preferredLanguage]['zombie_name'],
-        cost: 1,
-        movement: "zombie_move",
-        attack: "zombie_attack",
-        health: 1,
-        description: translations[preferredLanguage]['zombie_description']
-    },
     titan: {
         name: translations[preferredLanguage]['titan_name'],
         cost: 6,
@@ -2080,7 +2072,6 @@ class Game {
             card.appendChild(cardDetails);
 
             handContainer.appendChild(card);
-            console.log(card)
 
             // Add hover functionality for each card
             let hoverTimer = null;
