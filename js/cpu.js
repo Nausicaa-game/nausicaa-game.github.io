@@ -274,6 +274,17 @@ class CPUPlayer {
         console.log("[CPU Core] Target Unit:", targetUnitElement);
         const {row, col} = targetUnitElement;
         
+        const bestCase = this.findNearestMoveCase();
+        console.log("[CPU Core] Best Case:", bestCase);
+        
+        const validAttacks = this.game.getValidAttacks(botUnitElement.row, botUnitElement.col);   
+        if (validAttacks.find(attack => attack.row === row && attack.col === col)) {
+            console.log(`[CPU Core] CPU is attacking ${targetUnitElement.unit.type}...`);
+            this.game.attackUnit(row, col, decision.id);
+            this.game.endTurn();
+            return;
+        }
+
         if(botUnits.length < 5) {
             console.log(`[CPU Core] CPU has ${botUnits.length} units left, spawning one...`);
 
@@ -312,8 +323,6 @@ class CPUPlayer {
             }
         }
 
-        const bestCase = this.findNearestMoveCase();
-        console.log("[CPU Core] Best Case:", bestCase);
         if(botUnitElement.unit.type !== "oracle") { 
             const validAttacks = this.game.getValidAttacks(botUnitElement.row, botUnitElement.col);   
             if (validAttacks.find(attack => attack.row === row && attack.col === col)) {
@@ -376,6 +385,15 @@ class CPUPlayer {
             originalEndTurn.apply(this.game);
             if(!this.game.gameOver && this.game.currentPlayer === 2) {
                 this.makeAction();
+            }
+
+            this.turnCount = this.turnCount || 0;
+            this.turnCount++;
+            if (this.turnCount % 5 === 0) {
+                const distanceCoefficient = parseInt(Math.random() * 100);
+                const attractivenessCoefficient = parseInt(Math.random() * 100);
+                this.regulateImportanceCoefficients({distance: distanceCoefficient, attractiveness: attractivenessCoefficient});
+                console.log(`[CPU Core] Coefficients regulated: distance=${distanceCoefficient}%, attractiveness=${attractivenessCoefficient}%`);
             }
         }
     }
