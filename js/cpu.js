@@ -52,6 +52,11 @@ class CPUPlayer {
      */
     constructor(game) {
         this.game = game;
+        this.game.board = simulation.board;
+        this.game.players = simulation.players;
+        this.game.refreshBoardDisplay();
+
+        console.log(this.getBestMove());
     }
 
     /**
@@ -93,15 +98,14 @@ class CPUPlayer {
      */  
     calculateAttackCoefficient(x1, y1, x2, y2) {
         // Calcule la distance euclidienne entre les deux points.
-        const distance = calculateEuclideanDistance(x1, y1, x2, y2);
+        const distance = this.calculateEuclideanDistance(x1, y1, x2, y2);
 
         // Si la distance est nulle, retourne Infinity pour éviter une division par zéro.
         if (distance === 0) {
             return Infinity;
         }
-
         // Calcule le coefficient d'attaque en divisant le coefficient d'attractivité par la distance.
-        return (UNITS_ATTRACTIVENESS[game.board[y2][x2].unit.type] * COEFFICIENTS_IMPORTANCE["attractiveness"]) / distance;
+        return (UNITS_ATTRACTIVENESS[this.game.board[y2][x2].type] * COEFFICIENTS_IMPORTANCE["attractiveness"]) / distance;
     }
 
     /**
@@ -111,13 +115,15 @@ class CPUPlayer {
      * de l'unité bot par rapport à l'unité cible. Le coefficient de priorité est une valeur qui représente la priorité
      */
     calculateUnitPriority(botUnit, targetUnit) {
-        const botX = botUnit.x;
-        const botY = botUnit.y;
+        const botUnitElement = this.game.players[2].units.find(unit => unit.uuid == botUnit.uuid)
+        const botX = botUnitElement.col;
+        const botY = botUnitElement.row;
 
-        const targetX = targetUnit.x;
-        const targetY = targetUnit.y;
+        const targetUnitElement = this.game.players[1].units.find(unit => unit.uuid == targetUnit.uuid)
+        const targetX = targetUnitElement.col;
+        const targetY = targetUnitElement.row;
 
-        return calculateAttackCoefficient(botX, botY, targetX, targetY);
+        return this.calculateAttackCoefficient(botX, botY, targetX, targetY);
     }
 
     /** 
@@ -128,9 +134,11 @@ class CPUPlayer {
         const unitsCoefficients = {};
         for (let y = 0; y < board.length; y++) {
             for (let x = 0; x < board[y].length; x++) {
-                let unit = board[y][x].unit;
+                // console.log("board:",board[y][x]);
+                let unit = board[y][x];
                 if (unit && unit.player === 1) {
-                    unitsCoefficients[unit.id] = calculateUnitPriority(botUnit, unit);
+                    // console.log("botUnit:",botUnit, "unit:",unit);
+                    unitsCoefficients[unit.uuid] = this.calculateUnitPriority(botUnit, unit);
                 }
             }
         }
@@ -141,7 +149,7 @@ class CPUPlayer {
     * Retourne l'unité la plus prioritaire à attaquer pour une unité donnée.
     */
     getBestUnitToAttack(botUnit) {
-        const unitsCoefficients = iterateBoard(botUnit);
+        const unitsCoefficients = this.iterateBoard(botUnit);
         const bestUnit = Object.keys(unitsCoefficients).reduce((a, b) => unitsCoefficients[a] > unitsCoefficients[b] ? a : b);
         return {unit: bestUnit, coefficient: unitsCoefficients[bestUnit]};
     }
@@ -153,7 +161,7 @@ class CPUPlayer {
         const bestMoves = {};
         this.game.players[2].units.forEach((unitElement) => {
             const unit = {...unitElement.unit, x: unitElement.x, y: unitElement.y};
-            bestMoves[unit.id] = getBestUnitToAttack(unit);
+            bestMoves[unit.uuid] = this.getBestUnitToAttack(unit);
         });
         return bestMoves;
     }
@@ -170,3 +178,5 @@ class CPUPlayer {
      *    - Si il n'existe pas d'attaque possible, se déplacer au plus proche de la cible en checkant quel est le validMove le plus proche.
      */
 }
+
+const simulation = {"board":[[null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,{"type":"oracle","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e6148f1b-b3a9-4915-825f-b7d951892985"},null,null],[null,null,null,null,null,null,null,null,null,null],[null,null,null,null,{"type":"siren","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"a1db7677-1ae9-4c5e-bcf2-6a0b9bfafac4"},null,null,null,null,null],[null,null,null,null,null,{"type":"harpy","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e747c4ef-37dd-4c45-93dd-bb6a7963e564"},null,null,null,null],[null,null,null,null,null,null,null,null,null,null],[null,null,null,{"type":"oracle","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"7b444e1f-47f2-43d9-93d8-d43bb2fb4534"},null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null]],"players":{"1":{"mana":2,"maxMana":4,"deck":["naiad","naiad","gobelin","centaur","seer","siren","archer","archer","gobelin","siren","titan","phoenix","griffin"],"hand":["griffin","shapeshifter","harpy","gobelin"],"units":[{"unit":{"type":"oracle","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"7b444e1f-47f2-43d9-93d8-d43bb2fb4534"},"row":6,"col":3,"uuid":"7b444e1f-47f2-43d9-93d8-d43bb2fb4534"},{"unit":{"type":"harpy","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e747c4ef-37dd-4c45-93dd-bb6a7963e564"},"row":4,"col":5,"uuid":"e747c4ef-37dd-4c45-93dd-bb6a7963e564"}]},"2":{"mana":0,"maxMana":3,"deck":["griffin","griffin","seer","naiad","harpy","naiad","archer","titan","centaur","shapeshifter","archer","gobelin","siren"],"hand":["harpy","gobelin","phoenix","gobelin"],"units":[{"unit":{"type":"oracle","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e6148f1b-b3a9-4915-825f-b7d951892985"},"row":1,"col":7,"uuid":"e6148f1b-b3a9-4915-825f-b7d951892985"},{"unit":{"type":"siren","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"a1db7677-1ae9-4c5e-bcf2-6a0b9bfafac4"},"row":3,"col":4,"uuid":"a1db7677-1ae9-4c5e-bcf2-6a0b9bfafac4"}]}}}

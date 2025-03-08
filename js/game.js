@@ -141,6 +141,7 @@ class Game {
         this.initializeGame();
         this.setupEventListeners();
         this.setupCardPreviewSystem();
+        this.cpuPlayer = new CPUPlayer(this);
     }
 
     setTimerMode(enabled) {
