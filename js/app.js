@@ -99,6 +99,10 @@ document.addEventListener('DOMContentLoaded', function() {
             gameBoard.appendChild(cell);
 
             // Add event listeners for hover effect
+            cell.addEventListener('mouseenter', handleCellMouseOver);
+            cell.addEventListener('mouseleave', handleCellMouseOut);
+
+            // Add event listeners to the cell itself to handle unit hovering
             cell.addEventListener('mouseover', handleCellMouseOver);
             cell.addEventListener('mouseout', handleCellMouseOut);
         }
@@ -215,8 +219,8 @@ document.addEventListener('DOMContentLoaded', () => {
     p2pConnection.interceptGameActions();
 });
 
-function handleCellMouseOver(event) {
-    const cell = event.target;
+function handleCellMouseOver(event, targetElement=null) {
+    const cell = targetElement || event.target;
     const row = parseInt(cell.dataset.row);
     const col = parseInt(cell.dataset.col);
 

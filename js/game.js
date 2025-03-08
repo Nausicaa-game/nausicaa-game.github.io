@@ -445,7 +445,7 @@ class Game {
         });
 
         // Setup drag and drop for units
-        this.setupDragAndDrop();
+        // this.setupDragAndDrop();
     }
 
     setupDragAndDrop() {
@@ -457,94 +457,156 @@ class Game {
                 (this.currentPlayer === 2 && p2pConnection.isHost))) {
                 return;
             }
-            if(this.currentPlayer === 2 && this.cpuMode) {
+            if (this.currentPlayer === 2 && this.cpuMode) {
                 return;
             }
-
+    
             const unitElement = e.target.closest('.unit');
             if (!unitElement) return;
-
+    
             const cell = unitElement.closest('.board-cell');
             if (!cell) return;
-
+    
             const row = parseInt(cell.dataset.row);
             const col = parseInt(cell.dataset.col);
             
             // Check if this is the current player's unit
             const unit = this.board[row][col];
             if (!unit || unit.player !== this.currentPlayer) return;
-
-            // Check if the unit can be moved
-            if (unit.hasMoved || unit.justSpawned) return;
+    
+            // Prevent default to disable text selection
+            e.preventDefault();
             
-            // Select the unit first to calculate valid moves
+            // Track if we're actually dragging or just clicking
+            let isDragging = false;
+            const dragStartX = e.clientX;
+            const dragStartY = e.clientY;
+            
+            // Select the unit first to calculate valid moves and attacks
             this.selectUnit(unitElement, row, col);
             
-            // Only proceed with drag setup if the unit can move
-            if (this.validMoves.length === 0) {
+            // Valid actions check
+            const canMove = (!unit.hasMoved && !unit.justSpawned) && this.validMoves.length > 0;
+            const canAttack = (!unit.hasAttacked && UNITS[unit.type].attack !== 'none' && 
+                              this.players[this.currentPlayer].mana >= 1) && 
+                              this.validAttacks.length > 0;
+            const canDash = (unit.hasMoved && !unit.hasAttacked && !unit.hasDashed && 
+                            !unit.justSpawned && this.players[this.currentPlayer].mana >= 1 && 
+                            UNITS[unit.type].movement !== 'none') && 
+                            this.validMoves.length > 0;
+            
+            // Only proceed if the unit can take some action
+            if (!canMove && !canAttack && !canDash) {
                 return;
             }
+                
+            // Determine the current action type
+            let isAttacking = false;
             
-            // Mark as being dragged and style accordingly
-            unitElement.classList.add('dragging');
+            if (canAttack && this.validAttacks.length > 0) {
+                this.selectedAction = 'attack';
+                isAttacking = true;
+                this.highlightValidAttacks();
+            } else if ((canMove || canDash) && this.validMoves.length > 0) {
+                this.selectedAction = canDash ? 'dash' : 'move';
+                this.highlightValidMoves();
+            }
             
-            // Create a semi-transparent clone for dragging
+            // Create the drag image in advance but don't show it
             const dragImage = unitElement.cloneNode(true);
             dragImage.id = 'drag-image';
             dragImage.style.position = 'absolute';
-            dragImage.style.opacity = '0.7';
+            dragImage.style.opacity = '0';  // Start invisible
             dragImage.style.pointerEvents = 'none';
             dragImage.style.zIndex = '1000';
             document.body.appendChild(dragImage);
             
             // Calculate offset
             const rect = unitElement.getBoundingClientRect();
-            const offsetX = e.clientX - rect.left;
-            const offsetY = e.clientY - rect.top;
+            const offsetX = dragStartX - rect.left;
+            const offsetY = dragStartY - rect.top;
             
-            // Store original position
-            const originalCell = cell;
-            
-            // Highlight valid moves
-            this.highlightValidMoves();
+            // Function to start the drag
+            const startDrag = (e) => {
+                isDragging = true;
+                
+                // Now show and position the drag image
+                dragImage.style.opacity = '0.7';
+                dragImage.style.left = (e.clientX - offsetX) + 'px';
+                dragImage.style.top = (e.clientY - offsetY) + 'px';
+                
+                // Mark the original unit as dragging
+                unitElement.classList.add('dragging');
+            };
             
             // Move function for the drag image
             const moveAt = (pageX, pageY) => {
-                dragImage.style.left = pageX - offsetX + 'px';
-                dragImage.style.top = pageY - offsetY + 'px';
+                dragImage.style.left = (pageX - offsetX) + 'px';
+                dragImage.style.top = (pageY - offsetY) + 'px';
             };
             
-            // Initial position
-            moveAt(e.clientX, e.clientY);
-            
-            // Mouse move handler
+            // Mouse move handler for drag detection and movement
             const onMouseMove = (e) => {
+                // Check if we should start dragging
+                if (!isDragging) {
+                    const deltaX = Math.abs(e.clientX - dragStartX);
+                    const deltaY = Math.abs(e.clientY - dragStartY);
+                    
+                    // If moved more than this threshold, start dragging
+                    if (deltaX > 3 || deltaY > 3) {
+                        startDrag(e);
+                    }
+                    return;
+                }
+                
+                // If already dragging, move the drag image
                 moveAt(e.clientX, e.clientY);
                 
                 // Get element under the drag image for drop highlighting
+                dragImage.style.display = 'none'; // Temporarily hide the drag image
                 const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+                dragImage.style.display = ''; // Show the drag image again
+                
                 if (!elemBelow) return;
                 
                 const cellBelow = elemBelow.closest('.board-cell');
                 if (!cellBelow) return;
                 
-                // If cell has a valid move highlight, add a drop indicator
-                if (cellBelow.querySelector('.cell-highlight')) {
-                    cellBelow.classList.add('drop-target');
+                // Determine if cell is a valid target
+                const targetRow = parseInt(cellBelow.dataset.row);
+                const targetCol = parseInt(cellBelow.dataset.col);
+                
+                let isValidTarget = false;
+                
+                if (isAttacking) {
+                    // Check if it's a valid attack target
+                    isValidTarget = this.validAttacks.some(attack => 
+                        attack.row === targetRow && attack.col === targetCol
+                    );
+                    
+                    if (isValidTarget) {
+                        cellBelow.classList.add('drop-target', 'attack-target');
+                    }
+                } else {
+                    // Check if it's a valid move target
+                    isValidTarget = this.validMoves.some(move => 
+                        move.row === targetRow && move.col === targetCol
+                    );
+                    
+                    if (isValidTarget) {
+                        cellBelow.classList.add('drop-target');
+                    }
                 }
                 
                 // Remove drop highlight from other cells
                 document.querySelectorAll('.board-cell.drop-target').forEach(cell => {
                     if (cell !== cellBelow) {
-                        cell.classList.remove('drop-target');
+                        cell.classList.remove('drop-target', 'attack-target');
                     }
                 });
             };
             
-            // Listen to mouse move events
-            document.addEventListener('mousemove', onMouseMove);
-            
-            // Mouse up handler for drop
+            // Mouse up handler
             const onMouseUp = (e) => {
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', onMouseUp);
@@ -556,6 +618,12 @@ class Game {
                 
                 unitElement.classList.remove('dragging');
                 
+                // If we never started dragging, treat as a normal click
+                if (!isDragging) {
+                    // The click event will handle selection
+                    return;
+                }
+                
                 // Get drop target
                 const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
                 if (!elemBelow) return;
@@ -563,31 +631,56 @@ class Game {
                 const cellBelow = elemBelow.closest('.board-cell');
                 if (!cellBelow) return;
                 
-                // Check if drop target is a valid move
+                // Get target position
                 const targetRow = parseInt(cellBelow.dataset.row);
                 const targetCol = parseInt(cellBelow.dataset.col);
                 
                 // Remove all drop highlights
                 document.querySelectorAll('.board-cell.drop-target').forEach(cell => {
-                    cell.classList.remove('drop-target');
+                    cell.classList.remove('drop-target', 'attack-target');
                 });
                 
-                if (this.isValidMove(targetRow, targetCol)) {
-                    // Execute the move
-                    songManager.playSong('clic');
-                    this.moveUnit(targetRow, targetCol);
-                    // If this was a move action, track the unit that moved
-                    if (this.selectedAction === 'move') {
-                        this.movedUnitThisTurn = this.board[targetRow][targetCol];
+                // Execute the appropriate action based on the target
+                if (isAttacking) {
+                    // Check if it's a valid attack target
+                    const isValidAttack = this.validAttacks.some(attack => 
+                        attack.row === targetRow && attack.col === targetCol
+                    );
+                    
+                    if (isValidAttack) {
+                        // Execute attack
+                        songManager.playSong('attack');
+                        this.attackUnit(targetRow, targetCol);
+                    }
+                } else {
+                    // Check if it's a valid move target
+                    const isValidMove = this.validMoves.some(move => 
+                        move.row === targetRow && move.col === targetCol
+                    );
+                    
+                    if (isValidMove) {
+                        // Execute move
+                        songManager.playSong('clic');
+                        this.moveUnit(targetRow, targetCol);
+                        
+                        // If this was a dash action, mark the unit and end turn
+                        if (this.selectedAction === 'dash') {
+                            const movedUnit = this.board[targetRow][targetCol];
+                            if (movedUnit) {
+                                movedUnit.hasDashed = true;
+                                this.endTurn();
+                            }
+                        } else if (this.selectedAction === 'move') {
+                            // If this was a regular move action, track the unit that moved
+                            this.movedUnitThisTurn = this.board[targetRow][targetCol];
+                        }
                     }
                 }
             };
             
-            // Listen to mouse up event
+            // Listen to mouse events
+            document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', onMouseUp);
-            
-            // Prevent default to disable text selection
-            e.preventDefault();
         });
     }
 
@@ -2624,7 +2717,7 @@ class Game {
             unitElement.className = `unit player-${unit.player}`;
             unitElement.dataset.type = unit.type;
             unitElement.style.backgroundImage = `url('/assets/pions/${unit.type}.svg')`;
-
+            unitElement.setAttribute('draggable', 'true');
             // Add draggable attribute for units
             if (!unit.justSpawned) {
                 unitElement.setAttribute('draggable', 'false');
@@ -2640,6 +2733,15 @@ class Game {
                 unitElement.style.boxShadow = '0 0 5px #e53935'; // Red glow
             }
 
+            // Add hover functionality for each unit
+            unitElement.addEventListener('mouseover', (e) => {
+                handleCellMouseOver(e, e.target.parentElement)
+            });
+            
+            unitElement.addEventListener('mouseout', () => {
+                handleCellMouseOut(e, e.target.parentElement)                
+            });
+
             cell.appendChild(unitElement);
         } else {
             // Update existing unit element's class and style
@@ -2648,6 +2750,7 @@ class Game {
             unitElement.style.backgroundImage = `url('/assets/pions/${unit.type}.svg')`;
 
             // Update draggable attribute
+            unitElement.setAttribute('draggable', 'true');
             if (!unit.justSpawned) {
                 unitElement.setAttribute('draggable', 'false');
                 unitElement.style.cursor = unit.player === this.currentPlayer ? 'grab' : 'default';
