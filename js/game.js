@@ -453,6 +453,11 @@ class Game {
             //console.log("Bruh what are ut trying bud")
             return;
         }
+
+        if(this.currentPlayer === 2 && this.cpuMode) {
+            return;
+        }
+
         const cell = event.currentTarget;
         const row = parseInt(cell.dataset.row);
         const col = parseInt(cell.dataset.col);
