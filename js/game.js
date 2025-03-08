@@ -1689,11 +1689,13 @@ class Game {
         // Reset moved unit tracker
         this.movedUnitThisTurn = null;
 
-        if (p2pConnection?.gameId) {
-            if (this.currentPlayer === 1 && !p2pConnection.isHost) {
+        if (p2pConnection?.gameId || this.cpuMode) {
+            if (this.currentPlayer === 1 && !p2pConnection.isHost && !this.cpuMode) {
+                // console.log("endTurn: sending endTurn to host");
                 songManager.playSong("yourTurn")
                 // this.endTurn();
-            } else if (this.currentPlayer === 2 && p2pConnection.isHost) {
+            } else if (this.currentPlayer === 2 && (p2pConnection.isHost || this.cpuMode)) {
+                // console.log("endTurn: sending endTurn to guest");
                 songManager.playSong("yourTurn")
                 // this.endTurn();
             }
