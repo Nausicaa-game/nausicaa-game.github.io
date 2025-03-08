@@ -374,7 +374,7 @@ class CPUPlayer {
         let originalEndTurn = this.game.endTurn;
         this.game.endTurn = () => {
             originalEndTurn.apply(this.game);
-            if(this.game.currentPlayer === 2) {
+            if(!this.game.gameOver && this.game.currentPlayer === 2) {
                 this.makeAction();
             }
         }
