@@ -30,7 +30,7 @@ let COEFFICIENTS_IMPORTANCE = {
 
 // les units sont décrits dans game. en fonction de leur dangerosité estimé, donner un coefficient qui se rapprochera entre 0 et 1 de la dangerosité d'un pion
 const UNITS_ATTRACTIVENESS = {
-    "oracle": 10, // Très important à protéger/attaquer
+    "oracle": 100, // Très important à protéger/attaquer
     "gobelin": 20, // Unité de base, peu menaçante individuellement
     "harpy": 50, // Peut faire des dégâts de zone, potentiellement dangereuse
     "naiad": 30, // Support, mais pioche des cartes, peut accélérer le jeu adverse
