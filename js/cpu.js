@@ -52,7 +52,8 @@ class CPUPlayer {
      */
     constructor(game) {
         this.game = game;
-        // this.activateSimulation();
+        this.botPlayer = game.players[2];
+        this.firstPlayer = game.players[1];
     }
 
     activateSimulation() {
@@ -149,11 +150,11 @@ class CPUPlayer {
      * de l'unité bot par rapport à l'unité cible. Le coefficient de priorité est une valeur qui représente la priorité
      */
     calculateUnitPriority(botUnit, targetUnit) {
-        const botUnitElement = this.game.players[2].units.find(unit => unit.uuid == botUnit.uuid)
+        const botUnitElement = this.botPlayer.units.find(unit => unit.uuid == botUnit.uuid)
         const botX = botUnitElement.col;
         const botY = botUnitElement.row;
 
-        const targetUnitElement = this.game.players[1].units.find(unit => unit.uuid == targetUnit.uuid)
+        const targetUnitElement = this.firstPlayer.units.find(unit => unit.uuid == targetUnit.uuid)
         const targetX = targetUnitElement.col;
         const targetY = targetUnitElement.row;
 
@@ -199,7 +200,7 @@ class CPUPlayer {
      */
     getBestTargets() {
         const bestMoves = {};
-        this.game.players[2].units.forEach((unitElement) => {
+        this.botPlayer.units.forEach((unitElement) => {
             const unit = {...unitElement.unit, x: unitElement.x, y: unitElement.y};
             bestMoves[unit.uuid] = this.getBestUnitToAttack(unit);
         });
@@ -229,8 +230,8 @@ class CPUPlayer {
     */
     findNearestMoveCase() {
         const decision = this.makeDecision();
-        const botUnitElement = this.game.players[2].units.find(unit => unit.uuid == decision.id);
-        const targetUnitElement = this.game.players[1].units.find(unit => unit.uuid == decision.targetId);
+        const botUnitElement = this.botPlayer.units.find(unit => unit.uuid == decision.id);
+        const targetUnitElement = this.firstPlayer.units.find(unit => unit.uuid == decision.targetId);
 
         const validMoves = this.game.getValidMoves(botUnitElement.row, botUnitElement.col);
         const distances = validMoves.map(move => this.calculateEuclideanDistance(move.row, move.col, targetUnitElement.row, targetUnitElement.col));
@@ -240,63 +241,74 @@ class CPUPlayer {
     }
 
     async makeAction(dash=false) {
-        console.log("CPU is making a decision...");
-        const decision = this.makeDecision();
-        const botUnitElement = this.game.players[2].units.find(unit => unit.uuid == decision.id);
-        const targetUnitElement = this.game.players[1].units.find(unit => unit.uuid == decision.targetId);
-        console.log(targetUnitElement);
-        const {row, col} = targetUnitElement;
-        const botUnits = this.game.players[2].units.length;
-        const botPlayer = this.game.players[2];
+        console.log("[CPU Core] CPU is making a decision...");
         await sleep(1000);
-
-        if(botUnits < 5) {
-            console.log(`CPU has ${botUnits} units left, spawning one...`);
-
-            const unitType = this.game.players[2].hand.filter(unitType => UNITS[unitType].cost <= botPlayer.mana && unitType != "naiad").sort((a,b) => UNITS[a].cost < UNITS[b].cost ? -1 : 1)[0];
-            if(!unitType) {
-                console.log("No unit to spawn, ending turn...");
-                this.game.endTurn();
-                return;
-            }
-            
-            console.log("Spawning",unitType)
-            let spawningColumn = col
-            let nearestColumn = col;
-            let distance = 0;
-            while (this.game.board[1][nearestColumn] !== null) {
-                distance++;
-                if (col - distance >= 0 && this.game.board[1][col - distance] === null) {
-                    nearestColumn = col - distance;
-                    break;
-                }
-                if (col + distance < this.game.board[1].length && this.game.board[1][col + distance] === null) {
-                    nearestColumn = col + distance;
-                    break;
-                }
-                if (distance > 5) {
-                    console.log("No space to spawn, ending turn...");
-                    this.game.endTurn();
-                    return;
-                }
-            }
-            spawningColumn = nearestColumn;
-
-            this.game.placeUnit(unitType, 2, 1, spawningColumn);
-            botPlayer.mana -= UNITS[unitType].cost;
-            botPlayer.mana = Math.max(0, botPlayer.mana);
+        const botPlayer = this.botPlayer;
+        const botUnits = botPlayer.units.length;
+        const decision = this.makeDecision();
+        console.log("[CPU Core] Decision:", decision);
+        const botUnitElement = botPlayer.units.find(unit => unit.uuid == decision.id);
+         if (!botUnitElement) {
+            console.warn(`[CPU Core] Bot unit with ID ${decision.id} not found.`);
             this.game.endTurn();
             return;
         }
+        const targetUnitElement = this.firstPlayer.units.find(unit => unit.uuid == decision.targetId);
+        if (!targetUnitElement) {
+            console.warn(`[CPU Core] Target unit with ID ${decision.targetId} not found.`);
+            this.game.endTurn();
+            return;
+        }
+        console.log("[CPU Core] Target Unit:", targetUnitElement);
+        const {row, col} = targetUnitElement;
+        
+        if(botUnits < 5) {
+            console.log(`[CPU Core] CPU has ${botUnits} units left, spawning one...`);
+
+            const unitType = botPlayer.hand.filter(unitType => UNITS[unitType].cost <= botPlayer.mana && unitType != "naiad").sort((a,b) => UNITS[a].cost < UNITS[b].cost ? -1 : 1)[0];
+            if(!unitType) {
+                console.log("[CPU Core] No unit to spawn, making normal actions...");
+            }
+            else {
+                console.log("[CPU Core] Spawning",unitType)
+                let spawningColumn = col
+                let nearestColumn = col;
+                let distance = 0;
+                while (this.game.board[1][nearestColumn] !== null) {
+                    distance++;
+                    if (col - distance >= 0 && this.game.board[1][col - distance] === null) {
+                        nearestColumn = col - distance;
+                        break;
+                    }
+                    if (col + distance < this.game.board[1].length && this.game.board[1][col + distance] === null) {
+                        nearestColumn = col + distance;
+                        break;
+                    }
+                    if (distance > 5) {
+                        console.log("[CPU Core] No space to spawn, ending turn...");
+                        this.game.endTurn();
+                        return;
+                    }
+                }
+                spawningColumn = nearestColumn;
+    
+                this.game.placeUnit(unitType, 2, 1, spawningColumn);
+                botPlayer.mana -= UNITS[unitType].cost;
+                botPlayer.mana = Math.max(0, botPlayer.mana);
+                this.game.endTurn();
+                return;
+            }
+        }
 
         const bestCase = this.findNearestMoveCase();
+        console.log("[CPU Core] Best Case:", bestCase);
         if(botUnitElement.unit.type !== "oracle") { 
             const validAttacks = this.game.getValidAttacks(botUnitElement.row, botUnitElement.col);   
             if (validAttacks.find(attack => attack.row === row && attack.col === col)) {
-                console.log(`CPU is attacking ${targetUnitElement.unit.type}...`);
+                console.log(`[CPU Core] CPU is attacking ${targetUnitElement.unit.type}...`);
                 this.game.attackUnit(row, col, decision.id);
             } else {
-                console.log(`CPU is ${dash?"dashing":"moving"} towards ${bestCase.row+", "+bestCase.col}, against ${targetUnitElement.unit.type}...`);
+                console.log(`[CPU Core] CPU is ${dash?"dashing":"moving"} towards ${bestCase.row+", "+bestCase.col}, against ${targetUnitElement.unit.type}...`);
                 this.game.moveUnit(bestCase.row, bestCase.col, decision.id, dash?'dash':'move');
                 if(dash) {
                     return;
@@ -306,7 +318,7 @@ class CPUPlayer {
                     this.game.endTurn();
                 }
                 else {
-                    console.log("Not enough mana ("+botPlayer.mana+")  to dash, ending turn...");
+                    console.log("[CPU Core] Not enough mana ("+botPlayer.mana+")  to dash, ending turn...");
                     this.game.endTurn();
                 }
             }
@@ -314,10 +326,10 @@ class CPUPlayer {
             // L'oracle ne peut pas attaquer, il doit se déplacer, il s'éloiigne de la cible
             const actualVector = {x: bestCase.row - botUnitElement.row, y: bestCase.col - botUnitElement.col};
             console.log(actualVector);
-            console.log("CPU oracle is moving...");
+            console.log("[CPU Core] CPU oracle is moving...");
             this.game.moveUnit(botUnitElement.row - actualVector.x, botUnitElement.col - actualVector.y, decision.id, 'move');
             await sleep(1000);
-            console.log("CPU oracle is dashing...");
+            console.log("[CPU Core] CPU oracle is dashing...");
             this.game.moveUnit(botUnitElement.row - actualVector.x, botUnitElement.col - actualVector.y, decision.id, 'dash');
             this.game.endTurn();
         }
