@@ -52,11 +52,15 @@ class CPUPlayer {
      */
     constructor(game) {
         this.game = game;
-        // this.game.board = simulation.board;
-        // this.game.players = simulation.players;
-        // this.game.refreshBoardDisplay();
+        // this.activateSimulation();
+    }
 
-        // console.log(this.getBestMove());
+    activateSimulation() {
+        this.game.board = simulation.board;
+        this.game.players = simulation.players;
+        this.game.refreshBoardDisplay();
+
+        console.log(this.makeDecision());
     }
 
     /**
@@ -157,7 +161,7 @@ class CPUPlayer {
     /**
      * Retourne les meilleures actions pour chaque unité du joueur 2.
      */
-    getBestMove() {
+    getBestMoves() {
         const bestMoves = {};
         this.game.players[2].units.forEach((unitElement) => {
             const unit = {...unitElement.unit, x: unitElement.x, y: unitElement.y};
@@ -166,10 +170,24 @@ class CPUPlayer {
         return bestMoves;
     }
 
+    makeDecision() {
+        const bestMoves = this.getBestMoves();
+        const botUnitsIds = Object.keys(bestMoves);
+        const bestMove = {id: null, targetId: null, coefficient: 0}; 
+        botUnitsIds.forEach((unitId) => {
+            const coefficient = bestMoves[unitId].coefficient;
+            if (coefficient > bestMove.coefficient) {
+                bestMove.id = unitId;
+                bestMove.targetId = bestMoves[unitId].unit;
+                bestMove.coefficient = coefficient;
+            }
+        });
+        return bestMove;
+    }
+
     /**
      * A implémenter
      * WORK IN PROGRESS:
-     * - Fonction de prise de décision pour le joueur CPU a chaque tour.
      * - Régulation des coefficients d'importance pour les heuristiques.
      * - Implémentation de la logique de jeu pour le CPU.
      * - Calculer par distance euclidienne le meilleure mouvement valide ou attaque valide possible. 
@@ -177,6 +195,7 @@ class CPUPlayer {
      *    - Si il existe une attaque possible, attaquer.
      *    - Si il n'existe pas d'attaque possible, se déplacer au plus proche de la cible en checkant quel est le validMove le plus proche.
      */
+
 }
 
 const simulation = {"board":[[null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,{"type":"oracle","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e6148f1b-b3a9-4915-825f-b7d951892985"},null,null],[null,null,null,null,null,null,null,null,null,null],[null,null,null,null,{"type":"siren","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"a1db7677-1ae9-4c5e-bcf2-6a0b9bfafac4"},null,null,null,null,null],[null,null,null,null,null,{"type":"harpy","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e747c4ef-37dd-4c45-93dd-bb6a7963e564"},null,null,null,null],[null,null,null,null,null,null,null,null,null,null],[null,null,null,{"type":"oracle","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"7b444e1f-47f2-43d9-93d8-d43bb2fb4534"},null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null]],"players":{"1":{"mana":2,"maxMana":4,"deck":["naiad","naiad","gobelin","centaur","seer","siren","archer","archer","gobelin","siren","titan","phoenix","griffin"],"hand":["griffin","shapeshifter","harpy","gobelin"],"units":[{"unit":{"type":"oracle","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"7b444e1f-47f2-43d9-93d8-d43bb2fb4534"},"row":6,"col":3,"uuid":"7b444e1f-47f2-43d9-93d8-d43bb2fb4534"},{"unit":{"type":"harpy","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e747c4ef-37dd-4c45-93dd-bb6a7963e564"},"row":4,"col":5,"uuid":"e747c4ef-37dd-4c45-93dd-bb6a7963e564"}]},"2":{"mana":0,"maxMana":3,"deck":["griffin","griffin","seer","naiad","harpy","naiad","archer","titan","centaur","shapeshifter","archer","gobelin","siren"],"hand":["harpy","gobelin","phoenix","gobelin"],"units":[{"unit":{"type":"oracle","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e6148f1b-b3a9-4915-825f-b7d951892985"},"row":1,"col":7,"uuid":"e6148f1b-b3a9-4915-825f-b7d951892985"},{"unit":{"type":"siren","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"a1db7677-1ae9-4c5e-bcf2-6a0b9bfafac4"},"row":3,"col":4,"uuid":"a1db7677-1ae9-4c5e-bcf2-6a0b9bfafac4"}]}}}
