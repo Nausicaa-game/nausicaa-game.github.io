@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const unitInfo = document.getElementById('unit-info');
     const endTurnOneButton = document.getElementById('end-turn-one');
     const endTurnTwoButton = document.getElementById('end-turn-two');
-
+    const scoreDisplay = document.getElementById('score-display');
     // startGameTheme();
 
     let step = 0;
@@ -48,10 +48,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 text: 'Pour passer votre tour, cliquez sur ce bouton.',
                 highlight: endTurnOneButton,
             },
+             {
+                title: 'Score',
+                text: 'Le score est affiché ici. Il augmente lorsque vous détruisez des unités ennemies.',
+                highlight: scoreDisplay,
+            },
             {
-                title: 'Tour de l\'adversaire',
-                text: 'Pendant le tour de votre adversaire, vous devrez attendre.',
-                highlight: endTurnTwoButton,
+                title: 'Terminer le tour',
+                text: 'Pour passer votre tour, cliquez sur ce bouton.',
+                highlight: endTurnOneButton,
             },
             {
                 title: 'Objectif',
@@ -84,6 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: 'Mana',
                 text: 'Mana is needed to summon units and perform actions. It increases by 1 each turn, up to a maximum of 6.',
                 highlight: document.querySelector('.player-one .mana-container'),
+            },
+            {
+                title: 'Score',
+                text: 'The score is displayed here. It increases when you destroy enemy units.',
+                highlight: scoreDisplay,
             },
             {
                 title: 'End Turn',
@@ -127,6 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 text: 'Mana wird benötigt, um Einheiten zu beschwören und Aktionen durchzuführen. Es steigt jede Runde um 1, bis zu einem Maximum von 6.',
                 highlight: document.querySelector('.player-one .mana-container'),
             },
+             {
+                title: 'Punktzahl',
+                text: 'Die Punktzahl wird hier angezeigt. Sie erhöht sich, wenn du feindliche Einheiten zerstörst.',
+                highlight: scoreDisplay,
+            },
             {
                 title: 'Zug beenden',
                 text: 'Um deinen Zug zu beenden, klicke auf diese Schaltfläche.',
@@ -168,6 +183,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: 'Maná',
                 text: 'Se necesita maná para invocar unidades y realizar acciones. Aumenta en 1 cada turno, hasta un máximo de 6.',
                 highlight: document.querySelector('.player-one .mana-container'),
+            },
+             {
+                title: 'Puntuación',
+                text: 'La puntuación se muestra aquí. Aumenta cuando destruyes unidades enemigas.',
+                highlight: scoreDisplay,
             },
             {
                 title: 'Terminar Turno',
@@ -211,6 +231,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 text: 'Il mana è necessario per evocare unità ed eseguire azioni. Aumenta di 1 ogni turno, fino a un massimo di 6.',
                 highlight: document.querySelector('.player-one .mana-container'),
             },
+             {
+                title: 'Punteggio',
+                text: 'Il punteggio viene visualizzato qui. Aumenta quando distruggi le unità nemiche.',
+                highlight: scoreDisplay,
+            },
             {
                 title: 'Fine Turno',
                 text: 'Per terminare il tuo turno, clicca su questo pulsante.',
@@ -252,6 +277,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: 'マナ',
                 text: 'マナは、ユニットを召喚したり、アクションを実行したりするために必要です。ターンごとに1ずつ増加し、最大6まで増加します。',
                 highlight: document.querySelector('.player-one .mana-container'),
+            },
+             {
+                title: 'スコア',
+                text: 'スコアはここに表示されます。敵ユニットを破壊すると増加します。',
+                highlight: scoreDisplay,
             },
             {
                 title: 'ターン終了',
@@ -295,6 +325,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 text: '召唤单位和执行动作需要法力。它每回合增加 1，最多增加到 6。',
                 highlight: document.querySelector('.player-one .mana-container'),
             },
+             {
+                title: '分数',
+                text: '分数显示在这里。当您摧毁敌方单位时，它会增加。',
+                highlight: scoreDisplay,
+            },
             {
                 title: '结束回合',
                 text: '要结束您的回合，请单击此按钮。',
@@ -336,6 +371,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: 'مانا',
                 text: 'هناك حاجة إلى مانا لاستدعاء الوحدات وتنفيذ الإجراءات. يزيد بمقدار 1 في كل دور ، حتى 6 كحد أقصى.',
                 highlight: document.querySelector('.player-one .mana-container'),
+            },
+             {
+                title: 'أحرز هدفا',
+                text: 'يتم عرض النتيجة هنا. يزيد عندما تدمر وحدات العدو.',
+                highlight: scoreDisplay,
             },
             {
                 title: 'إنهاء الدور',
@@ -379,6 +419,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 text: 'Мана необходима для вызова юнитов и выполнения действий. Она увеличивается на 1 каждый ход, до максимума 6.',
                 highlight: document.querySelector('.player-one .mana-container'),
             },
+             {
+                title: 'Счет',
+                text: 'Счет отображается здесь. Он увеличивается, когда вы уничтожаете вражеские юниты.',
+                highlight: scoreDisplay,
+            },
             {
                 title: 'Конец хода',
                 text: 'Чтобы закончить свой ход, нажмите эту кнопку.',
@@ -409,6 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
         unitInfo.classList.remove('tutorial-highlight');
         endTurnOneButton.classList.remove('tutorial-highlight');
         endTurnTwoButton.classList.remove('tutorial-highlight');
+        scoreDisplay.classList.remove('tutorial-highlight');
         document.querySelectorAll('.player-one .mana-container').forEach(el => el.classList.remove('tutorial-highlight'));
 
         if (step.highlight) {
@@ -441,6 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
         unitInfo.classList.remove('tutorial-highlight');
         endTurnOneButton.classList.remove('tutorial-highlight');
         endTurnTwoButton.classList.remove('tutorial-highlight');
+        scoreDisplay.classList.remove('tutorial-highlight');
         document.querySelectorAll('.player-one .mana-container').forEach(el => el.classList.remove('tutorial-highlight'));
 
         history.pushState({}, null, '/app');
