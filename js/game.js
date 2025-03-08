@@ -2743,7 +2743,7 @@ class Game {
                 handleCellMouseOver(e, e.target.parentElement)
             });
             
-            unitElement.addEventListener('mouseout', () => {
+            unitElement.addEventListener('mouseout', (e) => {
                 handleCellMouseOut(e, e.target.parentElement)                
             });
 
