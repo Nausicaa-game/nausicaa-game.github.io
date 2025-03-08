@@ -56,11 +56,41 @@ class CPUPlayer {
     }
 
     activateSimulation() {
+        const simulation = {
+            "board":[
+                [null,null,null,null,null,null,null,null,null,null],
+                [null,null,null,null,null,null,null,{"type":"oracle","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e6148f1b-b3a9-4915-825f-b7d951892985"},null,null],
+                [null,null,null,null,null,null,null,null,null,null],
+                [null,null,null,null,{"type":"siren","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"a1db7677-1ae9-4c5e-bcf2-6a0b9bfafac4"},null,null,null,null,null],
+                [null,null,null,null,null,{"type":"harpy","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e747c4ef-37dd-4c45-93dd-bb6a7963e564"},null,null,null,null,null],
+                [null,null,null,null,null,null,null,null,null,null],
+                [null,null,null,{"type":"oracle","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"7b444e1f-47f2-43d9-93d8-d43bb2fb4534"},null,null,null,null,null,null],
+                [null,null,null,null,null,null,null,null,null,null]
+            ],
+            "players":{
+                "1":{
+                    "mana":2,"maxMana":4,
+                    "deck":["naiad","naiad","gobelin","centaur","seer","siren","archer","archer","gobelin","siren","titan","phoenix","griffin"],
+                    "hand":["griffin","shapeshifter","harpy","gobelin"],
+                    "units":[
+                        {"unit":{"type":"oracle","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"7b444e1f-47f2-43d9-93d8-d43bb2fb4534"},"row":6,"col":3,"uuid":"7b444e1f-47f2-43d9-93d8-d43bb2fb4534"},
+                        {"unit":{"type":"harpy","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e747c4ef-37dd-4c45-93dd-bb6a7963e564"},"row":4,"col":5,"uuid":"e747c4ef-37dd-4c45-93dd-bb6a7963e564"}
+                    ]
+                },
+                "2":{
+                    "mana":0,"maxMana":3,
+                    "deck":["griffin","griffin","seer","naiad","harpy","naiad","archer","titan","centaur","shapeshifter","archer","gobelin","siren"],
+                    "hand":["harpy","gobelin","phoenix","gobelin"],
+                    "units":[
+                        {"unit":{"type":"oracle","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e6148f1b-b3a9-4915-825f-b7d951892985"},"row":1,"col":7,"uuid":"e6148f1b-b3a9-4915-825f-b7d951892985"},
+                        {"unit":{"type":"siren","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"a1db7677-1ae9-4c5e-bcf2-6a0b9bfafac4"},"row":3,"col":4,"uuid":"a1db7677-1ae9-4c5e-bcf2-6a0b9bfafac4"}
+                    ]
+                }
+            }
+        }
         this.game.board = simulation.board;
         this.game.players = simulation.players;
         this.game.refreshBoardDisplay();
-
-        console.log(this.makeDecision());
     }
 
     /**
@@ -130,6 +160,14 @@ class CPUPlayer {
         return this.calculateAttackCoefficient(botX, botY, targetX, targetY);
     }
 
+    /**
+     * Régule les coefficients d'importance pour les heuristiques.
+    */
+    regulateImportanceCoefficients({distance, attractiveness}) {
+        COEFFICIENTS_IMPORTANCE["distance"] = distance;
+        COEFFICIENTS_IMPORTANCE["attractiveness"] = attractiveness;
+    }
+
     /** 
      * Itère sur le plateau de jeu et exécute une fonction de rappel pour chaque unité du joueur 1.
      */
@@ -159,7 +197,7 @@ class CPUPlayer {
     /**
      * Retourne les meilleures actions pour chaque unité du joueur 2.
      */
-    getBestMoves() {
+    getBestTargets() {
         const bestMoves = {};
         this.game.players[2].units.forEach((unitElement) => {
             const unit = {...unitElement.unit, x: unitElement.x, y: unitElement.y};
@@ -168,8 +206,11 @@ class CPUPlayer {
         return bestMoves;
     }
 
+    /**
+     * Retourne la meilleure action à effectuer pour le joueur CPU. Renvoie l'unité qui doit attaquer, l'unité à attaquer et le coefficient d'attaque.
+    */
     makeDecision() {
-        const bestMoves = this.getBestMoves();
+        const bestMoves = this.getBestTargets();
         const botUnitsIds = Object.keys(bestMoves);
         const bestMove = {id: null, targetId: null, coefficient: 0}; 
         botUnitsIds.forEach((unitId) => {
@@ -184,16 +225,101 @@ class CPUPlayer {
     }
 
     /**
-     * A implémenter
-     * WORK IN PROGRESS:
-     * - Régulation des coefficients d'importance pour les heuristiques.
-     * - Implémentation de la logique de jeu pour le CPU.
-     * - Calculer par distance euclidienne le meilleure mouvement valide ou attaque valide possible. 
-     *   Attaque prioritaire au mouvement:
-     *    - Si il existe une attaque possible, attaquer.
-     *    - Si il n'existe pas d'attaque possible, se déplacer au plus proche de la cible en checkant quel est le validMove le plus proche.
-     */
+     * Trouve la case la plus proche de la décision prise par le CPU.
+    */
+    findNearestMoveCase() {
+        const decision = this.makeDecision();
+        const botUnitElement = this.game.players[2].units.find(unit => unit.uuid == decision.id);
+        const targetUnitElement = this.game.players[1].units.find(unit => unit.uuid == decision.targetId);
 
+        const validMoves = this.game.getValidMoves(botUnitElement.row, botUnitElement.col);
+        const distances = validMoves.map(move => this.calculateEuclideanDistance(move.row, move.col, targetUnitElement.row, targetUnitElement.col));
+        const minDistance = Math.min(...distances);
+        const bestCase = validMoves.find(move => this.calculateEuclideanDistance(move.row, move.col, targetUnitElement.row, targetUnitElement.col) === minDistance);
+        return bestCase;
+    }
+
+    async makeAction(dash=false) {
+        console.log("CPU is making a decision...");
+        const decision = this.makeDecision();
+        const botUnitElement = this.game.players[2].units.find(unit => unit.uuid == decision.id);
+        const targetUnitElement = this.game.players[1].units.find(unit => unit.uuid == decision.targetId);
+        console.log(targetUnitElement);
+        const {row, col} = targetUnitElement;
+        const botUnits = this.game.players[2].units.length;
+        const botPlayer = this.game.players[2];
+        await sleep(1000);
+
+        if(botUnits < 5) {
+            console.log(`CPU has ${botUnits} units left, spawning one...`);
+
+            const unitType = this.game.players[2].hand.filter(unitType => UNITS[unitType].cost <= botPlayer.mana && unitType != "naiad").sort((a,b) => UNITS[a].cost < UNITS[b].cost ? -1 : 1)[0];
+            if(!unitType) {
+                console.log("No unit to spawn, ending turn...");
+                this.game.endTurn();
+                return;
+            }
+            
+            console.log("Spawning",unitType)
+            let spawningColumn = col
+            let nearestColumn = col;
+            let distance = 0;
+            while (this.game.board[1][nearestColumn] !== null) {
+                distance++;
+                if (col - distance >= 0 && this.game.board[1][col - distance] === null) {
+                    nearestColumn = col - distance;
+                    break;
+                }
+                if (col + distance < this.game.board[1].length && this.game.board[1][col + distance] === null) {
+                    nearestColumn = col + distance;
+                    break;
+                }
+                if (distance > 5) {
+                    console.log("No space to spawn, ending turn...");
+                    this.game.endTurn();
+                    return;
+                }
+            }
+            spawningColumn = nearestColumn;
+
+            this.game.placeUnit(unitType, 2, 1, spawningColumn);
+            botPlayer.mana -= UNITS[unitType].cost;
+            botPlayer.mana = Math.max(0, botPlayer.mana);
+            this.game.endTurn();
+            return;
+        }
+
+        const bestCase = this.findNearestMoveCase();
+        if(botUnitElement.unit.type !== "oracle") { 
+            const validAttacks = this.game.getValidAttacks(botUnitElement.row, botUnitElement.col);   
+            if (validAttacks.find(attack => attack.row === row && attack.col === col)) {
+                console.log(`CPU is attacking ${targetUnitElement.unit.type}...`);
+                this.game.attackUnit(row, col, decision.id);
+            } else {
+                console.log(`CPU is ${dash?"dashing":"moving"} towards ${bestCase.row+", "+bestCase.col}, against ${targetUnitElement.unit.type}...`);
+                this.game.moveUnit(bestCase.row, bestCase.col, decision.id, dash?'dash':'move');
+                if(dash) {
+                    return;
+                }
+                else if(botPlayer.mana > 2) {
+                    this.makeAction(true);
+                    this.game.endTurn();
+                }
+                else {
+                    console.log("Not enough mana ("+botPlayer.mana+")  to dash, ending turn...");
+                    this.game.endTurn();
+                }
+            }
+        } else {
+            // L'oracle ne peut pas attaquer, il doit se déplacer, il s'éloiigne de la cible
+            const actualVector = {x: bestCase.row - botUnitElement.row, y: bestCase.col - botUnitElement.col};
+            console.log(actualVector);
+            console.log("CPU oracle is moving...");
+            this.game.moveUnit(botUnitElement.row - actualVector.x, botUnitElement.col - actualVector.y, decision.id, 'move');
+            await sleep(1000);
+            console.log("CPU oracle is dashing...");
+            this.game.moveUnit(botUnitElement.row - actualVector.x, botUnitElement.col - actualVector.y, decision.id, 'dash');
+            this.game.endTurn();
+        }
+    }
 }
-
-const simulation = {"board":[[null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,{"type":"oracle","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e6148f1b-b3a9-4915-825f-b7d951892985"},null,null],[null,null,null,null,null,null,null,null,null,null],[null,null,null,null,{"type":"siren","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"a1db7677-1ae9-4c5e-bcf2-6a0b9bfafac4"},null,null,null,null,null],[null,null,null,null,null,{"type":"harpy","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e747c4ef-37dd-4c45-93dd-bb6a7963e564"},null,null,null,null],[null,null,null,null,null,null,null,null,null,null],[null,null,null,{"type":"oracle","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"7b444e1f-47f2-43d9-93d8-d43bb2fb4534"},null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null]],"players":{"1":{"mana":2,"maxMana":4,"deck":["naiad","naiad","gobelin","centaur","seer","siren","archer","archer","gobelin","siren","titan","phoenix","griffin"],"hand":["griffin","shapeshifter","harpy","gobelin"],"units":[{"unit":{"type":"oracle","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"7b444e1f-47f2-43d9-93d8-d43bb2fb4534"},"row":6,"col":3,"uuid":"7b444e1f-47f2-43d9-93d8-d43bb2fb4534"},{"unit":{"type":"harpy","player":1,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e747c4ef-37dd-4c45-93dd-bb6a7963e564"},"row":4,"col":5,"uuid":"e747c4ef-37dd-4c45-93dd-bb6a7963e564"}]},"2":{"mana":0,"maxMana":3,"deck":["griffin","griffin","seer","naiad","harpy","naiad","archer","titan","centaur","shapeshifter","archer","gobelin","siren"],"hand":["harpy","gobelin","phoenix","gobelin"],"units":[{"unit":{"type":"oracle","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"e6148f1b-b3a9-4915-825f-b7d951892985"},"row":1,"col":7,"uuid":"e6148f1b-b3a9-4915-825f-b7d951892985"},{"unit":{"type":"siren","player":2,"health":1,"hasMoved":false,"hasAttacked":false,"usedAbility":false,"justSpawned":false,"hasDashed":false,"uuid":"a1db7677-1ae9-4c5e-bcf2-6a0b9bfafac4"},"row":3,"col":4,"uuid":"a1db7677-1ae9-4c5e-bcf2-6a0b9bfafac4"}]}}}
