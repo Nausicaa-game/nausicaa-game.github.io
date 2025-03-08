@@ -29,3 +29,11 @@ async function play() {
     }
     window.location.href = 'app?animation=true'
 }
+
+async function playDemo() {
+    for (let i = 0; i < 150; i++) {
+        blob.radius += 30;
+        await sleep(0.001)
+    }
+    window.location.href = 'demo?animation=true'
+}

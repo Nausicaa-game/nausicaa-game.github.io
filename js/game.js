@@ -2010,7 +2010,7 @@ class Game {
 
         // Enable/disable end turn buttons
         document.getElementById('end-turn-one').disabled = this.currentPlayer !== 1 || this.gameOver;
-        document.getElementById('end-turn-two').disabled = this.currentPlayer !== 2 || this.gameOver;
+        document.getElementById('end-turn-two').disabled = this.currentPlayer !== 2 || this.gameOver || this.cpuMode;
         this.highlightCurrentPlayer();
     }
 
