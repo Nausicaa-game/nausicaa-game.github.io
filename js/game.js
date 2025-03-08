@@ -426,6 +426,7 @@ class Game {
                     return;
                 }
                 this.endTurn();
+                songManager.playSong('manualEndTurn', true)
             }
         });
 
@@ -436,6 +437,8 @@ class Game {
                     return;
                 }
                 this.endTurn();
+                songManager.playSong('manualEndTurn', true)
+
             }
         });
 
@@ -1763,9 +1766,13 @@ class Game {
         // Update UI
         this.updateGameUI();
         this.updateActionText(translations[preferredLanguage]['new_game_started']);
-        if (this.timerMode) {
-            this.startTurnTimer();
-        }
+        
+        this.stopTurnTimer();
+        
+        document.getElementById("timer-display").style.display = "none";
+        // if (this.timerMode) {
+        //     this.startTurnTimer();
+        // }
     }
 
     endGame(winner) {
