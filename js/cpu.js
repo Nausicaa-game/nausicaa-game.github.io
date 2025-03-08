@@ -52,11 +52,11 @@ class CPUPlayer {
      */
     constructor(game) {
         this.game = game;
-        this.game.board = simulation.board;
-        this.game.players = simulation.players;
-        this.game.refreshBoardDisplay();
+        // this.game.board = simulation.board;
+        // this.game.players = simulation.players;
+        // this.game.refreshBoardDisplay();
 
-        console.log(this.getBestMove());
+        // console.log(this.getBestMove());
     }
 
     /**
