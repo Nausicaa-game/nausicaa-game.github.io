@@ -442,6 +442,8 @@ document.addEventListener('DOMContentLoaded', () => {
         endTurnOneButton.classList.remove('tutorial-highlight');
         endTurnTwoButton.classList.remove('tutorial-highlight');
         document.querySelectorAll('.player-one .mana-container').forEach(el => el.classList.remove('tutorial-highlight'));
+
+        history.pushState({}, null, '/app');
     }
 
     // Start the tutorial automatically
