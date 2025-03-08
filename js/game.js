@@ -2099,6 +2099,11 @@ class Game {
         });
     }
 
+    resetScore() {
+        this.players[1].wins = 0;
+        this.players[2].wins = 0;
+        document.getElementById('score-display').textContent = '0 - 0';
+    }
     // Helper methods for specific abilities and attacks
 
     pullUnitTowards(fromRow, fromCol, toRow, toCol) {

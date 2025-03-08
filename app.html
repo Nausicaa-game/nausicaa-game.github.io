@@ -98,7 +98,10 @@
                     </label>
                 </div>
                 <div id="timer-display" style="display: none; width:200px; text-align: center;">15</div>
-                <div id="score-display" style="width:200px; text-align: center;">0 - 0</div>
+                <div style="display: flex; flex-direction: row;">
+                    <span id="score-display" style="text-align: center;">0 - 0</span>
+                    <span onclick="game.resetScore()" style="cursor: pointer; margin-left: 8px; opacity: 0.6;">↺</span>
+                </div>
             </div>
             <br>
             <div class="game-board" id="game-board">
