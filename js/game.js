@@ -2125,7 +2125,7 @@ class Game {
         const unitData = UNITS[unit.type];
 
         let infoHTML = `
-            <div class="unit-info-name">${unitData.name} (${translations[preferredLanguage]["player"]} ${unit.player})</div>
+            <div class="unit-info-name">${unitData.name} (${translations[preferredLanguage]["player"]} ${unit.player === 1 ? 1 : this.cpuMode ? "CPU" : 2})</div>
             <div class="unit-info-health">${translations[preferredLanguage]['health']}: ${unit.health}/${unitData.health}</div>
             <div class="unit-info-desc">${unitData.description}</div>
             <div class="unit-status">`;
