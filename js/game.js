@@ -1770,6 +1770,8 @@ class Game {
         this.stopTurnTimer();
         
         document.getElementById("timer-display").style.display = "none";
+        document.querySelector(".timer").style.display = '';
+        document.querySelector(".cpu-mode").style.display = '';
         // if (this.timerMode) {
         //     this.startTurnTimer();
         // }
