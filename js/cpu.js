@@ -138,10 +138,8 @@ class CPUPlayer {
         const unitsCoefficients = {};
         for (let y = 0; y < board.length; y++) {
             for (let x = 0; x < board[y].length; x++) {
-                // console.log("board:",board[y][x]);
                 let unit = board[y][x];
                 if (unit && unit.player === 1) {
-                    // console.log("botUnit:",botUnit, "unit:",unit);
                     unitsCoefficients[unit.uuid] = this.calculateUnitPriority(botUnit, unit);
                 }
             }
