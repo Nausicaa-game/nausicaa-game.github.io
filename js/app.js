@@ -222,37 +222,34 @@ function handleCellMouseOver(event) {
     const row = parseInt(cell.dataset.row);
     const col = parseInt(cell.dataset.col);
 
-    // console.log(row, col)
-    if(!row || !col) return;
     // Assuming you have a method in your Game class to get the unit at a specific location
     const unit = game.board[row][col];
-    // console.log(unit)
-    if (unit && unit.player === game.currentPlayer) {
-        // Assuming you have methods in your Game class to calculate valid moves and attacks
-        const validMoves = game.getValidMoves(row, col);
-        const validAttacks = game.getValidAttacks(row, col);
+    if(unit){
         game.updateUnitInfoPanel(unit);
-        // console.log(validMoves, validAttacks);
-        // Highlight valid moves
-        validMoves.forEach(move => {
-            const moveCell = document.querySelector(`.board-cell[data-row="${move.row}"][data-col="${move.col}"]`);
-            // console.log(moveCell);
-            if (moveCell && !game.selectedUnit) {
-                moveCell.classList.add('valid-move');
-            }
-        });
+        if(unit.player === game.currentPlayer) {
+            // Assuming you have methods in your Game class to calculate valid moves and attacks
+            const validMoves = game.getValidMoves(row, col);
+            const validAttacks = game.getValidAttacks(row, col)
+            // console.log(validMoves, validAttacks);
+            // Highlight valid moves
+            validMoves.forEach(move => {
+                const moveCell = document.querySelector(`.board-cell[data-row="${move.row}"][data-col="${move.col}"]`);
+                // console.log(moveCell);
+                if (moveCell && !game.selectedUnit) {
+                    moveCell.classList.add('valid-move');
+                }
+            });
 
-        // Highlight valid attacks
-        validAttacks.forEach(attack => {
-            const attackCell = document.querySelector(`.board-cell[data-row="${attack.row}"][data-col="${attack.col}"]`);
-            if (attackCell && !game.selectedUnit) {
-                attackCell.classList.add('valid-attack');
-            }
-        });
-    }
-    else {
-        if(!game.selectedUnit) 
-            document.querySelector('#unit-info .unit-details').textContent = translations[preferredLanguage]['select_unit'];
+            // Highlight valid attacks
+            validAttacks.forEach(attack => {
+                const attackCell = document.querySelector(`.board-cell[data-row="${attack.row}"][data-col="${attack.col}"]`);
+                if (attackCell && !game.selectedUnit) {
+                    attackCell.classList.add('valid-attack');
+                }
+            });
+        }
+    } else {
+        document.querySelector('#unit-info .unit-details').textContent = translations[preferredLanguage]['select_unit'];
     }
 }
 
