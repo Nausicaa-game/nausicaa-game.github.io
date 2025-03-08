@@ -462,6 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         tutorialOverlay.style.display = 'flex';
+        songManager.playSong('buttonClick');
     }
 
     tutorialNextButton.addEventListener('click', () => {
@@ -496,4 +497,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start the tutorial automatically
     showTutorialStep(step);
     game.cpuMode = true;
+    songManager.playSong('menu_next');
+    window.demoMode = true;
 });

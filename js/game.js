@@ -371,7 +371,10 @@ class Game {
                 songManager.playSong('oraclePut', true);
                 songManager.setVolume("oraclePut",0.3)
                 songManager.playSong('announcer:battleBegins', true);
-                songManager.transitionSong("firstRound", "menu_next", true)
+                if(!window.demoMode) 
+                    songManager.transitionSong("firstRound", "menu_next", true)
+                else
+                    songManager.stopSong("firstRound")
                 if (game.timerMode) {
                     game.startTurnTimer();
                 }
@@ -1961,12 +1964,15 @@ class Game {
     }
 
     resetGame() {
-        songManager.stopSong("menu_next")
+        if(!window.demoMode)
+            songManager.stopSong("menu_next")
         songManager.stopSong("victory")
         songManager.stopSong("defeat")
 
         songManager.playSong("announcer:allPick", true)
-        songManager.playSong("firstRound", true)
+        
+        if(!window.demoMode)
+            songManager.playSong("firstRound", true)
         songManager.setVolume("firstRound",0.2)
         // songManager.transitionSong("victory","firstRound", true)
 
@@ -2957,3 +2963,5 @@ class Game {
         }, 1100); // Transition duration + initial delay
     }
 }
+
+window.demoMode = false;

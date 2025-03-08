@@ -130,7 +130,8 @@ let backgroundThemePlaying = false;
 // document.querySelector(".overlay").style.display = 'none';
 function startGameTheme() {
     if (!backgroundThemePlaying) {
-        songManager.playSong('firstRound');
+        if(!window.demoMode)
+            songManager.playSong('firstRound');
         songManager.setVolume("firstRound",0.3)
         songManager.playSong('announcer:allPick');
         backgroundThemePlaying = true;
