@@ -2000,6 +2000,10 @@ class Game {
         document.getElementById("timer-display").style.display = "none";
         document.querySelector(".timer").style.display = '';
         document.querySelector(".cpu-mode").style.display = '';
+        this.turn = 1;
+        this.currentPlayer = 1;
+        document.getElementById('turn-indicator').textContent = `${translations[preferredLanguage]['turn']} ${this.turn} - ${translations[preferredLanguage]['player']} ${this.currentPlayer}`;
+
         // if (this.timerMode) {
         //     this.startTurnTimer();
         // }
