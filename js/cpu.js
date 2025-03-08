@@ -52,8 +52,6 @@ class CPUPlayer {
      */
     constructor(game) {
         this.game = game;
-        this.botPlayer = game.players[2];
-        this.firstPlayer = game.players[1];
     }
 
     activateSimulation() {
@@ -150,11 +148,13 @@ class CPUPlayer {
      * de l'unité bot par rapport à l'unité cible. Le coefficient de priorité est une valeur qui représente la priorité
      */
     calculateUnitPriority(botUnit, targetUnit) {
-        const botUnitElement = this.botPlayer.units.find(unit => unit.uuid == botUnit.uuid)
+        const botUnitElement = this.game.players[2].units.find(unit => unit.uuid == botUnit.uuid)
         const botX = botUnitElement.col;
         const botY = botUnitElement.row;
 
-        const targetUnitElement = this.firstPlayer.units.find(unit => unit.uuid == targetUnit.uuid)
+        console.log("[CPU Core] Calculating priority for", botUnitElement.unit.type, "against", targetUnit.unit.type);
+
+        const targetUnitElement = this.game.players[1].units.find(unit => unit.uuid == targetUnit.uuid)
         const targetX = targetUnitElement.col;
         const targetY = targetUnitElement.row;
 
@@ -178,8 +178,9 @@ class CPUPlayer {
         for (let y = 0; y < board.length; y++) {
             for (let x = 0; x < board[y].length; x++) {
                 let unit = board[y][x];
-                if (unit && unit.player === 1) {
-                    unitsCoefficients[unit.uuid] = this.calculateUnitPriority(botUnit, unit);
+                let targetUnit = this.game.players[1].units.find(playerUnit => unit?.uuid == playerUnit.uuid);
+                if (targetUnit && unit.player === 1) {
+                    unitsCoefficients[unit.uuid] = this.calculateUnitPriority(botUnit, targetUnit);
                 }
             }
         }
@@ -200,7 +201,7 @@ class CPUPlayer {
      */
     getBestTargets() {
         const bestMoves = {};
-        this.botPlayer.units.forEach((unitElement) => {
+        this.game.players[2].units.forEach((unitElement) => {
             const unit = {...unitElement.unit, x: unitElement.x, y: unitElement.y};
             bestMoves[unit.uuid] = this.getBestUnitToAttack(unit);
         });
@@ -230,8 +231,8 @@ class CPUPlayer {
     */
     findNearestMoveCase() {
         const decision = this.makeDecision();
-        const botUnitElement = this.botPlayer.units.find(unit => unit.uuid == decision.id);
-        const targetUnitElement = this.firstPlayer.units.find(unit => unit.uuid == decision.targetId);
+        const botUnitElement = this.game.players[2].units.find(unit => unit.uuid == decision.id);
+        const targetUnitElement = this.game.players[1].units.find(unit => unit.uuid == decision.targetId);
 
         const validMoves = this.game.getValidMoves(botUnitElement.row, botUnitElement.col);
         const distances = validMoves.map(move => this.calculateEuclideanDistance(move.row, move.col, targetUnitElement.row, targetUnitElement.col));
@@ -242,15 +243,15 @@ class CPUPlayer {
 
     async makeAction(dash=false) {
         console.log("[CPU Core] CPU is making a decision...");
-        await sleep(1000);
-        const botPlayer = this.botPlayer;
+        await sleep(Math.random() * 2000 + 1000);
+        const botPlayer = this.game.players[2];
         const botUnits = botPlayer.units;
         console.log("[CPU Core] Bot Units:", botUnits
             .map(unit => unit.unit.type)
             .join(", "));
 
         if(!botUnits.find(unit => unit.unit.type === "oracle")) {
-            const firstPlayerOracle = this.firstPlayer.units.find(unit => unit.unit.type === "oracle");
+            const firstPlayerOracle = this.game.players[1].units.find(unit => unit.unit.type === "oracle");
             console.log("[CPU Core] Placing oracle...");
             this.game.placeUnit("oracle", 2, 0, 10 - firstPlayerOracle.col - 1);
             this.game.endTurn();
@@ -265,7 +266,7 @@ class CPUPlayer {
             this.game.endTurn();
             return;
         }
-        const targetUnitElement = this.firstPlayer.units.find(unit => unit.uuid == decision.targetId);
+        const targetUnitElement = this.game.players[1].units.find(unit => unit.uuid == decision.targetId);
         if (!targetUnitElement) {
             console.warn(`[CPU Core] Target unit with ID ${decision.targetId} not found.`);
             this.game.endTurn();
@@ -281,7 +282,7 @@ class CPUPlayer {
         if (validAttacks.find(attack => attack.row === row && attack.col === col)) {
             console.log(`[CPU Core] CPU is attacking ${targetUnitElement.unit.type}...`);
             this.game.attackUnit(row, col, decision.id);
-            this.game.endTurn();
+            // this.game.endTurn();
             return;
         }
 
@@ -375,6 +376,8 @@ class CPUPlayer {
     }
 
     async enableCPU() {
+        if(!window.firstGame) {return}
+        window.firstGame = false;
         console.log("[CPU Core] CPU is enabled.");
         let botPlayerNameElem = document.querySelector("aside.player-area.player-two > div.player-info > h3")
         botPlayerNameElem.classList.add("cpu");
@@ -395,6 +398,12 @@ class CPUPlayer {
                 this.regulateImportanceCoefficients({distance: distanceCoefficient, attractiveness: attractivenessCoefficient});
                 console.log(`[CPU Core] Coefficients regulated: distance=${distanceCoefficient}%, attractiveness=${attractivenessCoefficient}%`);
             }
+        }
+        let orignalResetGame = this.game.resetGame;
+        this.game.resetGame = () => {
+            orignalResetGame.apply(this.game);
+            
+            this.turnCount = 0;
         }
     }
 }

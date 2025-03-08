@@ -263,3 +263,5 @@ function handleCellMouseOut(event) {
         cell.classList.remove('valid-move', 'valid-attack');
     });
 }
+
+window.firstGame = true;
