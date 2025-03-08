@@ -127,6 +127,7 @@ for (const unitType in UNITS) {
 class Game {
     constructor() {
         this.timerMode = false; // Default: timer mode off
+        this.cpuMode = false; // Default: CPU mode off
         this.timerSeconds = 15;
         this.turnTimer = null;
         this.initializeUI();
@@ -138,11 +139,10 @@ class Game {
 
     setTimerMode(enabled) {
         this.timerMode = enabled;
-        if (this.timerMode && !this.gameOver) {
-            // this.startTurnTimer();
-        } else {
-            // this.stopTurnTimer();
-        }
+    }
+
+    setCpuMode(enabled) {
+        this.cpuMode = enabled;
     }
 
     startTurnTimer() {
@@ -2677,7 +2677,6 @@ class Game {
             <p class="unit-desc">${unitData.description}</p>
         `;
         
-        console.log("showUnitCardPreview", x, y)
         // Add styling
         Object.assign(preview.style, {
             backgroundColor: 'var(--background-light)',

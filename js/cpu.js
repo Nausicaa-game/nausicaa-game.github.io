@@ -244,7 +244,19 @@ class CPUPlayer {
         console.log("[CPU Core] CPU is making a decision...");
         await sleep(1000);
         const botPlayer = this.botPlayer;
-        const botUnits = botPlayer.units.length;
+        const botUnits = botPlayer.units;
+        console.log("[CPU Core] Bot Units:", botUnits
+            .map(unit => unit.unit.type)
+            .join(", "));
+
+        if(!botUnits.find(unit => unit.unit.type === "oracle")) {
+            const firstPlayerOracle = this.firstPlayer.units.find(unit => unit.unit.type === "oracle");
+            console.log("[CPU Core] Placing oracle...");
+            this.game.placeUnit("oracle", 2, 0, 10 - firstPlayerOracle.col - 1);
+            this.game.endTurn();
+            return
+        }
+        
         const decision = this.makeDecision();
         console.log("[CPU Core] Decision:", decision);
         const botUnitElement = botPlayer.units.find(unit => unit.uuid == decision.id);
@@ -262,8 +274,8 @@ class CPUPlayer {
         console.log("[CPU Core] Target Unit:", targetUnitElement);
         const {row, col} = targetUnitElement;
         
-        if(botUnits < 5) {
-            console.log(`[CPU Core] CPU has ${botUnits} units left, spawning one...`);
+        if(botUnits.length < 5) {
+            console.log(`[CPU Core] CPU has ${botUnits.length} units left, spawning one...`);
 
             const unitType = botPlayer.hand.filter(unitType => UNITS[unitType].cost <= botPlayer.mana && unitType != "naiad").sort((a,b) => UNITS[a].cost < UNITS[b].cost ? -1 : 1)[0];
             if(!unitType) {
@@ -324,14 +336,47 @@ class CPUPlayer {
             }
         } else {
             // L'oracle ne peut pas attaquer, il doit se déplacer, il s'éloiigne de la cible
-            const actualVector = {x: bestCase.row - botUnitElement.row, y: bestCase.col - botUnitElement.col};
-            console.log(actualVector);
             console.log("[CPU Core] CPU oracle is moving...");
-            this.game.moveUnit(botUnitElement.row - actualVector.x, botUnitElement.col - actualVector.y, decision.id, 'move');
-            await sleep(1000);
-            console.log("[CPU Core] CPU oracle is dashing...");
-            this.game.moveUnit(botUnitElement.row - actualVector.x, botUnitElement.col - actualVector.y, decision.id, 'dash');
+            // Inverser la direction du mouvement pour s'éloigner de la cible
+            const awayFromTarget = {
+                row: Math.max(0, Math.min(7, botUnitElement.row + (botUnitElement.row - targetUnitElement.row))),
+                col: Math.max(0, Math.min(9, botUnitElement.col + (botUnitElement.col - targetUnitElement.col)))
+            };
+
+            // Trouver le mouvement valide le plus proche de la direction opposée
+            let bestMoveAway = null;
+            let bestDistance = Infinity;
+
+            this.game.getValidMoves(botUnitElement.row, botUnitElement.col).forEach(move => {
+                const distance = this.calculateEuclideanDistance(move.row, move.col, awayFromTarget.row, awayFromTarget.col);
+                if (distance < bestDistance) {
+                    bestDistance = distance;
+                    bestMoveAway = move;
+                }
+            });
+
+            // Déplacer l'oracle vers la case la plus éloignée
+            if (bestMoveAway) {
+                this.game.moveUnit(bestMoveAway.row, bestMoveAway.col, decision.id, 'move');
+            } else {
+                console.log("[CPU Core] No valid move to move away from target.");
+            }
             this.game.endTurn();
+        }
+    }
+
+    async enableCPU() {
+        console.log("[CPU Core] CPU is enabled.");
+        let botPlayerNameElem = document.querySelector("aside.player-area.player-two > div.player-info > h3")
+        botPlayerNameElem.classList.add("cpu");
+        botPlayerNameElem.textContent = "CPU";
+        
+        let originalEndTurn = this.game.endTurn;
+        this.game.endTurn = () => {
+            originalEndTurn.apply(this.game);
+            if(this.game.currentPlayer === 2) {
+                this.makeAction();
+            }
         }
     }
 }

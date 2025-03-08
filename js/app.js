@@ -134,6 +134,8 @@ function startGameTheme() {
         backgroundThemePlaying = true;
     }
     document.querySelector(".timer").style.display = 'none';
+    document.querySelector(".cpu-mode").style.display = 'none';
+    if(game.cpuMode) game.cpuPlayer.enableCPU();
 }
 
 document.querySelector('.game-container').addEventListener('click', function() {
@@ -168,7 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const timerModeCheckbox = document.getElementById('timerMode');
     timerModeCheckbox.addEventListener('change', function() {
+        console.log("Enabling timer mode:",this.checked);
         game.setTimerMode(this.checked);
+    });
+    const cpuModeCheckbox = document.getElementById('cpuMode');
+    cpuModeCheckbox.addEventListener('change', function() {
+        console.log("Enabling CPU mode:",this.checked);
+        game.setCpuMode(this.checked);
     });
   });
 
