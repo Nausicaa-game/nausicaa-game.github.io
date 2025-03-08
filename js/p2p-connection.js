@@ -260,7 +260,6 @@ class P2PGameConnection {
     }
 
     handleIncomingData(data) {
-        // console.log('Received data:', data);
         if (!data || !data.type) return;
 
         switch (data.type) {
@@ -359,8 +358,6 @@ class P2PGameConnection {
         this.game.selectedAction = gameState.selectedAction; // ADDED: Update selectedAction
 
         let newUnitsId = this.game.board.map(row => row.map(cell => cell ? cell.uuid : null));
-        // console.log('Old units:', oldUnitsId);
-        // console.log('New units:', newUnitsId);
         //compare oldUnitsId and newUnitsId length
 
         if (oldUnitsId.flat().filter(u => !!u).length < newUnitsId.flat().filter(u => !!u).length) {
@@ -396,7 +393,6 @@ class P2PGameConnection {
             return;
         }
 
-        // console.log("Game board updated:", this.game.board);
         // Rafraîchir l'interface
         this.game.updateGameUI();
         this.game.refreshBoardDisplay();
@@ -480,7 +476,6 @@ class P2PGameConnection {
             board: this.serializeBoard(),
             boardColors: this.serializeBoardColors() // Add colors information
         };
-        // console.log('Serializable game state:', state);
         return state;
     }
 
@@ -507,7 +502,6 @@ class P2PGameConnection {
                     serialBoard[row][col] = null;
                 }
             }
-            // console.log('Serialized board:', serialBoard[row]);
         }
 
         return serialBoard;

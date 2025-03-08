@@ -362,7 +362,6 @@ class Game {
         songManager.playSong('placed', true)
 
         if (unitType === 'oracle') {
-            //console.log("Player", player, "placed Oracle at", row, col);
             if (player === 1) {
                 songManager.playSong('oraclePut', true);
                 songManager.setVolume("oraclePut",0.3)
@@ -379,9 +378,6 @@ class Game {
         }
 
         this.board[row][col] = unit;
-        //console.log(`Placed ${unitType} for player ${player} at ${row}, ${col}`);
-        //console.log(this.board);
-
         this.players[player].units.push({
             unit,
             row,
@@ -450,10 +446,9 @@ class Game {
 
     handleCellClick(event) {
         if (this.gameOver) return;
-        // console.log("Cell clicked", this.currentPlayer, p2pConnection.isHost);
         // If it's the opponent's turn in multiplayer mode, do nothing
         if (p2pConnection?.gameId && ((this.currentPlayer === 1 && !p2pConnection.isHost) || (this.currentPlayer === 2 && p2pConnection.isHost))) {
-            //console.log("Bruh what are ut trying bud")
+            console.log("Bruh what are ut trying bud")
             return;
         }
 
@@ -467,7 +462,6 @@ class Game {
 
         // If it's the first turn and the player hasn't placed their Oracle yet
         if (this.turn === 1 && !this.hasPlacedOracle(this.currentPlayer)) {
-            // console.log(this.selectedCard)
             if (this.selectedCard && this.selectedCard.type === 'oracle') {
                 this.trySpawnUnit(row, col);
             } else {
@@ -479,7 +473,6 @@ class Game {
         // If a card is selected, try to spawn a unit
         if (this.selectedCard) {
             this.trySpawnUnit(row, col);
-            // console.log("i tried to spawn a unit");
             return;
         }
 
@@ -499,7 +492,6 @@ class Game {
 
             // Handle attack if valid
             if (this.isValidAttack(row, col)) {
-                //console.log("attacking on", row,col)
                 songManager.playSong('attack');
                 this.attackUnit(row, col);
                 return;
@@ -537,7 +529,6 @@ class Game {
     handleCardSelect(cardElement) {
         if (this.gameOver) return;
         if (p2pConnection?.gameId && ((this.currentPlayer === 1 && !p2pConnection.isHost) || (this.currentPlayer === 2 && p2pConnection.isHost))) {
-            //console.log("Bruh what are ut trying bud")
             return;
         }
 
@@ -592,7 +583,6 @@ class Game {
 
         // Highlight valid spawn locations
         this.highlightValidSpawnLocations();
-        // console.log(unitType+"_name")
         this.updateActionText(translations[preferredLanguage]['select_spawn'] + ` ${translations[preferredLanguage][unitType+"_name"]}`);
     }
 
@@ -629,7 +619,6 @@ class Game {
         // Modified: Allow attack without requiring movement first
         const canAttack = !unit.hasAttacked && UNITS[unit.type].attack !== 'none' && this.players[this.currentPlayer].mana >= 1;
         const canAttackFirstMove = !unit.hasAttacked && UNITS[unit.type].attack !== 'none' && this.players[this.currentPlayer].mana >= 1 && !unit.hasMoved;
-        //console.log('canMove', canMove, 'canAttack', canAttack, 'hasAbility', hasAbility, 'canDash', canDash);
 
         // Default to move action if available and no unit has been moved yet
         if ((canMove || (canAttackFirstMove)) && this.movedUnitThisTurn === null) {
@@ -646,10 +635,8 @@ class Game {
         } else {
             this.validAttacks = this.getValidAttacks(row, col);
             this.validMoves = this.getValidMoves(row, col);
-            //console.log("canAct",canAct, "canDash", canDash, this.validAttacks.length > 0, canAttack);
             if (this.validMoves.length > 0 && canDash && canAct) {
                 this.selectedAction = 'dash';
-                //console.log("validMoves",this.validMoves)
                 this.highlightValidMoves(false);
             } else if (this.validAttacks.length > 0 && canAct) {
                 this.selectedAction = 'attack';
@@ -1042,9 +1029,6 @@ class Game {
         const unit = this.board[row][col];
         if (!unit) return [];
 
-        
-        // console.log("getValidAttacks", unit);
-
         const attackType = UNITS[unit.type].attack;
         const validAttacks = [];
 
@@ -1322,7 +1306,6 @@ class Game {
     }
 
     isValidMove(row, col) {
-        //console.log("valid moves",this.validMoves)
         return this.validMoves.some(move => move.row === row && move.col === col);
     }
 
@@ -1345,7 +1328,7 @@ class Game {
                 return;
             }
         }
-        // console.log('trySpawnUnit', row, col);
+
         if (this.p2pConnection && !this.p2pConnection.isHost) {
             // Guest: Send action to host
             this.p2pConnection.sendMessage({
@@ -1506,7 +1489,7 @@ class Game {
         } else {
             unit = this.selectedUnit.unit;
         }
-        // console.log("Atteck unit", unit);
+
         const {
             row,
             col
@@ -1636,7 +1619,6 @@ class Game {
     }
 
     destroyUnit(row, col) {
-        //console.log(row, col, this.board, this.board[row])
         const unit = this.board[row][col];
         if (!unit) return;
 
@@ -1691,11 +1673,9 @@ class Game {
 
         if (p2pConnection?.gameId || this.cpuMode) {
             if (this.currentPlayer === 1 && !p2pConnection.isHost && !this.cpuMode) {
-                // console.log("endTurn: sending endTurn to host");
                 songManager.playSong("yourTurn")
                 // this.endTurn();
             } else if (this.currentPlayer === 2 && (p2pConnection.isHost || this.cpuMode)) {
-                // console.log("endTurn: sending endTurn to guest");
                 songManager.playSong("yourTurn")
                 // this.endTurn();
             }
@@ -1949,7 +1929,6 @@ class Game {
     }
 
     updateUnitPosition(playerIndex, oldRow, oldCol, newRow, newCol) {
-        // console.log("updateUnitPosition", playerIndex, oldRow, oldCol, newRow, newCol);
         const playerUnits = this.players[playerIndex].units;
         const unitInfo = playerUnits.find(u => u.row === oldRow && u.col === oldCol);
 
@@ -1960,7 +1939,6 @@ class Game {
     }
 
     performExplosiveAttack(row, col) {
-        //console.log("Performing explosive attack at", row,col)
         // Apply explosive attack to all surrounding squares
         for (let r = -1; r <= 1; r++) {
             for (let c = -1; c <= 1; c++) {
@@ -1968,7 +1946,6 @@ class Game {
 
                 const targetRow = row + r;
                 const targetCol = col + c;
-                //console.log("targetRow",targetRow, "targetCol", targetCol)
 
                 if (this.isValidPosition(targetRow, targetCol) && this.board[targetRow][targetCol]) {
                     const targetUnit = this.board[targetRow][targetCol];
@@ -2051,7 +2028,6 @@ class Game {
         handContainer.innerHTML = '';
 
         const player = this.players[playerIndex] || Object.values(this.players).find(p => p.uuid === playerIndex);
-        // console.log(this.players,player)
         const hand = player.hand.includes("oracle") ? player.hand.filter(unitType => unitType === "oracle") : player.hand;
         hand.forEach(unitType => {
             const unitData = UNITS[unitType];
@@ -2424,8 +2400,6 @@ class Game {
         this.turn = gameState.turn;
         this.gameOver = gameState.gameOver;
 
-        // console.log(gameState);
-
         // Update the board with a deep copy
         this.board = gameState.board.map(row => {
             return row.map(cell => {
@@ -2440,14 +2414,12 @@ class Game {
     }
 
     refreshBoardDisplay() {
-        // console.log('refreshBoardDisplay');
         const boardElement = document.getElementById('game-board');
         if (!boardElement) return;
 
         // Clear the board
         boardElement.innerHTML = '';
 
-        // console.log("Game board passing throug refresh display:", this.board)
         for (let row = 0; row < BOARD_ROWS; row++) {
             for (let col = 0; col < BOARD_COLS; col++) {
                 const cell = document.createElement('div');
@@ -2562,7 +2534,6 @@ class Game {
     getUnitPosition(unit) {
         for (let row = 0; row < BOARD_ROWS; row++) {
             for (let col = 0; col < BOARD_COLS; col++) {
-                // console.log(this.board[row][col], unit.uuid)
                 if (this.board[row][col]?.uuid === unit.uuid) {
                     return {
                         row,
