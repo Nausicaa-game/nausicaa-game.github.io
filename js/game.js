@@ -133,7 +133,6 @@ class Game {
         this.initializeUI();
         this.initializeGame();
         this.setupEventListeners();
-        this.setupCardPreviewSystem();
         this.cpuPlayer = new CPUPlayer(this);
     }
 
@@ -263,14 +262,16 @@ class Game {
                 maxMana: 1,
                 deck: this.generateDeck(),
                 hand: [],
-                units: []
+                units: [],
+                wins: this.players?.[1]?.wins || 0
             },
             2: {
                 mana: 1,
                 maxMana: 1,
                 deck: this.generateDeck(),
                 hand: [],
-                units: []
+                units: [],
+                wins: this.players?.[2]?.wins || 0
             }
         };
 
@@ -441,6 +442,152 @@ class Game {
         // Reset game button
         document.getElementById('reset-game').addEventListener('click', () => {
             this.resetGame();
+        });
+
+        // Setup drag and drop for units
+        this.setupDragAndDrop();
+    }
+
+    setupDragAndDrop() {
+        // Use event delegation for drag events
+        document.getElementById('game-board').addEventListener('mousedown', (e) => {
+            // Only allow drag when it's the current player's turn
+            if (this.gameOver) return;
+            if (p2pConnection?.gameId && ((this.currentPlayer === 1 && !p2pConnection.isHost) || 
+                (this.currentPlayer === 2 && p2pConnection.isHost))) {
+                return;
+            }
+            if(this.currentPlayer === 2 && this.cpuMode) {
+                return;
+            }
+
+            const unitElement = e.target.closest('.unit');
+            if (!unitElement) return;
+
+            const cell = unitElement.closest('.board-cell');
+            if (!cell) return;
+
+            const row = parseInt(cell.dataset.row);
+            const col = parseInt(cell.dataset.col);
+            
+            // Check if this is the current player's unit
+            const unit = this.board[row][col];
+            if (!unit || unit.player !== this.currentPlayer) return;
+
+            // Check if the unit can be moved
+            if (unit.hasMoved || unit.justSpawned) return;
+            
+            // Select the unit first to calculate valid moves
+            this.selectUnit(unitElement, row, col);
+            
+            // Only proceed with drag setup if the unit can move
+            if (this.validMoves.length === 0) {
+                return;
+            }
+            
+            // Mark as being dragged and style accordingly
+            unitElement.classList.add('dragging');
+            
+            // Create a semi-transparent clone for dragging
+            const dragImage = unitElement.cloneNode(true);
+            dragImage.id = 'drag-image';
+            dragImage.style.position = 'absolute';
+            dragImage.style.opacity = '0.7';
+            dragImage.style.pointerEvents = 'none';
+            dragImage.style.zIndex = '1000';
+            document.body.appendChild(dragImage);
+            
+            // Calculate offset
+            const rect = unitElement.getBoundingClientRect();
+            const offsetX = e.clientX - rect.left;
+            const offsetY = e.clientY - rect.top;
+            
+            // Store original position
+            const originalCell = cell;
+            
+            // Highlight valid moves
+            this.highlightValidMoves();
+            
+            // Move function for the drag image
+            const moveAt = (pageX, pageY) => {
+                dragImage.style.left = pageX - offsetX + 'px';
+                dragImage.style.top = pageY - offsetY + 'px';
+            };
+            
+            // Initial position
+            moveAt(e.clientX, e.clientY);
+            
+            // Mouse move handler
+            const onMouseMove = (e) => {
+                moveAt(e.clientX, e.clientY);
+                
+                // Get element under the drag image for drop highlighting
+                const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+                if (!elemBelow) return;
+                
+                const cellBelow = elemBelow.closest('.board-cell');
+                if (!cellBelow) return;
+                
+                // If cell has a valid move highlight, add a drop indicator
+                if (cellBelow.querySelector('.cell-highlight')) {
+                    cellBelow.classList.add('drop-target');
+                }
+                
+                // Remove drop highlight from other cells
+                document.querySelectorAll('.board-cell.drop-target').forEach(cell => {
+                    if (cell !== cellBelow) {
+                        cell.classList.remove('drop-target');
+                    }
+                });
+            };
+            
+            // Listen to mouse move events
+            document.addEventListener('mousemove', onMouseMove);
+            
+            // Mouse up handler for drop
+            const onMouseUp = (e) => {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+                
+                // Remove drag image
+                if (dragImage.parentNode) {
+                    dragImage.parentNode.removeChild(dragImage);
+                }
+                
+                unitElement.classList.remove('dragging');
+                
+                // Get drop target
+                const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+                if (!elemBelow) return;
+                
+                const cellBelow = elemBelow.closest('.board-cell');
+                if (!cellBelow) return;
+                
+                // Check if drop target is a valid move
+                const targetRow = parseInt(cellBelow.dataset.row);
+                const targetCol = parseInt(cellBelow.dataset.col);
+                
+                // Remove all drop highlights
+                document.querySelectorAll('.board-cell.drop-target').forEach(cell => {
+                    cell.classList.remove('drop-target');
+                });
+                
+                if (this.isValidMove(targetRow, targetCol)) {
+                    // Execute the move
+                    songManager.playSong('clic');
+                    this.moveUnit(targetRow, targetCol);
+                    // If this was a move action, track the unit that moved
+                    if (this.selectedAction === 'move') {
+                        this.movedUnitThisTurn = this.board[targetRow][targetCol];
+                    }
+                }
+            };
+            
+            // Listen to mouse up event
+            document.addEventListener('mouseup', onMouseUp);
+            
+            // Prevent default to disable text selection
+            e.preventDefault();
         });
     }
 
@@ -1310,7 +1457,7 @@ class Game {
     }
 
     isValidAttack(row, col) {
-        return this.validAttacks.some(attack => attack.row === row && attack.col === col);
+        return this.validAttacks.some(attack => attack.row === row && col === col);
     }
 
     isValidAbilityTarget(row, col) {
@@ -1831,6 +1978,9 @@ class Game {
             songManager.transitionSong("menu_next", "victory", true)
         }
 
+        this.players[winner].wins += 1;
+        document.getElementById('score-display').textContent = `${this.players[1].wins} - ${this.players[2].wins}`;
+
         // Set the message content
         victoryMessage.innerHTML = `
             <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">${subliminalText}</h1>
@@ -1999,6 +2149,23 @@ class Game {
         // Enable/disable end turn buttons
         document.getElementById('end-turn-one').disabled = this.currentPlayer !== 1 || this.gameOver;
         document.getElementById('end-turn-two').disabled = this.currentPlayer !== 2 || this.gameOver || this.cpuMode;
+        
+        // Update unit cursor styles based on current player and unit state
+        document.querySelectorAll('.unit').forEach(unitElement => {
+            const cell = unitElement.closest('.board-cell');
+            if (cell) {
+                const row = parseInt(cell.dataset.row);
+                const col = parseInt(cell.dataset.col);
+                const unit = this.board[row][col];
+                
+                if (unit && unit.player === this.currentPlayer && !unit.hasMoved && !unit.justSpawned) {
+                    unitElement.style.cursor = 'grab';
+                } else {
+                    unitElement.style.cursor = 'default';
+                }
+            }
+        });
+        
         this.highlightCurrentPlayer();
     }
 
@@ -2458,6 +2625,12 @@ class Game {
             unitElement.dataset.type = unit.type;
             unitElement.style.backgroundImage = `url('/assets/pions/${unit.type}.svg')`;
 
+            // Add draggable attribute for units
+            if (!unit.justSpawned) {
+                unitElement.setAttribute('draggable', 'false');
+                unitElement.style.cursor = unit.player === this.currentPlayer ? 'grab' : 'default';
+            }
+
             // Add colored border based on player
             if (unit.player === 1) {
                 unitElement.style.borderRadius = '6px';
@@ -2473,6 +2646,12 @@ class Game {
             unitElement.className = `unit player-${unit.player}`;
             unitElement.dataset.type = unit.type;
             unitElement.style.backgroundImage = `url('/assets/pions/${unit.type}.svg')`;
+
+            // Update draggable attribute
+            if (!unit.justSpawned) {
+                unitElement.setAttribute('draggable', 'false');
+                unitElement.style.cursor = unit.player === this.currentPlayer ? 'grab' : 'default';
+            }
 
             // Update colored border based on player
             if (unit.player === 1) {
@@ -2543,91 +2722,6 @@ class Game {
             }
         }
         return null; // Or throw an error if you prefer
-    }
-
-    // Add this code to your Game class in game.js
-    setupCardPreviewSystem() {
-        // Variables to track hover state
-        const hoverDelay = 750; // 2 seconds
-        const hoverTimers = new Map(); // Map to store timers for different elements
-        
-        // Use a single document-level event listener for efficiency
-        // document.addEventListener('mouseover', (e) => {
-        //     // Check if we're hovering over a unit on the board
-        //     const unitElement = e.target.closest('.unit');
-        //     if (unitElement) {
-        //         const unitType = unitElement.dataset.type;
-        //         if (unitType) {
-        //             // Clear any existing timer for this element
-        //             const elementId = unitElement.dataset.uuid || `unit-${unitType}-${Date.now()}`;
-        //             if (hoverTimers.has(elementId)) {
-        //                 clearTimeout(hoverTimers.get(elementId));
-        //             }
-                    
-        //             // Set new timer
-        //             const timer = setTimeout(() => {
-        //                 this.showUnitCardPreview(unitType, e.clientX, e.clientY);
-        //             }, hoverDelay);
-                    
-        //             hoverTimers.set(elementId, timer);
-        //         }
-        //         return;
-        //     }
-            
-        //     // Check if we're hovering over a card in a player's hand
-        //     const cardElement = e.target.closest('.card');
-        //     if (cardElement) {
-        //         const unitType = cardElement.dataset.type;
-        //         if (unitType) {
-        //             // Clear any existing timer for this element
-        //             const elementId = cardElement.dataset.uuid || `card-${unitType}-${Date.now()}`;
-        //             if (hoverTimers.has(elementId)) {
-        //                 clearTimeout(hoverTimers.get(elementId));
-        //             }
-                    
-        //             // Set new timer
-        //             const timer = setTimeout(() => {
-        //                 this.showUnitCardPreview(unitType, e.clientX, e.clientY);
-        //             }, hoverDelay);
-                    
-        //             hoverTimers.set(elementId, timer);
-        //         }
-        //     }
-        // });
-        
-        // Clear timers when mouse leaves elements
-        // document.addEventListener('mouseout', (e) => {
-        //     const unitElement = e.target.closest('.unit');
-        //     const cardElement = e.target.closest('.card');
-            
-        //     if (unitElement) {
-        //         const elementId = unitElement.dataset.uuid || `unit-${unitElement.dataset.type}-${Date.now()}`;
-        //         if (hoverTimers.has(elementId)) {
-        //             clearTimeout(hoverTimers.get(elementId));
-        //             hoverTimers.delete(elementId);
-        //         }
-                
-        //         // Only hide preview if we're not moving to another unit or card
-        //         const relatedTarget = e.relatedTarget;
-        //         if (!relatedTarget || (!relatedTarget.closest('.unit') && !relatedTarget.closest('.card'))) {
-        //             this.hideUnitCardPreview();
-        //         }
-        //     }
-            
-        //     if (cardElement) {
-        //         const elementId = cardElement.dataset.uuid || `card-${cardElement.dataset.type}-${Date.now()}`;
-        //         if (hoverTimers.has(elementId)) {
-        //             clearTimeout(hoverTimers.get(elementId));
-        //             hoverTimers.delete(elementId);
-        //         }
-                
-        //         // Only hide preview if we're not moving to another unit or card
-        //         const relatedTarget = e.relatedTarget;
-        //         if (!relatedTarget || (!relatedTarget.closest('.unit') && !relatedTarget.closest('.card'))) {
-        //             this.hideUnitCardPreview();
-        //         }
-        //     }
-        // });
     }
 
     showUnitCardPreview(unitType, x, y) {

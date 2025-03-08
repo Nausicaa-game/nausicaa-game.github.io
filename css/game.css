@@ -172,6 +172,11 @@
     background-position: center;
     cursor: grab;
     z-index: 5;
+    transition: transform 0.2s ease;
+}
+
+.unit.dragging {
+    opacity: 0.6;
 }
 
 .unit.player-one {
@@ -192,6 +197,28 @@
     height: 100%;
     background-color: rgba(255, 215, 0, 0.3);
     z-index: 2;
+    cursor: pointer;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.4; }
+}
+
+.board-cell.drop-target {
+    background-color: rgba(74, 207, 89, 0.4) !important;
+}
+
+.board-cell.drop-target.dark {
+    background-color: rgba(74, 207, 89, 0.6) !important;
+}
+
+#drag-image {
+    pointer-events: none;
+    z-index: 1000;
+    transform: scale(1.1);
 }
 
 .hand-container {
@@ -561,42 +588,3 @@
     display: block;
   }
 }
-
-/* @media (min-width: 768px) and (max-width: 991px) {
-  body {
-    font-size: 16px;
-  }
-
-  .game-container {
-    height: auto;
-  }
-
-  .player-area {
-    width: 250px;
-    padding: 0.75rem;
-  }
-
-  .board-container {
-    padding: 0.75rem;
-  }
-
-  .game-board {
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(8, 1fr);
-  }
-
-  .board-cell {
-    width: auto;
-    height: auto;
-  }
-
-  .card {
-    width: 90px;
-    height: 130px;
-  }
-
-  .card-image {
-    width: 60px;
-    height: 60px;
-  }
-} */

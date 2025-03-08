@@ -125,9 +125,7 @@ let backgroundThemePlaying = false;
 // document.addEventListener('click', function() {
 // document.querySelector(".overlay").style.display = 'none';
 function startGameTheme() {
-    // console.log("clicked");
     if (!backgroundThemePlaying) {
-        // console.log("playing theme");
         songManager.playSong('firstRound');
         songManager.setVolume("firstRound",0.3)
         songManager.playSong('announcer:allPick');
@@ -222,6 +220,8 @@ function handleCellMouseOver(event) {
     const row = parseInt(cell.dataset.row);
     const col = parseInt(cell.dataset.col);
 
+    if((!row && row !== 0) || (!col && col !== 0)) return;
+
     // Assuming you have a method in your Game class to get the unit at a specific location
     const unit = game.board[row][col];
     if(unit){
@@ -230,11 +230,9 @@ function handleCellMouseOver(event) {
             // Assuming you have methods in your Game class to calculate valid moves and attacks
             const validMoves = game.getValidMoves(row, col);
             const validAttacks = game.getValidAttacks(row, col)
-            // console.log(validMoves, validAttacks);
             // Highlight valid moves
             validMoves.forEach(move => {
                 const moveCell = document.querySelector(`.board-cell[data-row="${move.row}"][data-col="${move.col}"]`);
-                // console.log(moveCell);
                 if (moveCell && !game.selectedUnit) {
                     moveCell.classList.add('valid-move');
                 }
