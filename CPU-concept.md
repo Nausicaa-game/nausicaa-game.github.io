@@ -130,20 +130,3 @@ Furthermore, we can introduce variability by periodically changing these hyperpa
     *   **Threat Assessment:** Anticipate the opponent's moves and place units to counter them.
 
 The AI will place an unit when it will calculate than his oracle is in a weaker position.
-
-## Bug Paper
-
-(This section would contain a detailed description of a specific bug, including steps to reproduce, expected behavior, and actual behavior.)
-
-Example:
-
-### Bug: Incorrect Card Targeting
-
-*   **Description:** The CPU sometimes targets its own cards with attack spells instead of the opponent's cards.
-*   **Steps to Reproduce:**
-    1.  Start a game against the CPU.
-    2.  Wait until the CPU has an attack spell in its hand.
-    3.  Observe the CPU's target selection.
-*   **Expected Behavior:** The CPU should target the opponent's cards with attack spells.
-*   **Actual Behavior:** The CPU sometimes targets its own cards with attack spells.
-*   **Possible Cause:** Error in the target selection logic.  The targeting function may be incorrectly identifying valid targets or may be prioritizing the CPU's own cards over the opponent's.
