@@ -286,7 +286,7 @@ class CPUPlayer {
             return;
         }
 
-        if(botUnits.length < 5) {
+        if(botUnits.length < 4) {
             console.log(`[CPU Core] CPU has ${botUnits.length} units left, spawning one...`);
 
             const unitType = botPlayer.hand.filter(unitType => UNITS[unitType].cost <= botPlayer.mana && unitType != "naiad").sort((a,b) => UNITS[a].cost < UNITS[b].cost ? -1 : 1)[0];
