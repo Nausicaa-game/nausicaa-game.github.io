@@ -46,7 +46,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
+    cursor: none;
     z-index: 100; 
 }
 
@@ -126,6 +126,7 @@
     display: inline-block;
     width: 60px;
     height: 34px;
+    cursor: none;
 }
 
 .switch input {
@@ -136,7 +137,7 @@
 
 .slider {
     position: absolute;
-    cursor: pointer;
+    cursor: none;
     top: 0;
     left: 0;
     right: 0;

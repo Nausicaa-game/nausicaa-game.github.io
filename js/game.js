@@ -945,6 +945,7 @@ class Game {
                     if (cell) {
                         const highlight = document.createElement('div');
                         highlight.className = 'cell-highlight';
+                        highlight.setAttribute('data-cursor', 'move-tiny');
                         cell.appendChild(highlight);
                     }
                 }
@@ -968,6 +969,7 @@ class Game {
             if (cell) {
                 const highlight = document.createElement('div');
                 highlight.className = 'cell-highlight';
+                highlight.setAttribute('data-cursor', 'move-tiny');
                 cell.appendChild(highlight);
             }
         });
@@ -989,6 +991,7 @@ class Game {
             if (cell) {
                 const highlight = document.createElement('div');
                 highlight.className = 'cell-highlight attack-highlight';
+                highlight.setAttribute('data-cursor', 'sword');
                 highlight.style.backgroundColor = 'rgba(255, 0, 0, 0.3)';
                 cell.appendChild(highlight);
             }
@@ -2089,7 +2092,7 @@ class Game {
             <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">${subliminalText}</h1>
             <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">${translations[preferredLanguage]['player']} ${winner} ${translations[preferredLanguage]['wins']}</p>
             <p style="font-size: 1.2rem;">${subliminalText2}</p>
-            <button id="new-game-btn" style="margin-top: 1.5rem; padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; background-color: white; border: none; border-radius: 5px; font-weight: bold;">${translations[preferredLanguage]['new-game']}</button>
+            <button id="new-game-btn" style="margin-top: 1.5rem; padding: 0.5rem 1rem; font-size: 1rem; background-color: white; border: none; border-radius: 5px; font-weight: bold;" data-cursor="pointer">${translations[preferredLanguage]['new-game']}</button>
         `;
 
         // Add message to overlay and overlay to board
@@ -2267,9 +2270,10 @@ class Game {
                 const unit = this.board[row][col];
                 
                 if (unit && unit.player === this.currentPlayer && !unit.hasMoved && !unit.justSpawned) {
-                    unitElement.style.cursor = 'grab';
+                    // unitElement.style.cursor = 'grab';
+                    unitElement.setAttribute("data-cursor", 'pointer');
                 } else {
-                    unitElement.style.cursor = 'default';
+                    unitElement.setAttribute("data-cursor", 'default');
                 }
             }
         });
@@ -2309,6 +2313,7 @@ class Game {
 
             const card = document.createElement('div');
             card.className = 'card';
+            card.setAttribute("data-cursor", "pointer")
             card.dataset.type = unitType;
             card.dataset.cost = unitData.cost;
 
@@ -2736,7 +2741,7 @@ class Game {
             // Add draggable attribute for units
             if (!unit.justSpawned) {
                 unitElement.setAttribute('draggable', 'false');
-                unitElement.style.cursor = unit.player === this.currentPlayer ? 'grab' : 'default';
+                unitElement.setAttribute("data-cursor", unit.player === this.currentPlayer ? 'pointer' : 'default');
             }
 
             // Add colored border based on player
@@ -2768,7 +2773,7 @@ class Game {
             unitElement.setAttribute('draggable', 'true');
             if (!unit.justSpawned) {
                 unitElement.setAttribute('draggable', 'false');
-                unitElement.style.cursor = unit.player === this.currentPlayer ? 'grab' : 'default';
+                unitElement.setAttribute("data-cursor", unit.player === this.currentPlayer ? 'pointer' : 'default');
             }
 
             // Update colored border based on player

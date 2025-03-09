@@ -291,5 +291,59 @@ async function loadAllSwearsList() {
 }
 
 loadAllSwearsList();
+// document.getElementsByTagName("body")[0].style.cursor = "url('/assets/cursors/default.cur'), auto";
 
 window.firstGame = true;
+
+function addCustomCursor(cursor) {
+    document.body.style.cursor = "none";
+    const cursorElement = document.createElement('img');
+    cursorElement.src = "/assets/cursors/"+cursor+".cur";
+    cursorElement.style.position = "absolute";
+    cursorElement.style.zIndex = "9999";
+    cursorElement.style.pointerEvents = "none";
+    cursorElement.classList.add("custom-cursor");
+    document.body.appendChild(cursorElement);
+    document.addEventListener('mousemove', (e) => {
+        cursorElement.style.left = e.pageX + 'px';
+        cursorElement.style.top = e.pageY + 'px';
+
+        const hoveredElement = document.elementFromPoint(e.clientX, e.clientY);
+        
+        // Find the closest element with a data-cursor attribute, including the element itself
+        let elementWithCursor = hoveredElement;
+        while (elementWithCursor) {
+            if (elementWithCursor.hasAttribute('data-cursor')) {
+                break;
+            }
+            elementWithCursor = elementWithCursor.parentElement;
+        }
+
+        if (elementWithCursor && elementWithCursor.getAttribute("data-cursor")) {
+            const cursorType = elementWithCursor.getAttribute("data-cursor");
+            cursorElement.src = "/assets/cursors/" + cursorType + ".png";
+        } else {
+            cursorElement.src = "/assets/cursors/" + cursor + ".png";
+        }
+    });
+
+    document.addEventListener('mouseleave', () => {
+        cursorElement.style.display = 'none';
+    });
+    document.addEventListener('mouseenter', () => {
+        cursorElement.style.display = 'block';
+    });
+    // document.getElementsByTagName("body")[0].style.cursor = "url('/assets/cursors/"+cursor+".cur'), auto";
+}
+
+function removeCustomCursor() {
+    document.body.style.cursor = "auto";
+    document.querySelector(".custom-cursor").remove();
+}
+
+function setCursor(cursor) {
+    const cursorElement = document.querySelector(".custom-cursor");
+    cursorElement.src = "/assets/cursors/"+cursor+".cur";
+}
+
+addCustomCursor("default");

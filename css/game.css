@@ -10,6 +10,23 @@
   user-select: none;
 }
 
+body {
+  overflow: hidden;
+}
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 42.8px;
+  /* transform: translate(50%, 50%); */
+  /* background-color: red; */
+  /* border-radius: 50%; */
+  pointer-events: none;
+  z-index: 1000;
+}
+
 .health-indicator {
   position: absolute;
   bottom: -5px;
@@ -73,8 +90,8 @@
 }
 
 .game-page {
-    background-color: var(--background-dark);
-    color: var(--text-light);
+  background-color: var(--background-dark);
+  color: var(--text-light);
 }
 
 .game-header {
@@ -89,6 +106,7 @@
 .game-container {
     display: flex;
     height: calc(100vh - 104px);
+    /* cursor: url("/assets/cursors/default.cur"), auto; */
 }
 
 .player-area {
@@ -139,7 +157,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 .board-cell.dark {
@@ -170,7 +188,7 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    cursor: grab;
+    /* cursor: grab; */
     z-index: 5;
     transition: transform 0.2s ease;
 }
@@ -197,7 +215,7 @@
     height: 100%;
     background-color: rgba(255, 215, 0, 0.3);
     z-index: 2;
-    cursor: pointer;
+    /* cursor: pointer; */
     animation: pulse 2s infinite;
 }
 
@@ -242,7 +260,7 @@
     border-radius: 8px;
     padding: 0.5rem;
     display: flex;
-    cursor: pointer;
+    /* cursor: pointer; */
     transition: transform 0.2s;
     border: 1px solid var(--accent-color);
 }
@@ -347,7 +365,7 @@
     font-size: 1.5rem;
     background: none;
     border: none;
-    cursor: pointer;
+    /* cursor: pointer; */
     color: var(--text-dark);
 }
 
@@ -582,7 +600,7 @@
     background: none;
     border: none;
     font-size: 1.5em;
-    cursor: pointer;
+    /* cursor: pointer; */
     color: var(--text-light);
     z-index: 10;
     display: block;
