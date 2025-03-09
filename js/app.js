@@ -1,7 +1,11 @@
 function addchatMessage(player, messageText, sendEvent = true) {
+    console.log("Adding chat message", player, messageText);
     if (messageText.trim() !== '') {
         const messageElement = document.createElement('span');
         messageElement.textContent = "Joueur " + player + ": " + messageText;
+        $(messageElement).profanityFilter({
+            customSwears: window.swears
+        });
         messageElement.style.color = "black";
         messageElement.style.textTransform = "none";
         chatMessages.prepend(messageElement);
@@ -263,5 +267,29 @@ function handleCellMouseOut(event) {
         cell.classList.remove('valid-move', 'valid-attack');
     });
 }
+
+async function getSwears(language) {
+    const response = await fetch("/js/swearList/"+language+".json");
+    const data = await response.json();
+    console.log("Swear list "+language+" loaded");
+    // console.log(data);
+    return data;
+}
+
+async function loadAllSwearsList() {
+    let swears = [];
+    swearsEn = await getSwears("en");
+    swearsFr = await getSwears("fr")
+    swearsDe = await getSwears("de")
+    swearsEs = await getSwears("es")
+    swearsIt = await getSwears("it")
+    swearsPt = await getSwears("pt")
+    swearsRu = await getSwears("ru")
+    swears = [...swearsEn, ...swearsFr, ...swearsDe, ...swearsEs, ...swearsIt, ...swearsPt, ...swearsRu];
+    window.swears = swears;
+    return swears;
+}
+
+loadAllSwearsList();
 
 window.firstGame = true;
