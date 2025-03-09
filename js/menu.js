@@ -69,4 +69,17 @@ document.addEventListener('DOMContentLoaded', function() {
     closeRules.addEventListener('click', function() {
         rulesPanel.style.display = 'none';
     });
+
+    const aboutPanel = document.getElementById('about-panel');
+    const closeAbout = document.getElementById('close-about');
+    const aboutOption = Array.from(document.querySelectorAll('.menu-option')).find(el => el.querySelector('h3').textContent === 'ABOUT');
+
+    aboutOption.addEventListener('click', function(e) {
+        e.preventDefault();
+        aboutPanel.style.display = 'flex';
+    });
+
+    closeAbout.addEventListener('click', function() {
+        aboutPanel.style.display = 'none';
+    });
 });
