@@ -18,7 +18,7 @@ function GameHeader() {
   const { t, locale, setLocale, available } = useI18n()
 
   return (
-    <header className="game-header retracted">
+    <header className="game-header">
       <div style={{ display: 'flex', flexDirection: 'row', position: 'relative', top: 16 }}>
         <div
           className="logo"
