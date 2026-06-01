@@ -1,1 +1,0 @@
-{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/Board.tsx","./src/components/PlayerPanel.tsx","./src/components/UnitCard.tsx","./src/engine/GameEngine.ts","./src/engine/units.ts","./src/hooks/useGame.tsx","./src/pages/GamePage.tsx","./src/pages/LandingPage.tsx","./src/types/game.ts"],"version":"5.7.3"}
