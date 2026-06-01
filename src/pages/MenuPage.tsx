@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import WobbleCorner from '../components/WobbleCorner'
 import type { WobbleHandle } from '../components/WobbleCorner'
 import { useAudio } from '../audio/AudioContext'
+import '../css/style.css'
+import '../css/game.css'
 import '../css/menu.css'
 
 function RulesPanel({ onClose }: { onClose: () => void }) {
