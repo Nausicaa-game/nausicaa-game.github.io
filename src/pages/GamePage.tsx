@@ -5,7 +5,6 @@ import Chat from '../components/Chat'
 import PlayerPanel from '../components/PlayerPanel'
 import UnitInfoPanel from '../components/UnitInfoPanel'
 import VictoryOverlay from '../components/VictoryOverlay'
-import P2PControls from '../components/P2PControls'
 import { GameProvider, useGame } from '../hooks/useGame'
 import { useI18n } from '../i18n/I18nContext'
 import '../css/style.css'
@@ -14,12 +13,12 @@ import '../css/app.css'
 import '../css/fonts.css'
 
 function GameHeader() {
-  const { resetGame, players } = useGame()
+  const { resetGame } = useGame()
   const { t, locale, setLocale, available } = useI18n()
 
   return (
     <header className="game-header">
-      <div style={{ display: 'flex', flexDirection: 'row', position: 'relative', top: 16 }}>
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         <div
           className="logo"
           style={{
@@ -30,25 +29,21 @@ function GameHeader() {
             borderRadius: '50%',
           }}
         />
-        <h1 style={{ position: 'relative', left: 8, top: -4 }}>Nausicaa</h1>
-      </div>
-      <div id="score-display" style={{ display: 'none', position: 'absolute', right: '50%', top: 8 }}>
-        {players[1]?.wins ?? 0} - {players[2]?.wins ?? 0}
+        <h1 style={{ marginLeft: 8 }}>Nausicaa</h1>
       </div>
       <button className="header-toggle-button" id="header-toggle-button">☰</button>
       <div className="game-controls">
+        <button className="btn secondary" onClick={resetGame}>{t('new-game')}</button>
+        <button className="btn secondary" onClick={() => {}}>{t('rules')}</button>
+        <Link to="/" className="btn secondary">{t('back-home')}</Link>
         <select
           value={locale}
           onChange={e => setLocale(e.target.value as any)}
-          style={{ marginRight: 8 }}
         >
           {available.map(l => (
             <option key={l} value={l}>{l.toUpperCase()}</option>
           ))}
         </select>
-        <P2PControls />
-        <button className="btn secondary" onClick={resetGame}>{t('end_turn')}</button>
-        <Link to="/" className="btn secondary">{t('accueil')}</Link>
       </div>
     </header>
   )
