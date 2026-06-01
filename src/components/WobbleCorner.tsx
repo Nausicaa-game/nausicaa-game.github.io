@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
 
 const TWO_PI = Math.PI * 2
 const HALF_PI = Math.PI / 2
@@ -27,88 +27,116 @@ function bezierSkin(ctx: CanvasRenderingContext2D, bez: number[], closed = true)
   }
 }
 
-export default function WobbleCorner() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+export interface WobbleHandle {
+  expand: () => void
+}
 
-  useEffect(() => {
-    const canvas = canvasRef.current!
-    const ctx = canvas.getContext('2d')!
-    const w = () => window.innerWidth
-    const h = () => window.innerHeight
-    canvas.width = w()
-    canvas.height = h()
+const WobbleCorner = forwardRef<WobbleHandle, { onExpandComplete?: () => void }>(
+  function WobbleCorner({ onExpandComplete }, ref) {
+    const canvasRef = useRef<HTMLCanvasElement>(null)
 
-    const bumpRadius = 100
-    const halfBump = bumpRadius / 2
-    const segments = 12
-    const step = HALF_PI / segments
+    useImperativeHandle(ref, () => ({
+      expand() {
+        expandingRef.current = true
+      },
+    }))
 
-    const radii: number[] = []
-    const thetaOff: number[] = []
-    for (let i = 0; i < segments + 2; i++) {
-      radii.push(Math.random() * bumpRadius - halfBump)
-      thetaOff.push(Math.random() * TWO_PI)
-    }
+    const expandingRef = useRef(false)
 
-    let theta = 0
-    let thetaRamp = 0
-    const thetaRampDest = 12
-    const rampDamp = 25
+    useEffect(() => {
+      const canvas = canvasRef.current!
+      const ctx = canvas.getContext('2d')!
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
 
-    function update() {
-      thetaRamp += (thetaRampDest - thetaRamp) / rampDamp
-      theta += 0.03
+      const bumpRadius = 100
+      const halfBump = bumpRadius / 2
+      const segments = 12
+      const step = HALF_PI / segments
 
-      const anchors: number[] = [0, 0]
-      for (let i = 0; i <= segments + 2; i++) {
-        const sine = Math.sin(thetaOff[i] + theta + thetaRamp)
-        const rad = radii[i] * sine
-        const x = rad * Math.sin(step * i)
-        const y = rad * Math.cos(step * i)
-        anchors.push(x, y)
+      const radii: number[] = []
+      const thetaOff: number[] = []
+      for (let i = 0; i < segments + 2; i++) {
+        radii.push(Math.random() * bumpRadius - halfBump)
+        thetaOff.push(Math.random() * TWO_PI)
       }
 
-      ctx.save()
-      ctx.translate(-10, -10)
-      ctx.scale(0.5, 0.5)
-      ctx.fillStyle = 'rgba(20, 20, 30)'
-      ctx.beginPath()
-      ctx.moveTo(0, 0)
-      bezierSkin(ctx, anchors, false)
-      ctx.lineTo(0, 0)
-      ctx.fill()
-      ctx.restore()
-    }
+      let radius = 0
+      let theta = 0
+      let thetaRamp = 0
+      const thetaRampDest = 12
+      const rampDamp = 25
 
-    let animId = 0
-    function loop() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      update()
-      animId = requestAnimationFrame(loop)
-    }
-    loop()
+      let expandSteps = 0
+      const maxSteps = 150
+      const stepIncrement = 30
 
-    function onResize() {
-      canvas.width = w()
-      canvas.height = h()
-    }
-    window.addEventListener('resize', onResize)
-    return () => {
-      cancelAnimationFrame(animId)
-      window.removeEventListener('resize', onResize)
-    }
-  }, [])
+      function update() {
+        thetaRamp += (thetaRampDest - thetaRamp) / rampDamp
+        theta += 0.03
 
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: 100,
-        pointerEvents: 'none',
-      }}
-    />
-  )
-}
+        if (expandingRef.current && expandSteps < maxSteps) {
+          radius += stepIncrement
+          expandSteps++
+          if (expandSteps >= maxSteps) {
+            expandingRef.current = false
+            onExpandComplete?.()
+          }
+        }
+
+        const anchors: number[] = [0, radius]
+        for (let i = 0; i <= segments + 2; i++) {
+          const sine = Math.sin(thetaOff[i] + theta + thetaRamp)
+          const rad = radius + radii[i] * sine
+          const x = rad * Math.sin(step * i)
+          const y = rad * Math.cos(step * i)
+          anchors.push(x, y)
+        }
+
+        ctx.save()
+        ctx.translate(-10, -10)
+        ctx.scale(0.5, 0.5)
+        ctx.fillStyle = 'rgba(20, 20, 30)'
+        ctx.beginPath()
+        ctx.moveTo(0, 0)
+        bezierSkin(ctx, anchors, false)
+        ctx.lineTo(0, 0)
+        ctx.fill()
+        ctx.restore()
+      }
+
+      let animId = 0
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        update()
+        animId = requestAnimationFrame(loop)
+      }
+      loop()
+
+      function onResize() {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+      }
+      window.addEventListener('resize', onResize)
+      return () => {
+        cancelAnimationFrame(animId)
+        window.removeEventListener('resize', onResize)
+      }
+    }, [onExpandComplete])
+
+    return (
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          zIndex: 9999,
+          pointerEvents: 'none',
+        }}
+      />
+    )
+  }
+)
+
+export default WobbleCorner

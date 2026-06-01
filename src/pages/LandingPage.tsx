@@ -1,12 +1,25 @@
-import { Link } from 'react-router-dom'
+import { useRef, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import WobbleCorner from '../components/WobbleCorner'
+import type { WobbleHandle } from '../components/WobbleCorner'
 import '../css/style.css'
 import '../css/fonts.css'
 
 export default function LandingPage() {
+  const wobbleRef = useRef<WobbleHandle>(null)
+  const navigate = useNavigate()
+
+  const handlePlay = useCallback(() => {
+    wobbleRef.current?.expand()
+  }, [])
+
+  const onExpandComplete = useCallback(() => {
+    navigate('/app?animation=true')
+  }, [navigate])
+
   return (
     <>
-      <WobbleCorner />
+      <WobbleCorner ref={wobbleRef} onExpandComplete={onExpandComplete} />
       <header>
         <div className="logo-container">
           <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -52,7 +65,7 @@ export default function LandingPage() {
             <h2>L'univers stratégique de Nausicaa</h2>
             <p>Un jeu de plateau mythologique où construction de deck et tactique s'entremêlent</p>
             <div className="cta-buttons">
-              <Link to="/app" className="btn primary">JOUER</Link>
+              <button onClick={handlePlay} className="btn primary">JOUER</button>
               <a href="/demo" className="btn secondary">DIDACTICIEL</a>
             </div>
           </div>
