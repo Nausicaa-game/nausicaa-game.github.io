@@ -14,7 +14,7 @@ import '../css/app.css'
 import '../css/fonts.css'
 
 function GameHeader() {
-  const { resetGame } = useGame()
+  const { resetGame, players } = useGame()
   const { t, locale, setLocale, available } = useI18n()
 
   return (
@@ -31,6 +31,9 @@ function GameHeader() {
           }}
         />
         <h1 style={{ position: 'relative', left: 8, top: -4 }}>Nausicaa</h1>
+      </div>
+      <div id="score-display" style={{ display: 'none', position: 'absolute', right: '50%', top: 8 }}>
+        {players[1]?.wins ?? 0} - {players[2]?.wins ?? 0}
       </div>
       <button className="header-toggle-button" id="header-toggle-button">☰</button>
       <div className="game-controls">
@@ -51,7 +54,7 @@ function GameHeader() {
   )
 }
 
-function GameContent() {
+export function GameContent() {
   const { turn, currentPlayer, timerMode, setTimerMode, cpuMode, setCpuMode } = useGame()
   const { t } = useI18n()
   const [showRules, setShowRules] = useState(false)

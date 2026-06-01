@@ -81,7 +81,7 @@ export default function PlayerPanel({ player, label, isCPU }: PlayerPanelProps) 
         <h3 className={isCurrent ? 'current-turn' : ''}>
           {label}{isCPU ? ' (CPU)' : ''}
         </h3>
-        <div className="mana-container">
+        <div className="mana-container" id={`mana-container-${isPlayerOne ? '1' : '2'}`}>
           <span className="mana-label">{t('mana')} </span>
           <span className="mana-crystals" id={`player-${isPlayerOne ? 'one' : 'two'}-mana`}>
             {p.mana}/{p.maxMana}
