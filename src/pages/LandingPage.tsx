@@ -1,5 +1,5 @@
 import { useRef, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import WobbleCorner from '../components/WobbleCorner'
 import type { WobbleHandle } from '../components/WobbleCorner'
 import '../css/style.css'
@@ -14,7 +14,7 @@ export default function LandingPage() {
   }, [])
 
   const onExpandComplete = useCallback(() => {
-    navigate('/app?animation=true')
+    navigate('/menu')
   }, [navigate])
 
   return (
@@ -66,7 +66,7 @@ export default function LandingPage() {
             <p>Un jeu de plateau mythologique où construction de deck et tactique s'entremêlent</p>
             <div className="cta-buttons">
               <button onClick={handlePlay} className="btn primary">JOUER</button>
-              <a href="/demo" className="btn secondary">DIDACTICIEL</a>
+              <Link to="/demo" className="btn secondary">DIDACTICIEL</Link>
             </div>
           </div>
           <div className="hero-cards">
