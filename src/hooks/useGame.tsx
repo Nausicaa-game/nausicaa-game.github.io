@@ -191,7 +191,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     validAttacks: engine.validAttacks,
     timerMode: engine.timerMode,
     movedUnitThisTurn: engine.movedUnitThisTurn,
-    timerSeconds: 15,
+    timerSeconds: engine.timerSeconds,
     selectCard,
     deselectCard,
     clickCell,

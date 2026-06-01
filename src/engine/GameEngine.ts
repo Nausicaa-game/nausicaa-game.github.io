@@ -38,7 +38,7 @@ export class GameEngine {
 
   // Timer
   timerMode = false
-  private timerSeconds = 15
+  timerSeconds = 15
   private turnTimer: ReturnType<typeof setInterval> | null = null
 
   // Sound hooks (overridable by UI layer)

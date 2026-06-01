@@ -1,4 +1,5 @@
 import { useGame } from '../hooks/useGame'
+import { useI18n } from '../i18n/I18nContext'
 import type { PlayerId } from '../types/game'
 import { UNIT_STATS } from '../engine/units'
 import UnitCard from './UnitCard'
@@ -11,6 +12,7 @@ interface PlayerPanelProps {
 
 function Hand({ player }: { player: PlayerId }) {
   const { players, selectedCard, selectCard, deselectCard, currentPlayer, gameOver } = useGame()
+  const { t } = useI18n()
   const hand = players[player].hand
   const mana = players[player].mana
   const isCurrent = currentPlayer === player && !gameOver
@@ -19,10 +21,12 @@ function Hand({ player }: { player: PlayerId }) {
     ? hand.filter(t => t === 'oracle')
     : hand
 
+  if (displayHand.length === 0 && player === 2) return null
+
   return (
     <div className="hand" id={`player-${player === 1 ? 'one' : 'two'}-hand`}>
       {displayHand.length === 0 ? (
-        <div className="empty-hand-message"></div>
+        <div className="empty-hand-message">{t('empty_hand')}</div>
       ) : (
         displayHand.map((type, i) => {
           const stats = UNIT_STATS[type]
@@ -52,22 +56,23 @@ export default function PlayerPanel({ player, label, isCPU }: PlayerPanelProps) 
     players, currentPlayer, gameOver, selectedAction,
     selectedUnit, endTurn, engine,
   } = useGame()
+  const { t } = useI18n()
 
   const p = players[player]
   const isCurrent = currentPlayer === player && !gameOver
   const isPlayerOne = player === 1
 
   const actionText = () => {
-    if (gameOver) return 'Partie terminée'
-    if (!isCurrent) return 'En attente...'
-    if (engine.selectedCard) return 'Placez l\'unité sur le plateau'
+    if (gameOver) return t('game_over')
+    if (!isCurrent) return t('waiting')
+    if (engine.selectedCard) return t('select_spawn')
     if (selectedUnit) {
-      const action = selectedAction === 'attack' ? 'Attaquez' :
-                     selectedAction === 'move' ? 'Déplacez' :
-                     selectedAction === 'dash' ? 'Dash' : 'Sélectionné'
-      return `${action} l'unité`
+      const action = selectedAction === 'attack' ? t('attack') :
+                     selectedAction === 'move' ? t('move') :
+                     selectedAction === 'dash' ? t('dash') : ''
+      return action ? `${action}` : t('select_unit')
     }
-    return 'Sélectionnez une unité ou une carte'
+    return t('select_unit')
   }
 
   return (
@@ -77,7 +82,7 @@ export default function PlayerPanel({ player, label, isCPU }: PlayerPanelProps) 
           {label}{isCPU ? ' (CPU)' : ''}
         </h3>
         <div className="mana-container">
-          <span className="mana-label">Mana: </span>
+          <span className="mana-label">{t('mana')} </span>
           <span className="mana-crystals" id={`player-${isPlayerOne ? 'one' : 'two'}-mana`}>
             {p.mana}/{p.maxMana}
           </span>
@@ -85,7 +90,7 @@ export default function PlayerPanel({ player, label, isCPU }: PlayerPanelProps) 
       </div>
 
       <div className="hand-container">
-        <h4>{isPlayerOne ? 'Votre main' : 'Main adverse'}</h4>
+        <h4>{isPlayerOne ? t('select_card') : t('waiting')}</h4>
         <Hand player={player} />
       </div>
 
@@ -102,7 +107,7 @@ export default function PlayerPanel({ player, label, isCPU }: PlayerPanelProps) 
           disabled={!isCurrent}
           onClick={endTurn}
         >
-          Terminer le tour
+          {t('end_turn')}
         </button>
       </div>
     </aside>

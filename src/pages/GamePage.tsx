@@ -1,6 +1,10 @@
+import { useState } from 'react'
 import Board from '../components/Board'
 import PlayerPanel from '../components/PlayerPanel'
+import UnitInfoPanel from '../components/UnitInfoPanel'
+import VictoryOverlay from '../components/VictoryOverlay'
 import { GameProvider, useGame } from '../hooks/useGame'
+import { useI18n } from '../i18n/I18nContext'
 import '../css/style.css'
 import '../css/game.css'
 import '../css/app.css'
@@ -8,6 +12,7 @@ import '../css/fonts.css'
 
 function GameHeader() {
   const { resetGame } = useGame()
+  const { t, locale, setLocale, available } = useI18n()
 
   return (
     <header className="game-header retracted">
@@ -26,45 +31,67 @@ function GameHeader() {
       </div>
       <button className="header-toggle-button" id="header-toggle-button">☰</button>
       <div className="game-controls">
-        <button className="btn secondary" onClick={resetGame}>Nouvelle partie</button>
-        <a href="/" className="btn secondary">Retour à l'accueil</a>
+        <select
+          value={locale}
+          onChange={e => setLocale(e.target.value as any)}
+          style={{ marginRight: 8 }}
+        >
+          {available.map(l => (
+            <option key={l} value={l}>{l.toUpperCase()}</option>
+          ))}
+        </select>
+        <button className="btn secondary" onClick={resetGame}>{t('end_turn')}</button>
+        <a href="/" className="btn secondary">{t('accueil')}</a>
       </div>
     </header>
   )
 }
 
 function GameContent() {
-  const { turn, currentPlayer } = useGame()
+  const { turn, currentPlayer, timerMode, setTimerMode } = useGame()
+  const { t } = useI18n()
 
   return (
     <main className="game-container">
-      <PlayerPanel player={1} label="Joueur 1" />
+      <PlayerPanel player={1} label={t('player') + ' 1'} />
 
-      <section className="board-container">
-        <div className="turn-indicator" id="turn-indicator">
-          Tour {turn} - Joueur {currentPlayer}
+      <section className="board-container" style={{ position: 'relative' }}>
+        <div className="turn-indicator" id="turn-indicator" style={{ backgroundColor: currentPlayer === 1 ? 'var(--highlight-color)' : 'var(--primary-color)' }}>
+          {t('turn')} {turn} - {t('player')} {currentPlayer}
         </div>
 
         <div className="options">
           <div className="timer">
             Timer mode
             <label className="switch">
-              <input type="checkbox" />
+              <input type="checkbox" checked={timerMode} onChange={e => setTimerMode(e.target.checked)} />
               <span className="slider round" />
             </label>
+          </div>
+          <div id="timer-display" style={{ display: timerMode ? 'block' : 'none', width: 200, textAlign: 'center' }}>
+            15
           </div>
         </div>
 
         <Board />
-
-        <div className="unit-info" id="unit-info">
-          <h4>Information sur l'unité</h4>
-          <div className="unit-details">Sélectionnez une unité pour voir ses détails</div>
-        </div>
+        <UnitInfoPanel />
+        <VictoryOverlay />
       </section>
 
-      <PlayerPanel player={2} label="Joueur 2" />
+      <PlayerPanel player={2} label={t('player') + ' 2'} />
     </main>
+  )
+}
+
+function Overlay() {
+  const [visible, setVisible] = useState(true)
+  if (!visible) return null
+  return (
+    <div
+      className="overlay"
+      style={{ animation: 'overlayAnimation 0.8s forwards' }}
+      onAnimationEnd={() => setVisible(false)}
+    />
   )
 }
 
@@ -72,7 +99,7 @@ export default function GamePage() {
   return (
     <GameProvider>
       <div className="game-page">
-        <div className="overlay" />
+        <Overlay />
         <GameHeader />
         <GameContent />
       </div>
