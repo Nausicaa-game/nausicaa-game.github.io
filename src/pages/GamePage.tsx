@@ -49,7 +49,7 @@ function GameHeader() {
 }
 
 function GameContent() {
-  const { turn, currentPlayer, timerMode, setTimerMode } = useGame()
+  const { turn, currentPlayer, timerMode, setTimerMode, cpuMode, setCpuMode } = useGame()
   const { t } = useI18n()
 
   return (
@@ -69,6 +69,13 @@ function GameContent() {
               <span className="slider round" />
             </label>
           </div>
+          <div className="timer">
+            CPU mode
+            <label className="switch">
+              <input type="checkbox" checked={cpuMode} onChange={e => setCpuMode(e.target.checked)} />
+              <span className="slider round" />
+            </label>
+          </div>
           <div id="timer-display" style={{ display: timerMode ? 'block' : 'none', width: 200, textAlign: 'center' }}>
             15
           </div>
@@ -79,7 +86,7 @@ function GameContent() {
         <VictoryOverlay />
       </section>
 
-      <PlayerPanel player={2} label={t('player') + ' 2'} />
+      <PlayerPanel player={2} label={cpuMode ? 'CPU' : t('player') + ' 2'} isCPU={cpuMode} />
     </main>
   )
 }

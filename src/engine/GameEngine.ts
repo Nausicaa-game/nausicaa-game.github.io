@@ -6,6 +6,7 @@ import {
   SerializableGameState,
 } from '../types/game'
 import { UNIT_STATS, DECK_COMPOSITION, isValidSpawnPosition, isDarkTile } from './units'
+import { CPUPlayer } from './CPUPlayer'
 
 type Listener = { event: keyof GameEventMap; callback: (...args: any[]) => void }
 
@@ -27,6 +28,10 @@ export class GameEngine {
   turn = 1
   gameOver = false
   players: Record<PlayerId, PlayerState> = {} as Record<PlayerId, PlayerState>
+
+  // CPU
+  cpuMode = false
+  cpuPlayer = new CPUPlayer(this)
 
   // Selection state
   selectedCard: SelectedCard | null = null
@@ -77,6 +82,7 @@ export class GameEngine {
     this.currentPlayer = 1
     this.turn = 1
     this.gameOver = false
+    this.cpuPlayer.reset()
     this.selectedCard = null
     this.selectedUnit = null
     this.selectedAction = null
@@ -617,6 +623,8 @@ export class GameEngine {
         this.startTurnTimer()
       }
     }
+
+    this.triggerCPUIfNeeded()
   }
 
   checkAutoEndTurn(): void {
@@ -710,6 +718,18 @@ export class GameEngine {
       }
     }
     return null
+  }
+
+  // ─── CPU mode ──────────────────────────────────────────────────
+
+  setCpuMode(enabled: boolean): void {
+    this.cpuMode = enabled
+  }
+
+  private triggerCPUIfNeeded(): void {
+    if (this.cpuMode && this.currentPlayer === 2 && !this.gameOver) {
+      this.cpuPlayer.onEndTurn()
+    }
   }
 
   // ─── Serialization (for P2P sync) ────────────────────────────

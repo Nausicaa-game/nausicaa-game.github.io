@@ -20,6 +20,7 @@ interface GameContextValue {
   timerMode: boolean
   movedUnitThisTurn: Unit | null
   timerSeconds: number
+  cpuMode: boolean
 
   selectCard: (type: UnitType) => void
   deselectCard: () => void
@@ -27,6 +28,7 @@ interface GameContextValue {
   endTurn: () => void
   resetGame: () => void
   setTimerMode: (v: boolean) => void
+  setCpuMode: (v: boolean) => void
   getUnitStats: (type: UnitType) => Omit<UnitStats, 'name'>
 }
 
@@ -175,6 +177,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
     bump()
   }, [engine, bump])
 
+  const setCpuModeFn = useCallback((v: boolean) => {
+    engine.setCpuMode(v)
+    bump()
+  }, [engine, bump])
+
   const getUnitStats = useCallback((type: UnitType) => UNIT_STATS[type], [])
 
   const value: GameContextValue = {
@@ -192,12 +199,14 @@ export function GameProvider({ children }: { children: ReactNode }) {
     timerMode: engine.timerMode,
     movedUnitThisTurn: engine.movedUnitThisTurn,
     timerSeconds: engine.timerSeconds,
+    cpuMode: engine.cpuMode,
     selectCard,
     deselectCard,
     clickCell,
     endTurn,
     resetGame,
     setTimerMode: setTimerModeFn,
+    setCpuMode: setCpuModeFn,
     getUnitStats,
   }
 
