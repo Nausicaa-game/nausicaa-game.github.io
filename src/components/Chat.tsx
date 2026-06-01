@@ -1,5 +1,6 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { useGame } from '../hooks/useGame'
+import { ensureSwearsLoaded, filterProfanity } from '../utils/profanity'
 
 export default function Chat() {
   const { p2pConnection, chatMessages, addChatMessage } = useGame()
@@ -7,6 +8,8 @@ export default function Chat() {
   const [text, setText] = useState('')
   const [notification, setNotification] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => { ensureSwearsLoaded() }, [])
 
   const toggle = useCallback(() => {
     setOpen(o => {
@@ -51,7 +54,7 @@ export default function Chat() {
         <div className="chat-messages">
           {chatMessages.map((m, i) => (
             <span key={i} style={{ color: 'black', textTransform: 'none' }}>
-              Joueur {m.player}: {m.text}
+              Joueur {m.player}: {filterProfanity(m.text)}
             </span>
           ))}
         </div>
