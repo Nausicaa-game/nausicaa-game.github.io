@@ -65,7 +65,7 @@ export class GameEngine {
     }
   }
 
-  private emit<E extends keyof GameEventMap>(
+  emit<E extends keyof GameEventMap>(
     event: E,
     data: GameEventMap[E],
   ): void {
@@ -415,6 +415,8 @@ export class GameEngine {
         this.destroyUnit(targetRow, targetCol)
       }
     }
+
+    this.emit('unitAttacked', { unit: attacker, target: { row: targetRow, col: targetCol }, damage: 1 })
 
     attacker.hasAttacked = true
     return true

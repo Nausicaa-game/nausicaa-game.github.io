@@ -4,6 +4,7 @@ import Board from '../components/Board'
 import PlayerPanel from '../components/PlayerPanel'
 import UnitInfoPanel from '../components/UnitInfoPanel'
 import VictoryOverlay from '../components/VictoryOverlay'
+import P2PControls from '../components/P2PControls'
 import { GameProvider, useGame } from '../hooks/useGame'
 import { useI18n } from '../i18n/I18nContext'
 import '../css/style.css'
@@ -41,6 +42,7 @@ function GameHeader() {
             <option key={l} value={l}>{l.toUpperCase()}</option>
           ))}
         </select>
+        <P2PControls />
         <button className="btn secondary" onClick={resetGame}>{t('end_turn')}</button>
         <Link to="/" className="btn secondary">{t('accueil')}</Link>
       </div>

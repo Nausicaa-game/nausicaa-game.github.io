@@ -3,6 +3,8 @@ import {
 } from 'react'
 import { GameEngine } from '../engine/GameEngine'
 import { UNIT_STATS } from '../engine/units'
+import { P2PConnection } from '../engine/P2PConnection'
+import type { P2PStatus, P2PMessage } from '../engine/P2PConnection'
 import type { PlayerId, UnitType, Unit, Position, ActionType, UnitStats } from '../types/game'
 
 interface GameContextValue {
@@ -30,6 +32,11 @@ interface GameContextValue {
   setTimerMode: (v: boolean) => void
   setCpuMode: (v: boolean) => void
   getUnitStats: (type: UnitType) => Omit<UnitStats, 'name'>
+
+  p2pConnection: P2PConnection | null
+  p2pStatus: P2PStatus
+  hostGame: () => void
+  joinGame: (id: string) => void
 }
 
 const GameContext = createContext<GameContextValue | null>(null)
@@ -58,7 +65,6 @@ function selectUnitWithDefaults(engine: GameEngine, row: number, col: number) {
 }
 
 function handleSpawnOrMove(engine: GameEngine, row: number, col: number) {
-  // If a card is selected, try to spawn
   if (engine.selectedCard) {
     const ok = engine.placeUnit(engine.selectedCard.type, engine.currentPlayer, row, col)
     if (ok) {
@@ -73,7 +79,6 @@ function handleSpawnOrMove(engine: GameEngine, row: number, col: number) {
     const pos = engine.getUnitPosition(unit)
     if (!pos) return
 
-    // Clicking on same unit -> deselect
     if (pos.row === row && pos.col === col) {
       engine.selectedUnit = null
       engine.selectedAction = null
@@ -82,14 +87,12 @@ function handleSpawnOrMove(engine: GameEngine, row: number, col: number) {
       return
     }
 
-    // Clicking on another own unit -> switch selection
     const target = engine.board[row][col]
     if (target && target.player === engine.currentPlayer) {
       selectUnitWithDefaults(engine, row, col)
       return
     }
 
-    // Try attack
     const attacks = engine.getValidAttacks(pos.row, pos.col)
     if (attacks.some(a => a.row === row && a.col === col)) {
       engine.attackUnit(pos.row, pos.col, row, col)
@@ -101,7 +104,6 @@ function handleSpawnOrMove(engine: GameEngine, row: number, col: number) {
       return
     }
 
-    // Try move
     const moves = engine.getValidMoves(pos.row, pos.col)
     if (moves.some(m => m.row === row && m.col === col)) {
       engine.moveUnit(pos.row, pos.col, row, col)
@@ -112,7 +114,6 @@ function handleSpawnOrMove(engine: GameEngine, row: number, col: number) {
       return
     }
 
-    // Deselect
     engine.selectedUnit = null
     engine.selectedAction = null
     engine.validMoves = []
@@ -120,7 +121,6 @@ function handleSpawnOrMove(engine: GameEngine, row: number, col: number) {
     return
   }
 
-  // Nothing selected -> try selecting a unit
   selectUnitWithDefaults(engine, row, col)
 }
 
@@ -134,7 +134,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     forceRender(n => n + 1)
   }, [])
 
-  // Subscribe to engine events once
+  // Subscribe to engine events
   useMemo(() => {
     const events: (keyof import('../types/game').GameEventMap)[] = [
       'unitPlaced', 'unitMoved', 'unitAttacked', 'unitDestroyed',
@@ -145,6 +145,88 @@ export function GameProvider({ children }: { children: ReactNode }) {
       engine.on(ev as any, bump)
     }
   }, [engine, bump])
+
+  // ── P2P ──────────────────────────────────────────────────────
+
+  const p2pRef = useRef<P2PConnection | null>(null)
+  const [p2pStatus, setP2pStatus] = useState<P2PStatus>('disconnected')
+  const applyingState = useRef(false)
+
+  if (!p2pRef.current) {
+    const p2p = new P2PConnection()
+    p2pRef.current = p2p
+
+    p2p.setStatusHandler((s) => {
+      setP2pStatus(s)
+    })
+
+    p2p.setPeerIdHandler(() => {
+      bump()
+    })
+
+    p2p.setMessageHandler((msg: P2PMessage) => {
+      handleP2PMessage(msg)
+    })
+  }
+
+  const p2p = p2pRef.current
+
+  const hostGame = useCallback(() => {
+    p2p.hostGame()
+    bump()
+  }, [p2p, bump])
+
+  const joinGame = useCallback((id: string) => {
+    p2p.joinGame(id)
+    bump()
+  }, [p2p, bump])
+
+  function handleP2PMessage(msg: P2PMessage) {
+    if (msg.type === 'action' && msg.action) {
+      const action = msg.action
+      // Host receives and executes guest actions
+      if (p2p.isHost) {
+        switch (action.type) {
+          case 'endTurn':
+            engine.endTurn()
+            break
+          case 'endGame':
+            engine.gameOver = true
+            engine.emit('gameOver', { winner: (action.payload?.winner as number) as PlayerId })
+            break
+          case 'resetGame':
+            engine.init()
+            break
+        }
+        // Send state back to guest after executing
+        const state = engine.getSerializableState()
+        p2p.sendMessage({ type: 'gameState', state: { ...state, timestamp: Date.now() } as any })
+        bump()
+      }
+    } else if (msg.type === 'gameState' && msg.state && !p2p.isHost) {
+      // Guest receives state from host
+      applyingState.current = true
+      engine.applySerializedState(msg.state as any)
+      applyingState.current = false
+      bump()
+    }
+  }
+
+  // After engine actions, sync state to peer
+  function syncToPeer() {
+    if (p2p.status !== 'connected') return
+    if (applyingState.current) return
+
+    if (p2p.isHost) {
+      const state = engine.getSerializableState()
+      p2p.sendMessage({ type: 'gameState', state: { ...state, timestamp: Date.now() } as any })
+    } else {
+      // Guest sends endTurn to host
+      // (placeUnit, moveUnit, attackUnit are not forwarded individually for now)
+    }
+  }
+
+  // ── Game actions ─────────────────────────────────────────────
 
   const selectCard = useCallback((type: UnitType) => {
     if (engine.gameOver) return
@@ -160,17 +242,23 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const clickCell = useCallback((row: number, col: number) => {
     handleSpawnOrMove(engine, row, col)
     bump()
+    syncToPeer()
   }, [engine, bump])
 
   const endTurn = useCallback(() => {
     engine.endTurn()
     bump()
+    syncToPeer()
   }, [engine, bump])
 
   const resetGame = useCallback(() => {
     engine.init()
     bump()
-  }, [engine, bump])
+    if (p2p.status === 'connected' && p2p.isHost) {
+      const state = engine.getSerializableState()
+      p2p.sendMessage({ type: 'gameState', state: { ...state, timestamp: Date.now() } as any })
+    }
+  }, [engine, bump, p2p])
 
   const setTimerModeFn = useCallback((v: boolean) => {
     engine.setTimerMode(v)
@@ -208,6 +296,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setTimerMode: setTimerModeFn,
     setCpuMode: setCpuModeFn,
     getUnitStats,
+    p2pConnection: p2p,
+    p2pStatus,
+    hostGame,
+    joinGame,
   }
 
   return (
