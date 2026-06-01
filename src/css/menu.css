@@ -1,17 +1,11 @@
-body {
-    margin: 0;
-    padding: 0;
+.menu-page {
     height: 100vh;
-    background: url('images/background.jpg') no-repeat center center fixed;
-    background-size: cover;
-    font-family: 'Cinzel', serif;
-    color: #fff;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: center; 
-    align-items: center; 
-    user-select: none; 
+    justify-content: center;
+    align-items: center;
+    user-select: none;
 }
 
 .game-container {
