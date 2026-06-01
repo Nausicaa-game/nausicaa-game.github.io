@@ -47,10 +47,23 @@ export class GameEngine {
   private turnTimer: ReturnType<typeof setInterval> | null = null
 
   // Sound hooks (overridable by UI layer)
-  onPlaySound: ((sound: string) => void) | null = null
+  onPlaySound: ((sound: string, reset?: boolean) => void) | null = null
   onStopSound: ((sound: string) => void) | null = null
   onTransitionSong: ((from: string, to: string, restart: boolean) => void) | null = null
   onSetVolume: ((sound: string, volume: number) => void) | null = null
+
+  private play(sound: string, reset = false) {
+    this.onPlaySound?.(sound, reset)
+  }
+  private stop(sound: string) {
+    this.onStopSound?.(sound)
+  }
+  private transition(from: string, to: string, restart = false) {
+    this.onTransitionSong?.(from, to, restart)
+  }
+  private vol(sound: string, v: number) {
+    this.onSetVolume?.(sound, v)
+  }
 
   // ── Event system ──────────────────────────────────────────────
 
@@ -90,6 +103,13 @@ export class GameEngine {
     this.validAttacks = []
     this.movedUnitThisTurn = null
     this.stopTurnTimer()
+
+    this.stop('menu_next')
+    this.stop('victory')
+    this.stop('defeat')
+    this.play('announcer:allPick', true)
+    this.play('firstRound', true)
+    this.vol('firstRound', 0.2)
 
     this.players = {
       1: this.createPlayerState(),
@@ -194,6 +214,17 @@ export class GameEngine {
 
     this.emit('manaChanged', { player, mana: this.players[player].mana, maxMana: this.players[player].maxMana })
     this.emit('unitPlaced', { unit, row, col })
+
+    this.play('placed', true)
+
+    if (unitType === 'oracle') {
+      this.play('oraclePut', true)
+      this.vol('oraclePut', 0.3)
+      if (player === 2) {
+        this.play('announcer:battleBegins', true)
+        this.transition('firstRound', 'menu_next', true)
+      }
+    }
 
     // Special spawn effects
     if (unitType === 'titan') {
@@ -308,6 +339,7 @@ export class GameEngine {
     }
 
     this.emit('unitMoved', { unit, from: { row, col }, to: { row: newRow, col: newCol } })
+    this.play('clic')
     return true
   }
 
@@ -417,7 +449,7 @@ export class GameEngine {
     }
 
     this.emit('unitAttacked', { unit: attacker, target: { row: targetRow, col: targetCol }, damage: 1 })
-
+    this.play('attack')
     attacker.hasAttacked = true
     return true
   }
@@ -578,6 +610,7 @@ export class GameEngine {
     if (unit.type === 'oracle') {
       const winner: PlayerId = unit.player === 1 ? 2 : 1
       this.gameOver = true
+      this.transition('menu_next', 'victory', true)
       this.emit('gameOver', { winner })
     }
   }
@@ -586,6 +619,7 @@ export class GameEngine {
 
   endTurn(): void {
     this.stopTurnTimer()
+    this.play('manualEndTurn', true)
 
     for (const pu of this.players[this.currentPlayer].units) {
       const u = pu.unit
@@ -619,6 +653,7 @@ export class GameEngine {
 
     this.emit('turnChanged', { player: this.currentPlayer, turn: this.turn })
     this.emit('manaChanged', { player: this.currentPlayer, mana: p.mana, maxMana: p.maxMana })
+    this.play('yourTurn')
 
     if (this.timerMode && !this.gameOver) {
       if (this.players[2].units.some(u => u.unit.type === 'oracle')) {
@@ -666,6 +701,7 @@ export class GameEngine {
   startTurnTimer(): void {
     this.stopTurnTimer()
     this.timerSeconds = 15
+    this.play('timer', true)
     this.emit('timerTick', { seconds: this.timerSeconds })
     this.turnTimer = setInterval(() => {
       this.timerSeconds -= 0.01

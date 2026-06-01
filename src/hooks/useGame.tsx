@@ -142,7 +142,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   // Wire sound hooks
   useMemo(() => {
-    engine.onPlaySound = (sound) => audio.playSound(sound, true)
+    engine.onPlaySound = (sound, reset) => audio.playSound(sound, reset)
     engine.onStopSound = (sound) => audio.stopSound(sound)
     engine.onTransitionSong = (from, to, restart) => audio.transitionSong(from, to, restart)
     engine.onSetVolume = (sound, vol) => audio.setVolume(sound, vol)

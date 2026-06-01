@@ -70,7 +70,9 @@ export default function MenuPage() {
   const audio = useAudio()
 
   useEffect(() => {
-    audio.playSound('menu')
+    audio.onUserGesture(() => {
+      audio.fadeSong('menu', true, 0.5)
+    })
   }, [])
 
   const handlePlay = useCallback(() => {

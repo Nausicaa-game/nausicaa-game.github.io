@@ -8,6 +8,7 @@ interface AudioContextValue {
   setVolume: (name: string, volume: number) => void
   fadeSong: (name: string, fadeIn: boolean, duration?: number, callback?: () => void) => void
   transitionSong: (fromName: string, toName: string, reset?: boolean) => void
+  onUserGesture: (callback: () => void) => void
 }
 
 const AudioCtx = createContext<AudioContextValue | null>(null)
@@ -37,6 +38,35 @@ const SONG_REGISTRY: [string, string, boolean?][] = [
 export function AudioProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<Record<string, HTMLAudioElement>>({})
   const playingRef = useRef<string[]>([])
+  const unlockedRef = useRef(false)
+  const gestureCallbacksRef = useRef<(() => void)[]>([])
+
+  const unlock = useCallback(() => {
+    if (unlockedRef.current) return
+    unlockedRef.current = true
+    for (const cb of gestureCallbacksRef.current) cb()
+    gestureCallbacksRef.current = []
+  }, [])
+
+  useEffect(() => {
+    const handler = () => unlock()
+    document.addEventListener('click', handler, { once: true })
+    document.addEventListener('touchstart', handler, { once: true })
+    document.addEventListener('keydown', handler, { once: true })
+    return () => {
+      document.removeEventListener('click', handler)
+      document.removeEventListener('touchstart', handler)
+      document.removeEventListener('keydown', handler)
+    }
+  }, [unlock])
+
+  const onUserGesture = useCallback((callback: () => void) => {
+    if (unlockedRef.current) {
+      callback()
+    } else {
+      gestureCallbacksRef.current.push(callback)
+    }
+  }, [])
 
   const stopSound = useCallback((name: string) => {
     const el = audioRef.current[name]
@@ -51,6 +81,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     if (!audioRef.current[name]) {
       const el = new Audio(url)
       el.loop = loop
+      el.volume = 1
       el.addEventListener('ended', () => {
         const e = audioRef.current[name]
         if (e) {
@@ -65,12 +96,11 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 
   const playSound = useCallback((name: string, reset = false) => {
     const el = audioRef.current[name]
-    if (el) {
-      if (reset) el.currentTime = 0
-      el.play().catch(() => {})
-      if (!playingRef.current.includes(name)) {
-        playingRef.current.push(name)
-      }
+    if (!el) return
+    if (reset) el.currentTime = 0
+    el.play().catch(() => {})
+    if (!playingRef.current.includes(name)) {
+      playingRef.current.push(name)
     }
   }, [])
 
@@ -95,7 +125,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     if (!el) return
     const steps = 50
     let currentStep = 0
-    el.volume = fadeIn ? 0 : 1
+    el.volume = fadeIn ? 0 : el.volume
     if (fadeIn) {
       el.currentTime = 0
       el.play().catch(() => {})
@@ -104,7 +134,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       currentStep++
       el.volume = fadeIn
         ? Math.min(1, currentStep / steps)
-        : Math.max(0, 1 - currentStep / steps)
+        : Math.max(0, el.volume - 1 / steps)
       if (currentStep >= steps) {
         clearInterval(interval)
         el.volume = fadeIn ? 1 : 0
@@ -132,8 +162,8 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   }, [loadSong])
 
   const value = useMemo<AudioContextValue>(() => ({
-    loadSong, playSound, stopSound, stopAllSounds, setVolume, fadeSong, transitionSong,
-  }), [loadSong, playSound, stopSound, stopAllSounds, setVolume, fadeSong, transitionSong])
+    loadSong, playSound, stopSound, stopAllSounds, setVolume, fadeSong, transitionSong, onUserGesture,
+  }), [loadSong, playSound, stopSound, stopAllSounds, setVolume, fadeSong, transitionSong, onUserGesture])
 
   return <AudioCtx.Provider value={value}>{children}</AudioCtx.Provider>
 }
