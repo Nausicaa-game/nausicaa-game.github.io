@@ -155,7 +155,8 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     })
   }, [fadeSong, playSound])
 
-  useEffect(() => {
+  // Load songs synchronously so they're available before child effects run
+  useMemo(() => {
     for (const [name, url, loop] of SONG_REGISTRY) {
       loadSong(name, url, loop)
     }

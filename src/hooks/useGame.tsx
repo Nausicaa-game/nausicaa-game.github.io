@@ -47,9 +47,7 @@ interface GameContextValue {
 const GameContext = createContext<GameContextValue | null>(null)
 
 function makeEngine() {
-  const engine = new GameEngine()
-  engine.init()
-  return engine
+  return new GameEngine()
 }
 
 function selectUnitWithDefaults(engine: GameEngine, row: number, col: number) {
@@ -147,6 +145,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
     engine.onTransitionSong = (from, to, restart) => audio.transitionSong(from, to, restart)
     engine.onSetVolume = (sound, vol) => audio.setVolume(sound, vol)
   }, [engine, audio])
+
+  // Init engine after hooks are wired and audio is loaded
+  useMemo(() => {
+    engine.init()
+  }, [engine])
 
   // Subscribe to engine events
   useMemo(() => {
