@@ -14,7 +14,7 @@ export default function LandingPage() {
   }, [])
 
   const onExpandComplete = useCallback(() => {
-    navigate('/menu')
+    navigate('/app')
   }, [navigate])
 
   return (
