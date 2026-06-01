@@ -272,9 +272,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   const clickCell = useCallback((row: number, col: number) => {
     handleSpawnOrMove(engine, row, col)
+    if (engine.selectedUnit) {
+      audio.playSound('pop')
+    }
     bump()
     syncToPeer()
-  }, [engine, bump])
+  }, [engine, bump, audio])
 
   const endTurn = useCallback(() => {
     engine.endTurn()
