@@ -6,6 +6,7 @@ export default function Board() {
   const {
     board, clickCell, selectedUnit,
     validMoves, validAttacks, currentPlayer,
+    setHoveredUnit,
   } = useGame()
 
   const isValidTarget = (row: number, col: number) =>
@@ -41,6 +42,11 @@ export default function Board() {
               data-row={row}
               data-col={col}
               onClick={() => clickCell(row, col)}
+              onMouseEnter={() => {
+                const u = board[row][col]
+                setHoveredUnit(u ? { ...u } : null)
+              }}
+              onMouseLeave={() => setHoveredUnit(null)}
             >
               {unit && (
                 <div

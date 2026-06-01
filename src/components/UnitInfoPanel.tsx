@@ -3,10 +3,12 @@ import { useI18n } from '../i18n/I18nContext'
 import { UNIT_STATS } from '../engine/units'
 
 export default function UnitInfoPanel() {
-  const { selectedUnit } = useGame()
+  const { selectedUnit, hoveredUnit } = useGame()
   const { t } = useI18n()
 
-  if (!selectedUnit) {
+  const activeUnit = hoveredUnit ?? selectedUnit?.unit ?? null
+
+  if (!activeUnit) {
     return (
       <div className="unit-info" id="unit-info">
         <h4>{t('select_unit_info')}</h4>
@@ -15,7 +17,7 @@ export default function UnitInfoPanel() {
     )
   }
 
-  const { unit } = selectedUnit
+  const unit = activeUnit
   const stats = UNIT_STATS[unit.type]
   const name = t(stats.nameKey)
   const desc = t(stats.descriptionKey)

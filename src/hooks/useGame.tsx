@@ -24,6 +24,10 @@ interface GameContextValue {
   movedUnitThisTurn: Unit | null
   timerSeconds: number
   cpuMode: boolean
+  chatMessages: { player: number; text: string }[]
+  addChatMessage: (player: number, text: string) => void
+  hoveredUnit: Unit | null
+  setHoveredUnit: (u: Unit | null) => void
 
   selectCard: (type: UnitType) => void
   deselectCard: () => void
@@ -156,6 +160,18 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }
   }, [engine, bump])
 
+  // ── Hover ────────────────────────────────────────────────────
+
+  const [hoveredUnit, setHoveredUnit] = useState<Unit | null>(null)
+
+  // ── Chat ─────────────────────────────────────────────────────
+
+  const [chatMessages, setChatMessages] = useState<{ player: number; text: string }[]>([])
+
+  const addChatMessage = useCallback((player: number, text: string) => {
+    setChatMessages(prev => [{ player, text }, ...prev])
+  }, [])
+
   // ── P2P ──────────────────────────────────────────────────────
 
   const p2pRef = useRef<P2PConnection | null>(null)
@@ -194,6 +210,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
   function handleP2PMessage(msg: P2PMessage) {
     if (msg.type === 'action' && msg.action) {
       const action = msg.action
+      // SendMessage handled by both host and guest
+      if (action.type === 'sendMessage') {
+        addChatMessage(action.payload?.player as number, action.payload?.message as string)
+        return
+      }
       // Host receives and executes guest actions
       if (p2p.isHost) {
         switch (action.type) {
@@ -310,6 +331,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
     p2pStatus,
     hostGame,
     joinGame,
+    chatMessages,
+    addChatMessage,
+    hoveredUnit,
+    setHoveredUnit,
   }
 
   return (
