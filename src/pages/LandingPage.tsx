@@ -118,15 +118,124 @@ export default function LandingPage() {
           <p>Découvrez les différentes unités mythologiques que vous pouvez contrôler dans le jeu. Chaque unité possède des capacités uniques et un coût en mana spécifique.</p>
           <div className="units-container">
             <div className="unit-card">
-              <div className="unit-image">
-                <img src="/assets/pions/oracle.svg" alt="L'Oracle" />
-              </div>
+              <div className="unit-image"><img src="/assets/pions/oracle.svg" alt="Oracle" /></div>
               <h3>Oracle (Unité Royale)</h3>
               <p style={{ textAlign: 'left' }}>L'unité royale à protéger. Se déplace dans les 8 cases environnantes pour 1 mana (2 mana pour un dash). Sa perte signifie la défaite.</p>
               <div style={{ textAlign: 'left' }}>
                 <p><b>• Coût:</b> Gratuit</p>
                 <p><b>• Mouvement:</b> 8 cases environnantes.</p>
                 <p><b>• Règle Spéciale:</b> 1 mana pour se déplacer, 2 pour dasher.</p>
+              </div>
+            </div>
+            <div className="unit-card">
+              <div className="unit-image"><img src="/assets/pions/gobelin.svg" alt="Gobelin" /></div>
+              <h3>Gobelin (1 Mana)</h3>
+              <p style={{ textAlign: 'left' }}>Unité offensive de base. Avance jusqu'à 3 cases et attaque dans 4 directions latérales.</p>
+              <div style={{ textAlign: 'left' }}>
+                <p><b>• Coût:</b> 1 Mana</p>
+                <p><b>• Mouvement:</b> Avant jusqu'à 3 cases.</p>
+                <p><b>• Attaque:</b> 4 directions latérales.</p>
+              </div>
+            </div>
+            <div className="unit-card">
+              <div className="unit-image"><img src="/assets/pions/harpy.svg" alt="Harpie" /></div>
+              <h3>Harpie (1 Mana)</h3>
+              <p style={{ textAlign: 'left' }}>Se déplace dans les 8 directions. Peut déclencher une attaque explosive qui détruit les unités adjacentes et elle-même.</p>
+              <div style={{ textAlign: 'left' }}>
+                <p><b>• Coût:</b> 1 Mana</p>
+                <p><b>• Mouvement:</b> 8 cases environnantes.</p>
+                <p><b>• Capacité Spéciale:</b> Attaque explosive à usage unique.</p>
+                <p><b>• Attention:</b> Peut blesser vos propres unités.</p>
+              </div>
+            </div>
+            <div className="unit-card">
+              <div className="unit-image"><img src="/assets/pions/naiad.svg" alt="Naïade" /></div>
+              <h3>Naïade (1 Mana)</h3>
+              <p style={{ textAlign: 'left' }}>Unité de support. Fait piocher une carte à l'invocation et à sa destruction. Ne peut pas attaquer.</p>
+              <div style={{ textAlign: 'left' }}>
+                <p><b>• Coût:</b> 1 Mana</p>
+                <p><b>• Capacité:</b> Pioche une carte à l'invocation et à la destruction.</p>
+                <p><b>• Ne peut pas attaquer.</b></p>
+              </div>
+            </div>
+            <div className="unit-card">
+              <div className="unit-image"><img src="/assets/pions/griffin.svg" alt="Griffon" /></div>
+              <h3>Griffon (2 Mana)</h3>
+              <p style={{ textAlign: 'left' }}>Saute 2 cases latéralement. Pioche une carte lorsqu'il saute par-dessus une unité.</p>
+              <div style={{ textAlign: 'left' }}>
+                <p><b>• Coût:</b> 2 Mana</p>
+                <p><b>• Mouvement:</b> Saute de 2 cases latéralement.</p>
+                <p><b>• Capacité Spéciale:</b> Pioche une carte en sautant par-dessus une unité.</p>
+              </div>
+            </div>
+            <div className="unit-card">
+              <div className="unit-image"><img src="/assets/pions/siren.svg" alt="Sirène" /></div>
+              <h3>Sirène (2 Mana)</h3>
+              <p style={{ textAlign: 'left' }}>Attaque simultanément dans les 4 diagonales. Attention au tir ami !</p>
+              <div style={{ textAlign: 'left' }}>
+                <p><b>• Coût:</b> 2 Mana</p>
+                <p><b>• Mouvement:</b> Latéral limité.</p>
+                <p><b>• Attaque:</b> 4 diagonales simultanément.</p>
+                <p><b>• Attention:</b> Peut blesser vos propres unités.</p>
+              </div>
+            </div>
+            <div className="unit-card">
+              <div className="unit-image"><img src="/assets/pions/centaur.svg" alt="Centaure" /></div>
+              <h3>Centaure (2 Mana)</h3>
+              <p style={{ textAlign: 'left' }}>Peut attirer n'importe quelle unité de 2 cases vers lui pour 1 mana supplémentaire.</p>
+              <div style={{ textAlign: 'left' }}>
+                <p><b>• Coût:</b> 2 Mana</p>
+                <p><b>• Capacité:</b> Tire une unité de 2 cases pour 1 mana.</p>
+              </div>
+            </div>
+            <div className="unit-card">
+              <div className="unit-image"><img src="/assets/pions/archer.svg" alt="Archer" /></div>
+              <h3>Archer (3 Mana)</h3>
+              <p style={{ textAlign: 'left' }}>Se déplace latéralement et attaque jusqu'à 3 cases en diagonale.</p>
+              <div style={{ textAlign: 'left' }}>
+                <p><b>• Coût:</b> 3 Mana</p>
+                <p><b>• Mouvement:</b> Latéral.</p>
+                <p><b>• Attaque:</b> Diagonale, portée de 3 cases.</p>
+              </div>
+            </div>
+            <div className="unit-card">
+              <div className="unit-image"><img src="/assets/pions/phoenix.svg" alt="Phénix" /></div>
+              <h3>Phénix (3 Mana)</h3>
+              <p style={{ textAlign: 'left' }}>Ne peut se déplacer et attaquer que sur les cases sombres du plateau, en diagonale.</p>
+              <div style={{ textAlign: 'left' }}>
+                <p><b>• Coût:</b> 3 Mana</p>
+                <p><b>• Mouvement:</b> Diagonal, uniquement sur cases sombres.</p>
+                <p><b>• Restriction:</b> Ne peut agir que sur les cases sombres.</p>
+              </div>
+            </div>
+            <div className="unit-card">
+              <div className="unit-image"><img src="/assets/pions/shapeshifter.svg" alt="Métamorphe" /></div>
+              <h3>Métamorphe (4 Mana)</h3>
+              <p style={{ textAlign: 'left' }}>Peut échanger sa place avec n'importe quelle unité sauf l'Oracle. Ne peut pas attaquer après l'échange.</p>
+              <div style={{ textAlign: 'left' }}>
+                <p><b>• Coût:</b> 4 Mana</p>
+                <p><b>• Capacité:</b> Échange de place avec une unité (sauf Oracle).</p>
+                <p><b>• Restriction:</b> Ne peut pas attaquer le tour du téléport.</p>
+              </div>
+            </div>
+            <div className="unit-card">
+              <div className="unit-image"><img src="/assets/pions/seer.svg" alt="Voyant" /></div>
+              <h3>Voyant (4 Mana)</h3>
+              <p style={{ textAlign: 'left' }}>Génère du mana supplémentaire chaque tour mais ne peut ni se déplacer ni attaquer.</p>
+              <div style={{ textAlign: 'left' }}>
+                <p><b>• Coût:</b> 4 Mana</p>
+                <p><b>• Capacité:</b> Génère du mana supplémentaire.</p>
+                <p><b>• Limitation:</b> Ne peut ni bouger, ni attaquer.</p>
+              </div>
+            </div>
+            <div className="unit-card">
+              <div className="unit-image"><img src="/assets/pions/titan.svg" alt="Titan" /></div>
+              <h3>Titan (6 Mana)</h3>
+              <p style={{ textAlign: 'left' }}>Détruit les unités environnantes à son invocation. Dispose d'attaques de zone dévastatrices.</p>
+              <div style={{ textAlign: 'left' }}>
+                <p><b>• Coût:</b> 6 Mana</p>
+                <p><b>• Effet d'Invocation:</b> Détruit les unités adjacentes.</p>
+                <p><b>• Attaque:</b> Puissante attaque à distance avec effet de zone.</p>
               </div>
             </div>
           </div>
