@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useRef, useMemo, useCallback, type ReactNode } from 'react'
 
 interface AudioContextValue {
   loadSong: (name: string, url: string, loop?: boolean) => void
@@ -38,90 +38,102 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<Record<string, HTMLAudioElement>>({})
   const playingRef = useRef<string[]>([])
 
-  const stopSound = (name: string) => {
+  const stopSound = useCallback((name: string) => {
     const el = audioRef.current[name]
     if (el) {
       el.pause()
       el.currentTime = 0
       playingRef.current = playingRef.current.filter(s => s !== name)
     }
-  }
+  }, [])
 
-  const value: AudioContextValue = {
-    loadSong(name, url, loop = false) {
-      if (!audioRef.current[name]) {
-        const el = new Audio(url)
-        el.loop = loop
-        el.addEventListener('ended', () => {
-          stopSound(name)
-        })
-        audioRef.current[name] = el
+  const loadSong = useCallback((name: string, url: string, loop = false) => {
+    if (!audioRef.current[name]) {
+      const el = new Audio(url)
+      el.loop = loop
+      el.addEventListener('ended', () => {
+        const e = audioRef.current[name]
+        if (e) {
+          e.pause()
+          e.currentTime = 0
+          playingRef.current = playingRef.current.filter(s => s !== name)
+        }
+      })
+      audioRef.current[name] = el
+    }
+  }, [])
+
+  const playSound = useCallback((name: string, reset = false) => {
+    const el = audioRef.current[name]
+    if (el) {
+      if (reset) el.currentTime = 0
+      el.play().catch(() => {})
+      if (!playingRef.current.includes(name)) {
+        playingRef.current.push(name)
       }
-    },
+    }
+  }, [])
 
-    playSound(name, reset = false) {
+  const stopAllSounds = useCallback(() => {
+    playingRef.current.forEach(name => {
       const el = audioRef.current[name]
       if (el) {
-        el.play()
-        if (reset) el.currentTime = 0
-        if (!playingRef.current.includes(name)) {
-          playingRef.current.push(name)
-        }
+        el.pause()
+        el.currentTime = 0
       }
-    },
+    })
+    playingRef.current = []
+  }, [])
 
-    stopSound,
+  const setVolume = useCallback((name: string, volume: number) => {
+    const el = audioRef.current[name]
+    if (el) el.volume = volume
+  }, [])
 
-    stopAllSounds() {
-      playingRef.current.forEach(name => {
-        const el = audioRef.current[name]
-        if (el) {
+  const fadeSong = useCallback((name: string, fadeIn: boolean, duration = 1, callback?: () => void) => {
+    const el = audioRef.current[name]
+    if (!el) return
+    const steps = 50
+    let currentStep = 0
+    el.volume = fadeIn ? 0 : 1
+    if (fadeIn) {
+      el.currentTime = 0
+      el.play().catch(() => {})
+    }
+    const interval = setInterval(() => {
+      currentStep++
+      el.volume = fadeIn
+        ? Math.min(1, currentStep / steps)
+        : Math.max(0, 1 - currentStep / steps)
+      if (currentStep >= steps) {
+        clearInterval(interval)
+        el.volume = fadeIn ? 1 : 0
+        if (!fadeIn) {
           el.pause()
           el.currentTime = 0
+          playingRef.current = playingRef.current.filter(s => s !== name)
         }
-      })
-      playingRef.current = []
-    },
+        callback?.()
+      }
+    }, (duration * 1000) / steps)
+  }, [])
 
-    setVolume(name, volume) {
-      const el = audioRef.current[name]
-      if (el) el.volume = volume
-    },
-
-    fadeSong(name, fadeIn, duration = 1, callback) {
-      const el = audioRef.current[name]
-      if (!el) return
-      const steps = 50
-      let currentStep = 0
-      el.volume = fadeIn ? 0 : 1
-      if (fadeIn) value.playSound(name)
-      const interval = setInterval(() => {
-        currentStep++
-        el.volume = fadeIn
-          ? Math.min(1, currentStep / steps)
-          : Math.max(0, 1 - currentStep / steps)
-        if (currentStep >= steps) {
-          clearInterval(interval)
-          el.volume = fadeIn ? 1 : 0
-          if (!fadeIn) stopSound(name)
-          callback?.()
-        }
-      }, (duration * 1000) / steps)
-    },
-
-    transitionSong(fromName, toName, reset = false) {
-      value.fadeSong(fromName, false, 1, () => {
-        value.playSound(toName, reset)
-        value.fadeSong(toName, true, 1)
-      })
-    },
-  }
+  const transitionSong = useCallback((fromName: string, toName: string, reset = false) => {
+    fadeSong(fromName, false, 1, () => {
+      playSound(toName, reset)
+      fadeSong(toName, true, 1)
+    })
+  }, [fadeSong, playSound])
 
   useEffect(() => {
     for (const [name, url, loop] of SONG_REGISTRY) {
-      value.loadSong(name, url, loop)
+      loadSong(name, url, loop)
     }
-  }, [])
+  }, [loadSong])
+
+  const value = useMemo<AudioContextValue>(() => ({
+    loadSong, playSound, stopSound, stopAllSounds, setVolume, fadeSong, transitionSong,
+  }), [loadSong, playSound, stopSound, stopAllSounds, setVolume, fadeSong, transitionSong])
 
   return <AudioCtx.Provider value={value}>{children}</AudioCtx.Provider>
 }
