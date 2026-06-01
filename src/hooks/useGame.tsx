@@ -6,6 +6,7 @@ import { UNIT_STATS } from '../engine/units'
 import { P2PConnection } from '../engine/P2PConnection'
 import type { P2PStatus, P2PMessage } from '../engine/P2PConnection'
 import type { PlayerId, UnitType, Unit, Position, ActionType, UnitStats } from '../types/game'
+import { useAudio } from '../audio/AudioContext'
 
 interface GameContextValue {
   engine: GameEngine
@@ -128,11 +129,20 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const engine = useMemo(makeEngine, [])
   const [, forceRender] = useState(0)
   const bumpRef = useRef(0)
+  const audio = useAudio()
 
   const bump = useCallback(() => {
     bumpRef.current++
     forceRender(n => n + 1)
   }, [])
+
+  // Wire sound hooks
+  useMemo(() => {
+    engine.onPlaySound = (sound) => audio.playSound(sound, true)
+    engine.onStopSound = (sound) => audio.stopSound(sound)
+    engine.onTransitionSong = (from, to, restart) => audio.transitionSong(from, to, restart)
+    engine.onSetVolume = (sound, vol) => audio.setVolume(sound, vol)
+  }, [engine, audio])
 
   // Subscribe to engine events
   useMemo(() => {
