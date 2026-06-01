@@ -3,19 +3,28 @@ import { useEffect, useRef } from 'react'
 const TWO_PI = Math.PI * 2
 const HALF_PI = Math.PI / 2
 
-function bezierSkin(ctx: CanvasRenderingContext2D, bez: number[]) {
+function bezierSkin(ctx: CanvasRenderingContext2D, bez: number[], closed = true) {
   const avg: number[] = []
-  const leng = bez.length
-  for (let i = 2; i < leng; i++) {
+  const len = bez.length
+  for (let i = 2; i < len; i++) {
     avg.push((bez[i - 2] + bez[i]) / 2)
   }
-  avg.push((bez[0] + bez[leng - 2]) / 2, (bez[1] + bez[leng - 1]) / 2)
+  avg.push((bez[0] + bez[len - 2]) / 2, (bez[1] + bez[len - 1]) / 2)
 
-  ctx.moveTo(avg[0], avg[1])
-  for (let i = 2; i < leng; i += 2) {
-    ctx.quadraticCurveTo(bez[i], bez[i + 1], avg[i], avg[i + 1])
+  if (closed) {
+    ctx.moveTo(avg[0], avg[1])
+    for (let i = 2; i < len; i += 2) {
+      ctx.quadraticCurveTo(bez[i], bez[i + 1], avg[i], avg[i + 1])
+    }
+    ctx.quadraticCurveTo(bez[0], bez[1], avg[0], avg[1])
+  } else {
+    ctx.moveTo(bez[0], bez[1])
+    ctx.lineTo(avg[0], avg[1])
+    for (let i = 2; i < len - 2; i += 2) {
+      ctx.quadraticCurveTo(bez[i], bez[i + 1], avg[i], avg[i + 1])
+    }
+    ctx.lineTo(bez[len - 2], bez[len - 1])
   }
-  ctx.quadraticCurveTo(bez[0], bez[1], avg[0], avg[1])
 }
 
 export default function WobbleCorner() {
@@ -64,7 +73,8 @@ export default function WobbleCorner() {
       ctx.scale(0.5, 0.5)
       ctx.fillStyle = 'rgba(20, 20, 30)'
       ctx.beginPath()
-      bezierSkin(ctx, anchors)
+      ctx.moveTo(0, 0)
+      bezierSkin(ctx, anchors, false)
       ctx.lineTo(0, 0)
       ctx.fill()
       ctx.restore()
