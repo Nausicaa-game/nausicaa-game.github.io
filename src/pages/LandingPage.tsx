@@ -1,9 +1,12 @@
+import { Link } from 'react-router-dom'
+import WobbleCorner from '../components/WobbleCorner'
 import '../css/style.css'
 import '../css/fonts.css'
 
 export default function LandingPage() {
   return (
     <>
+      <WobbleCorner />
       <header>
         <div className="logo-container">
           <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -49,7 +52,7 @@ export default function LandingPage() {
             <h2>L'univers stratégique de Nausicaa</h2>
             <p>Un jeu de plateau mythologique où construction de deck et tactique s'entremêlent</p>
             <div className="cta-buttons">
-              <a href="/app" className="btn primary">JOUER</a>
+              <Link to="/app" className="btn primary">JOUER</Link>
               <a href="/demo" className="btn secondary">DIDACTICIEL</a>
             </div>
           </div>

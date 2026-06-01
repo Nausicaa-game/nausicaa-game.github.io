@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import Board from '../components/Board'
 import PlayerPanel from '../components/PlayerPanel'
 import UnitInfoPanel from '../components/UnitInfoPanel'
@@ -41,7 +42,7 @@ function GameHeader() {
           ))}
         </select>
         <button className="btn secondary" onClick={resetGame}>{t('end_turn')}</button>
-        <a href="/" className="btn secondary">{t('accueil')}</a>
+        <Link to="/" className="btn secondary">{t('accueil')}</Link>
       </div>
     </header>
   )
