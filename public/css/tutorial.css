@@ -1,0 +1,79 @@
+.tutorial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 1000; /* Ensure it's on top */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tutorial-box {
+    padding: 20px;
+    border-radius: 5px;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    text-align: center;
+    width: 100vw;
+    max-width: 600px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    position: absolute;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 20px;
+    margin: auto;
+    z-index: 2001;
+}
+
+.tutorial-box h2 {
+    margin-top: 0;
+    text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+
+.tutorial-box p {
+    margin-bottom: 15px;
+    text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+
+.tutorial-box button:hover {
+    background-color: #3e8e41;
+}
+
+#tutorial-next {
+    width: auto;
+}
+
+.tutorial-content, .tutorial-content h2, .tutorial-content p {
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    z-index: 2002;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+}
+
+/* .tutorial-content {
+    position:absolute;
+    bottom: 20px;
+} */
+
+.tutorial-highlight {
+    position:relative;
+    z-index: 1001;
+    pointer-events: none;
+    opacity: 0.95;
+    filter: drop-shadow(0 0 3px yellow);
+    /* color: yellow; */
+}
+
+#p2p-controls {
+    display:none;
+}
