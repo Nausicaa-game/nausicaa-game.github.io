@@ -60,75 +60,78 @@ export function GameContent() {
   const [showRules, setShowRules] = useState(false)
 
   return (
-    <main className="game-container">
-      <PlayerPanel player={1} label={t('player') + ' 1'} />
+    <>
+      <main className="game-container">
+        <PlayerPanel player={1} label={t('player') + ' 1'} />
 
-      <section className="board-container" style={{ position: 'relative' }}>
-        <div className="turn-indicator" id="turn-indicator" style={{ backgroundColor: currentPlayer === 1 ? 'var(--highlight-color)' : 'var(--primary-color)' }}>
-          {t('turn')} {turn} - {t('player')} {currentPlayer}
-        </div>
-
-        <div className="options">
-          <div className="timer">
-            Timer mode
-            <label className="switch">
-              <input type="checkbox" checked={timerMode} onChange={e => setTimerMode(e.target.checked)} />
-              <span className="slider round" />
-            </label>
+        <section className="board-container" style={{ position: 'relative' }}>
+          <div className="turn-indicator" id="turn-indicator" style={{ backgroundColor: currentPlayer === 1 ? 'var(--highlight-color)' : 'var(--primary-color)' }}>
+            {t('turn')} {turn} - {t('player')} {currentPlayer}
           </div>
-          <div className="timer">
-            CPU mode
-            <label className="switch">
-              <input type="checkbox" checked={cpuMode} onChange={e => setCpuMode(e.target.checked)} />
-              <span className="slider round" />
-            </label>
-          </div>
-          <div id="timer-display" style={{ display: timerMode ? 'block' : 'none', width: 200, textAlign: 'center' }}>
-            15
-          </div>
-          <button className="btn secondary" onClick={() => setShowRules(true)} style={{ marginTop: 8 }}>
-            Règles
-          </button>
-        </div>
 
-        <Board />
-        <UnitInfoPanel />
-        <VictoryOverlay />
+          <div className="options">
+            <div className="timer">
+              Timer mode
+              <label className="switch">
+                <input type="checkbox" checked={timerMode} onChange={e => setTimerMode(e.target.checked)} />
+                <span className="slider round" />
+              </label>
+            </div>
+            <div className="timer">
+              CPU mode
+              <label className="switch">
+                <input type="checkbox" checked={cpuMode} onChange={e => setCpuMode(e.target.checked)} />
+                <span className="slider round" />
+              </label>
+            </div>
+            <div id="timer-display" style={{ display: timerMode ? 'block' : 'none', width: 200, textAlign: 'center' }}>
+              15
+            </div>
+            <button className="btn secondary" onClick={() => setShowRules(true)} style={{ marginTop: 8 }}>
+              Règles
+            </button>
+          </div>
 
-        {showRules && (
-          <div className="rules-panel" style={{ display: 'flex' }}>
-            <div className="rules-content">
-              <h2>Règles Rapides</h2>
-              <button className="close-btn" onClick={() => setShowRules(false)}>×</button>
-              <div className="rules-section">
-                <h3>Objectif</h3>
-                <p>Éliminer l'Oracle adverse pour gagner la partie.</p>
-              </div>
-              <div className="rules-section">
-                <h3>Mana</h3>
-                <p>Commence à 1, augmente de 1 chaque tour (max. 6). Utilisé pour invoquer des unités, attaquer et utiliser des capacités.</p>
-              </div>
-              <div className="rules-section">
-                <h3>Actions</h3>
-                <ul>
-                  <li>Invoquer une unité depuis votre main</li>
-                  <li>Déplacer une unité (gratuit)</li>
-                  <li>Dash (1 mana, pas d'attaque ce tour)</li>
-                  <li>Attaquer (1 mana)</li>
-                </ul>
-              </div>
-              <div className="rules-section">
-                <h3>Restrictions</h3>
-                <p>Les unités fraîchement invoquées ne peuvent ni se déplacer ni attaquer ce tour.</p>
-              </div>
+          <Board />
+          <UnitInfoPanel />
+          <VictoryOverlay />
+        </section>
+
+        <PlayerPanel player={2} label={cpuMode ? 'CPU' : t('player') + ' 2'} isCPU={cpuMode} />
+      </main>
+
+      {showRules && (
+        <div className="rules-panel" style={{ display: 'flex' }}>
+          <div className="rules-content">
+            <h2>Règles Rapides</h2>
+            <button className="close-btn" onClick={() => setShowRules(false)}>×</button>
+            <div className="rules-section">
+              <h3>Objectif</h3>
+              <p>Éliminer l'Oracle adverse pour gagner la partie.</p>
+            </div>
+            <div className="rules-section">
+              <h3>Mana</h3>
+              <p>Commence à 1, augmente de 1 chaque tour (max. 6). Utilisé pour invoquer des unités, attaquer et utiliser des capacités.</p>
+            </div>
+            <div className="rules-section">
+              <h3>Actions</h3>
+              <ul>
+                <li>Invoquer une unité depuis votre main</li>
+                <li>Déplacer une unité (gratuit)</li>
+                <li>Dash (1 mana, pas d'attaque ce tour)</li>
+                <li>Attaquer (1 mana)</li>
+              </ul>
+            </div>
+            <div className="rules-section">
+              <h3>Restrictions</h3>
+              <p>Les unités fraîchement invoquées ne peuvent ni se déplacer ni attaquer ce tour.</p>
             </div>
           </div>
-        )}
-      </section>
+        </div>
+      )}
 
-      <PlayerPanel player={2} label={cpuMode ? 'CPU' : t('player') + ' 2'} isCPU={cpuMode} />
       <Chat />
-    </main>
+    </>
   )
 }
 

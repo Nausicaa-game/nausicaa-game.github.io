@@ -75,6 +75,9 @@
 .game-page {
     background-color: var(--background-dark);
     color: var(--text-light);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 .game-header {
@@ -84,11 +87,13 @@
     padding: 0.5rem 2rem;
     background-color: var(--background-dark);
     border-bottom: var(--border-ornate);
+    flex-shrink: 0;
 }
 
 .game-container {
     display: flex;
-    height: calc(100vh - 104px);
+    flex: 1;
+    overflow: hidden;
 }
 
 .player-area {
@@ -382,6 +387,17 @@
   display:none
 }
 
+.game-header.retracted {
+  height: 30px;
+  overflow: hidden;
+}
+
+.game-header.retracted div,
+.game-header.retracted h1,
+.game-header.retracted .game-controls {
+  display: none;
+}
+
 #unit-card-preview {
   opacity: 0;
   pointer-events: none;
@@ -426,6 +442,7 @@
   .game-container {
     flex-direction: column-reverse; 
     height: auto;
+    overflow: auto;
   }
 
   .player-area {
@@ -561,17 +578,6 @@
   .game-header {
     /* height: 180px; */
     /* transition: height 0.3s ease; Add transition for smooth animation */
-  }
-
-  .game-header.retracted {
-    height: 30px; /* Adjust as needed */
-    overflow: hidden;
-  }
-
-  .game-header.retracted div,
-  .game-header.retracted h1,
-  .game-header.retracted .game-controls {
-    display: none;
   }
 
   .header-toggle-button {
